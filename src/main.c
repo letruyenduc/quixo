@@ -31,7 +31,15 @@ int main()
 
     printGrid(grid);
 
-    shiftRowRight(grid, 2, 'N');
+    shiftRowRight(grid, 2, 'X');
+
+    printGrid(grid);
+
+    shiftColumnDown(grid, 0, 'O');
+
+    printGrid(grid);
+
+    shiftColumnUp(grid, 4, 'X');
 
     printGrid(grid);
 

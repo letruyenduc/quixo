@@ -100,6 +100,61 @@ int shiftRowLeft(Grid *grid, int row, char player)
     return SHIFT_STATUS_OK;
 }
 
+/**
+ * Description : Permet de déplacer une colonne vers le bas
+ * Auteur : Kevin Carletto
+ * Paramètres : grid est la structure de la grille de jeu, column l'indice de la colonne à déplacer, et player le caractère du joueur qui joue.
+ * Traitement : On vérifie que le cube retiré de la grille (la dernière case de la colonne) est vide ou appartient au joueur, sinon on retourne un code d'erreur.
+ * On parcours ensuite la colonne en partant de la fin en déplaçant le contenu de chaque case vers la suivante.
+ * Enfin, on définit la première case de la colonne avec le caractère du joueur qui joue.
+ * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
+ */
+int shiftColumnDown(Grid *grid, int column, char player)
+{
+    assert(column >= 0 && column < grid->width);
+
+    char movingCube = grid->lines[grid->height - 1][column];
+    if (movingCube != ' ' && movingCube != player)
+    {
+        return SHIFT_STATUS_OTHER_PLAYER;
+    }
+
+    for (int i = grid->height - 1; i > 0; i--)
+    {
+        grid->lines[i][column] = grid->lines[i - 1][column];
+    }
+    grid->lines[0][column] = player;
+
+    return SHIFT_STATUS_OK;
+}
+
+/**
+ * Description : Permet de déplacer une colonne vers le haut
+ * Auteur : Kevin Carletto
+ * Paramètres : grid est la structure de la grille de jeu, column l'indice de la colonne à déplacer, et player le caractère du joueur qui joue.
+ * Traitement : On vérifie que le cube retiré de la grille (la première case de la colonne) est vide ou appartient au joueur, sinon on retourne un code d'erreur.
+ * On parcours ensuite la colonne en partant du début en déplaçant le contenu de chaque case vers la précédente.
+ * Enfin, on définit la dernière case de la colonne avec le caractère du joueur qui joue.
+ * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
+ */
+int shiftColumnUp(Grid *grid, int column, char player)
+{
+    assert(column >= 0 && column < grid->width);
+
+    char movingCube = grid->lines[0][column];
+    if (movingCube != ' ' && movingCube != player)
+    {
+        return SHIFT_STATUS_OTHER_PLAYER;
+    }
+
+    for (int i = 1; i < grid->height; i++)
+    {
+        grid->lines[i - 1][column] = grid->lines[i][column];
+    }
+    grid->lines[grid->height - 1][column] = player;
+
+    return SHIFT_STATUS_OK;
+}
 
 /**
  * Description : Permet de libérer la mémoire utilisée par la grille de jeu
@@ -118,7 +173,6 @@ void freeGrid(Grid *grid)
     free(grid);
 }
 
-
 /**
  * Description : Fonction temporaire qui permet d'afficher la grille de jeu. À remplacer par celle utilisant ncurses
  * Auteur : Kevin Carletto
@@ -128,7 +182,7 @@ void freeGrid(Grid *grid)
  *     On affiche une délimitation sur la gauche de la ligne
  *     On affiche chaque case de la ligne
  *     On affiche une délimitation sur la droite de la ligne
- * On termine par afficher une délimitation en bas de la grille 
+ * On termine par afficher une délimitation en bas de la grille
  */
 void printGrid(Grid *grid)
 {

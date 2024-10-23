@@ -14,6 +14,8 @@ struct Grid
 Grid *createGrid(int width, int height);
 int shiftRowRight(Grid *grid, int row, char player);
 int shiftRowLeft(Grid *grid, int row, char player);
+int shiftColumnDown(Grid *grid, int column, char player);
+int shiftColumnUp(Grid *grid, int column, char player);
 void freeGrid(Grid *grid);
 void printGrid(Grid *grid);
 
