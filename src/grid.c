@@ -11,12 +11,12 @@
  * Auteur : Kevin Carletto
  * Champs : width contient la largeur de la grille, height la hauteur, et lines les lignes qui elle-mêmes contiennent les cases.
  */
-struct Grid
+typedef struct
 {
     int width;
     int height;
     char **lines;
-} typedef Grid;
+} Grid;
 
 /**
  * Description : Fonction de création d'une grille de jeu

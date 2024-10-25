@@ -22,11 +22,11 @@ int main()
     shiftRowRight(grid, 0, 'O');
 
     printGrid(grid);
-    
+
     shiftRowLeft(grid, 1, 'X');
 
     printGrid(grid);
-    
+
     shiftRowLeft(grid, 1, 'O');
 
     printGrid(grid);
