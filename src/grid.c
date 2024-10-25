@@ -45,10 +45,25 @@ Grid *createGrid(int width, int height)
 }
 
 /**
+ * Description : Fonction pour vérifier si un déplacement est autorisé pour un jouuer
+ * Auteur : Kevin Carletto
+ * Paramètres : grid est la structure de la grille de jeu, row l'indice de la ligne à déplacer, column l'indice de la colonne à déplacer, et player le caractère du joueur qui joue.
+ * Traitement : On récupère le cube modifié. On retourne 1 si le cube est vide ou si il appartient au joueur, 0 sinon.
+ * Retour : Une valeur booléenne (1 = autorisé, 0 = interdit)
+ */
+
+int isMoveAllowed(Grid *grid, int row, int column, char player)
+{
+    assert(row >= 0 && row < grid->height && column >= 0 && column < grid->width);
+    char movingCube = grid->lines[row][column];
+    return movingCube == ' ' || movingCube == player;
+}
+
+/**
  * Description : Permet de déplacer une ligne vers la droite
  * Auteur : Kevin Carletto
  * Paramètres : grid est la structure de la grille de jeu, row l'indice de la ligne à déplacer, et player le caractère du joueur qui joue.
- * Traitement : On vérifie que le cube retiré de la grille (la dernière case de la ligne) est vide ou appartient au joueur, sinon on retourne un code d'erreur.
+ * Traitement : On vérifie que le déplacement de la dernière case de la ligne est autorisé, sinon on retourne un code d'erreur.
  * On parcours ensuite la ligne en partant de la fin en déplaçant le contenu de chaque case vers la suivante.
  * Enfin, on définit la première case de la ligne avec le caractère du joueur qui joue.
  * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
@@ -57,8 +72,7 @@ int shiftRowRight(Grid *grid, int row, char player)
 {
     assert(row >= 0 && row < grid->height);
 
-    char movingCube = grid->lines[row][grid->width - 1];
-    if (movingCube != ' ' && movingCube != player)
+    if (!isMoveAllowed(grid, row, grid->width - 1, player))
     {
         return SHIFT_STATUS_OTHER_PLAYER;
     }
@@ -76,7 +90,7 @@ int shiftRowRight(Grid *grid, int row, char player)
  * Description : Permet de déplacer une ligne vers la gauche
  * Auteur : Kevin Carletto
  * Paramètres : grid est la structure de la grille de jeu, row l'indice de la ligne à déplacer, et player le caractère du joueur qui joue.
- * Traitement : On vérifie que le cube retiré de la grille (la première case de la ligne) est vide ou appartient au joueur, sinon on retourne un code d'erreur.
+ * Traitement : On vérifie que le déplacement de la première case de la ligne est autorisé, sinon on retourne un code d'erreur.
  * On parcours ensuite la ligne en partant du début en déplaçant le contenu de chaque case vers la précédente.
  * Enfin, on définit la dernière case de la ligne avec le caractère du joueur qui joue.
  * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
@@ -85,8 +99,7 @@ int shiftRowLeft(Grid *grid, int row, char player)
 {
     assert(row >= 0 && row < grid->height);
 
-    char movingCube = grid->lines[row][0];
-    if (movingCube != ' ' && movingCube != player)
+    if (!isMoveAllowed(grid, row, 0, player))
     {
         return SHIFT_STATUS_OTHER_PLAYER;
     }
@@ -104,7 +117,7 @@ int shiftRowLeft(Grid *grid, int row, char player)
  * Description : Permet de déplacer une colonne vers le bas
  * Auteur : Kevin Carletto
  * Paramètres : grid est la structure de la grille de jeu, column l'indice de la colonne à déplacer, et player le caractère du joueur qui joue.
- * Traitement : On vérifie que le cube retiré de la grille (la dernière case de la colonne) est vide ou appartient au joueur, sinon on retourne un code d'erreur.
+ * Traitement : On vérifie que le déplacement de la dernière case de la colonne est autorisé, sinon on retourne un code d'erreur.
  * On parcours ensuite la colonne en partant de la fin en déplaçant le contenu de chaque case vers la suivante.
  * Enfin, on définit la première case de la colonne avec le caractère du joueur qui joue.
  * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
@@ -113,8 +126,7 @@ int shiftColumnDown(Grid *grid, int column, char player)
 {
     assert(column >= 0 && column < grid->width);
 
-    char movingCube = grid->lines[grid->height - 1][column];
-    if (movingCube != ' ' && movingCube != player)
+    if (!isMoveAllowed(grid, column, grid->height-1, player))
     {
         return SHIFT_STATUS_OTHER_PLAYER;
     }
@@ -132,7 +144,7 @@ int shiftColumnDown(Grid *grid, int column, char player)
  * Description : Permet de déplacer une colonne vers le haut
  * Auteur : Kevin Carletto
  * Paramètres : grid est la structure de la grille de jeu, column l'indice de la colonne à déplacer, et player le caractère du joueur qui joue.
- * Traitement : On vérifie que le cube retiré de la grille (la première case de la colonne) est vide ou appartient au joueur, sinon on retourne un code d'erreur.
+ * Traitement : On vérifie que le déplacement de la première case de la colonne est autorisé, sinon on retourne un code d'erreur.
  * On parcours ensuite la colonne en partant du début en déplaçant le contenu de chaque case vers la précédente.
  * Enfin, on définit la dernière case de la colonne avec le caractère du joueur qui joue.
  * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
@@ -141,8 +153,7 @@ int shiftColumnUp(Grid *grid, int column, char player)
 {
     assert(column >= 0 && column < grid->width);
 
-    char movingCube = grid->lines[0][column];
-    if (movingCube != ' ' && movingCube != player)
+    if (!isMoveAllowed(grid, column, 0, player))
     {
         return SHIFT_STATUS_OTHER_PLAYER;
     }
