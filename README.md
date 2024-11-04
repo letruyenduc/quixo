@@ -25,4 +25,8 @@
 ## Compilation
 Pour compiler le projet, exécutez le script suivant :
 ```bash
+
 build.cmd
+
+## Exécution
+Exécutez le programme `.\bin\main.exe`
