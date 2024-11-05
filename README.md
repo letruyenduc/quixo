@@ -34,3 +34,8 @@ build.cmd
 
 ## Exécution
 Exécutez le programme `.\bin\main.exe`
+
+## Fonctionnalités
+
+- Stockage de la grille en mémoire
+- Gestion des déplacements élémentaires ( Déplacer les colonnes et les lignes )
