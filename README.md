@@ -37,13 +37,13 @@ Exécutez le programme `.\bin\main.exe`
 
 ## Fonctionnalités
 
-✅ Stockage de la grille en mémoire
-✅ Gestion des déplacements élémentaires ( Déplacer les colonnes et les lignes )
-❌ Tours de jeu
-❌ Interface de jeu
-❌ Conditions de victoire
+✅ Stockage de la grille en mémoire  
+✅ Gestion des déplacements élémentaires ( Déplacer les colonnes et les lignes )  
+❌ Tours de jeu  
+❌ Interface de jeu  
+❌ Conditions de victoire  
 ❌ Sauvegarde et chargement d'une partie en cours
 
 ### Fonctionnalités bonus :
-❌ Jouer contre un ordinateur
-❌ Jouer à plus de 2
+❌ Jouer contre un ordinateur  
+❌ Jouer à plus de 2  
