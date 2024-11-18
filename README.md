@@ -39,8 +39,8 @@ Exécutez le programme `.\bin\main.exe`
 
 ✅ Stockage de la grille en mémoire  
 ✅ Gestion des déplacements élémentaires ( Déplacer les colonnes et les lignes )  
-❌ Tours de jeu  
-❌ Interface de jeu  
+✅ Tours de jeu  
+✅ Interface de jeu  
 ❌ Conditions de victoire  
 ❌ Sauvegarde et chargement d'une partie en cours
 
