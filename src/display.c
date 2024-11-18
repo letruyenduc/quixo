@@ -5,72 +5,80 @@
 #include <ncurses.h>
 #include "grid.h"
 
-void initGrid(){
-    initscr();
-    for (int i = 0; i < 5; i++)
-    {
-        for (int i = 0; i < 5; i++)
-    {
-        printw(" ");
-        printw("-");
-    }
-    printw("\n");
-    for (int i = 0; i < 6; i++)
-    {
-        printw("|");
-        printw(" ");        
-    }
-    printw("\n");
-    }
-    for (int i = 0; i < 5; i++)
-    {
-        printw(" ");
-        printw("-");
-    }
-    refresh();
-    getch();
-    endwin();  
-}
+// void initGrid(){
+//     initscr();
+//     for (int i = 0; i < 5; i++)
+//     {
+//         for (int i = 0; i < 5; i++)
+//     {
+//         printw(" ");
+//         printw("-");
+//     }
+//     printw("\n");
+//     for (int i = 0; i < 6; i++)
+//     {
+//         printw("|");
+//         printw(" ");        
+//     }
+//     printw("\n");
+//     }
+//     for (int i = 0; i < 5; i++)
+//     {
+//         printw(" ");
+//         printw("-");
+//     }
+//     refresh();
+// }
 
-void displayGrid(Grid *grid){
-    for (int i = 0; i < grid->height; i++)
-    {
-        for (int j = 0; j < grid->width; j++)
-        {
-            mvaddch(i, j, grid->rows[i][j]);
-        }
-        printf("\n");
+#include <ncurses.h>
+
+void displayGrid(Grid *grid) {
+    for (int j = 0; j < grid->width; j++) {
+        mvprintw(0, j * 2, "+");  
+        mvprintw(0, j * 2 + 1, "-");
     }
+    mvprintw(0, grid->width * 2, "+");
+
+    for (int i = 0; i < grid->height; i++) {
+        mvprintw(i * 2 + 1, 0, "|");
+
+        for (int j = 0; j < grid->width; j++) {
+            mvprintw(i * 2 + 1, j * 2 + 1, "%c", grid->rows[i][j]);
+            mvprintw(i * 2 + 1, j * 2 + 2, "|"); 
+        }
+
+        mvprintw(i * 2 + 2, 0, "+");
+        for (int j = 0; j < grid->width; j++) {
+            mvprintw(i * 2 + 2, j * 2 + 1, "-");
+        }
+        mvprintw(i * 2 + 2, grid->width * 2, "+");
+    }
+
+    refresh(); 
 }
 
 void handleInput(int *row, int *column, int *function, char *player) {
-    // Initialisation de ncurses
-    initscr();
-    cbreak(); // Désactive le buffering, entre les caractères immédiatement
-    noecho(); // Désactive l'écho des touches
-    keypad(stdscr, TRUE); // Permet d'utiliser les touches spéciales comme les flèches
 
-    // Affichage des messages dans la fenêtre
-    clear();
-    mvprintw(0, 0, "Ligne : ");
+    mvprintw(11, 0, "Ligne : ");
     refresh();
-    scanw("%d", row); // Utilisation de scanw() pour obtenir une entrée au lieu de scanf
+    scanw("%d", row);
 
-    clear();
-    mvprintw(1, 0, "Colonne : ");
+    mvprintw(12, 0, "Colonne : ");
     refresh();
     scanw("%d", column);
 
-    clear();
-    mvprintw(2, 0, "\n0=shiftRowRight\n1=shiftRowLeft\n2=shiftColumnDown\n3=shiftColumnUp\nFonction : ");
+    mvprintw(13, 0, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp\nFonction : ");
     refresh();
     scanw("%d", function);
 
-    clear();
-    mvprintw(3, 0, "Joueur : ");
+    mvprintw(14, 0, "Joueur : ");
     refresh();
-    *player = (char) getch(); // Utilisation de getch() pour capturer une seule touche de clavier
+    *player = (char)getch();
 
-    // Nettoyage et fin de ncurses
-    endwin();
+    // Nettoie les zones d'affichage des inputs
+    mvprintw(11, 0, "                                                  ");
+    mvprintw(12, 0, "                                                  ");
+    mvprintw(13, 0, "                                                  ");
+    mvprintw(14, 0, "                                                  ");
+    refresh();
 }

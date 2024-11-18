@@ -26,6 +26,7 @@ int main()
     while (1)
     {
         status = 0;
+        clear();
         displayGrid(grid);
         handleInput(&row, &column, &function, &player);
         switch (function)
@@ -48,9 +49,11 @@ int main()
         }
 
         printf("\n\n\n\n\n\n\nStatut : %d\n", status);
+        refresh();
     }
 
     freeGrid(grid);
     grid = NULL;
+    endwin();
     return 0;
 }
