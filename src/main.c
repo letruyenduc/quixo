@@ -1,15 +1,17 @@
-#include <ncursesw/ncurses.h>
 #include <stdlib.h>
 #include <time.h>
-#include <windows.h>
-
 #include "grid.h"
-
+#ifdef _WIN32
+#include <ncursesw/ncurses.h>
+#include <windows.h>
+#endif
 int main()
 {
     srand(time(NULL));
     // Définir l'encodage de la console en UTF-8
+    #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
+    #endif
 
     Grid *grid = createGrid(5, 5);
 
