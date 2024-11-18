@@ -1,1 +1,1 @@
-gcc src/*.c -o bin/main -Llib
+gcc src/*.c -o bin/main -Llib -lncurses

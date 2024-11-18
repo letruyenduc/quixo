@@ -8,7 +8,7 @@ struct Grid
 {
     int width;
     int height;
-    char **lines;
+    char **rows;
 } typedef Grid;
 
 Grid *createGrid(int width, int height);

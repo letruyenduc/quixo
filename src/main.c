@@ -1,19 +1,24 @@
 #include <stdlib.h>
 #include <time.h>
 #include "grid.h"
+#include "display.h"
+
 #ifdef _WIN32
 #include <ncursesw/ncurses.h>
 #include <windows.h>
+#else
+#include <ncurses.h>
 #endif
 int main()
 {
     srand(time(NULL));
 // Définir l'encodage de la console en UTF-8
-#ifdef _WIN32
+    #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
-#endif
+    #endif
 
     Grid *grid = createGrid(5, 5);
+    initGrid();
 
     int row, column, function, status;
     char player;
@@ -21,19 +26,8 @@ int main()
     while (1)
     {
         status = 0;
-        printGrid(grid);
-        printf("Ligne : ");
-        fflush(stdin);
-        scanf("%d", &row);
-        printf("Colonne : ");
-        fflush(stdin);
-        scanf("%d", &column);
-        printf("\n0=shiftRowRight\n1=shiftRowLeft\n2=shiftColumnDown\n3=shiftColumnUp\nFonction : ");
-        fflush(stdin);
-        scanf("%d", &function);
-        printf("Joueur : ");
-        fflush(stdin);
-        scanf("%c", &player);
+        displayGrid(grid);
+        handleInput(&row, &column, &function, &player);
         switch (function)
         {
         case 0:
@@ -58,6 +52,5 @@ int main()
 
     freeGrid(grid);
     grid = NULL;
-
     return 0;
 }

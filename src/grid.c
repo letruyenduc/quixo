@@ -9,13 +9,13 @@
 /**
  * Description : Structure qui contient la grille de jeu
  * Auteur : Kevin Carletto
- * Champs : width contient la largeur de la grille, height la hauteur, et lines les lignes qui elle-mêmes contiennent les cases.
+ * Champs : width contient la largeur de la grille, height la hauteur, et rows les lignes qui elle-mêmes contiennent les cases.
  */
 typedef struct
 {
     int width;
     int height;
-    char **lines;
+    char **rows;
 } Grid;
 
 /**
@@ -40,7 +40,7 @@ Grid *createGrid(int width, int height)
     Grid *grid = malloc(sizeof(Grid));
     grid->width = width;
     grid->height = height;
-    grid->lines = gridLines;
+    grid->rows = gridLines;
 
     return grid;
 }
@@ -59,7 +59,7 @@ Grid *createGrid(int width, int height)
 int isMoveAllowed(Grid *grid, int row, int column, char player)
 {
     assert(row >= 0 && row < grid->height && column >= 0 && column < grid->width);
-    char movingCube = grid->lines[row][column];
+    char movingCube = grid->rows[row][column];
     return movingCube == ' ' || movingCube == player;
 }
 
@@ -86,9 +86,9 @@ int shiftRowRight(Grid *grid, int removedCuberow, int removedCubecolumn, char pl
 
     for (int i = removedCubecolumn; i > 0; i--)
     {
-        grid->lines[removedCuberow][i] = grid->lines[removedCuberow][i - 1];
+        grid->rows[removedCuberow][i] = grid->rows[removedCuberow][i - 1];
     }
-    grid->lines[removedCuberow][0] = player;
+    grid->rows[removedCuberow][0] = player;
 
     return SHIFT_STATUS_OK;
 }
@@ -116,9 +116,9 @@ int shiftRowLeft(Grid *grid, int removedCuberow, int removedCubeColumn, char pla
 
     for (int i = removedCubeColumn+1; i < grid->width; i++)
     {
-        grid->lines[removedCuberow][i - 1] = grid->lines[removedCuberow][i];
+        grid->rows[removedCuberow][i - 1] = grid->rows[removedCuberow][i];
     }
-    grid->lines[removedCuberow][grid->width - 1] = player;
+    grid->rows[removedCuberow][grid->width - 1] = player;
 
     return SHIFT_STATUS_OK;
 }
@@ -146,9 +146,9 @@ int shiftColumnDown(Grid *grid, int removedCuberow, int removedCubeColumn, char 
 
     for (int i = removedCuberow; i > 0; i--)
     {
-        grid->lines[i][removedCubeColumn] = grid->lines[i - 1][removedCubeColumn];
+        grid->rows[i][removedCubeColumn] = grid->rows[i - 1][removedCubeColumn];
     }
-    grid->lines[0][removedCubeColumn] = player;
+    grid->rows[0][removedCubeColumn] = player;
 
     return SHIFT_STATUS_OK;
 }
@@ -176,9 +176,9 @@ int shiftColumnUp(Grid *grid, int removedCuberow, int removedCubeColumn, char pl
 
     for (int i = removedCuberow+1; i < grid->height; i++)
     {
-        grid->lines[i - 1][removedCubeColumn] = grid->lines[i][removedCubeColumn];
+        grid->rows[i - 1][removedCubeColumn] = grid->rows[i][removedCubeColumn];
     }
-    grid->lines[grid->height - 1][removedCubeColumn] = player;
+    grid->rows[grid->height - 1][removedCubeColumn] = player;
 
     return SHIFT_STATUS_OK;
 }
@@ -194,9 +194,9 @@ void freeGrid(Grid *grid)
 {
     for (int i = 0; i < grid->height; i++)
     {
-        free(grid->lines[i]);
+        free(grid->rows[i]);
     }
-    free(grid->lines);
+    free(grid->rows);
     free(grid);
 }
 
@@ -223,7 +223,7 @@ void printGrid(Grid *grid)
         printf("|");
         for (int j = 0; j < grid->width; j++)
         {
-            printf("%c", grid->lines[i][j]);
+            printf("%c", grid->rows[i][j]);
         }
         printf("|\n");
     }
