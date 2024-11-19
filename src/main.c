@@ -12,13 +12,14 @@
 int main()
 {
     srand(time(NULL));
-// Définir l'encodage de la console en UTF-8
+    // Définir l'encodage de la console en UTF-8
     #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
     #endif
 
+    initscr();
+
     Grid *grid = createGrid(5, 5);
-    initGrid();
 
     int row, column, function, status;
     char player;
@@ -48,7 +49,7 @@ int main()
             break;
         }
 
-        printf("\n\n\n\n\n\n\nStatut : %d\n", status);
+        //printf("\n\n\n\n\n\n\nStatut : %d\n", status);
         refresh();
     }
 
