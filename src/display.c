@@ -9,32 +9,38 @@
 #endif
 #include "grid.h"
 
-void displayGrid(Grid *grid) {
-    for (int j = 0; j < grid->width; j++) {
-        mvprintw(0, j * 2, "+");  
+void displayGrid(Grid *grid)
+{
+    for (int j = 0; j < grid->width; j++)
+    {
+        mvprintw(0, j * 2, "+");
         mvprintw(0, j * 2 + 1, "-");
     }
     mvprintw(0, grid->width * 2, "+");
 
-    for (int i = 0; i < grid->height; i++) {
+    for (int i = 0; i < grid->height; i++)
+    {
         mvprintw(i * 2 + 1, 0, "|");
 
-        for (int j = 0; j < grid->width; j++) {
+        for (int j = 0; j < grid->width; j++)
+        {
             mvprintw(i * 2 + 1, j * 2 + 1, "%c", grid->rows[i][j]);
-            mvprintw(i * 2 + 1, j * 2 + 2, "|"); 
+            mvprintw(i * 2 + 1, j * 2 + 2, "|");
         }
 
         mvprintw(i * 2 + 2, 0, "+");
-        for (int j = 0; j < grid->width; j++) {
+        for (int j = 0; j < grid->width; j++)
+        {
             mvprintw(i * 2 + 2, j * 2 + 1, "-");
         }
         mvprintw(i * 2 + 2, grid->width * 2, "+");
     }
 
-    refresh(); 
+    refresh();
 }
 
-void handleInput(int *row, int *column, int *function, char *player) {
+void handleInput(int *row, int *column, int *function, char *player)
+{
 
     mvprintw(11, 0, "Ligne : ");
     refresh();

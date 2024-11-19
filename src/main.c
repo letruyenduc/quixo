@@ -9,13 +9,15 @@
 #else
 #include <ncurses.h>
 #endif
+
 int main()
 {
     srand(time(NULL));
+
+#ifdef _WIN32
     // Définir l'encodage de la console en UTF-8
-    #ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
-    #endif
+#endif
 
     initscr();
 
@@ -49,7 +51,7 @@ int main()
             break;
         }
 
-        //printf("\n\n\n\n\n\n\nStatut : %d\n", status);
+        // printf("\n\n\n\n\n\n\nStatut : %d\n", status);
         refresh();
     }
 

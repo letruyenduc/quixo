@@ -114,7 +114,7 @@ int shiftRowLeft(Grid *grid, int removedCuberow, int removedCubeColumn, char pla
         return SHIFT_STATUS_OTHER_PLAYER;
     }
 
-    for (int i = removedCubeColumn+1; i < grid->width; i++)
+    for (int i = removedCubeColumn + 1; i < grid->width; i++)
     {
         grid->rows[removedCuberow][i - 1] = grid->rows[removedCuberow][i];
     }
@@ -174,7 +174,7 @@ int shiftColumnUp(Grid *grid, int removedCuberow, int removedCubeColumn, char pl
         return SHIFT_STATUS_OTHER_PLAYER;
     }
 
-    for (int i = removedCuberow+1; i < grid->height; i++)
+    for (int i = removedCuberow + 1; i < grid->height; i++)
     {
         grid->rows[i - 1][removedCubeColumn] = grid->rows[i][removedCubeColumn];
     }
