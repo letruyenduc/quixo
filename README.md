@@ -27,13 +27,36 @@ Une **entreprise de jeux de société** est en train de préparer la sortie futu
 
 ## Compilation
 Pour compiler le projet, exécutez le script suivant :
-```bash
 
+### Sur Windows :
+```batch
 build.cmd
 ```
 
+### Sur MacOS / Linux :
+
+Il faut rendre le script exécutable lorsqu'on clone initialement le repo :
+```bash
+chmod u+x build.sh
+```
+
+Ensuite l'exécuter
+```bash
+./build.sh
+```
+
 ## Exécution
-Exécutez le programme `.\bin\main.exe`
+Exécutez le programme suivant :
+
+### Sur Windows :
+```batch
+bin\main.exe
+```
+
+### Sur MacOS / Linux :
+```batch
+bin/main
+```
 
 ## Fonctionnalités
 
