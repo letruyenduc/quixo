@@ -55,7 +55,6 @@ Grid *createGrid(int width, int height)
  * Traitement : On récupère le cube modifié. On retourne 1 si le cube est vide ou si il appartient au joueur, 0 sinon.
  * Retour : Une valeur booléenne (1 = autorisé, 0 = interdit)
  */
-
 int isMoveAllowed(Grid *grid, int row, int column, char player)
 {
     assert(row >= 0 && row < grid->height && column >= 0 && column < grid->width);
@@ -139,7 +138,7 @@ int shiftColumnDown(Grid *grid, int removedCuberow, int removedCubeColumn, char 
 {
     assert(removedCubeColumn >= 0 && removedCubeColumn < grid->width);
 
-    if (!isMoveAllowed(grid, removedCubeColumn, removedCuberow, player))
+    if (!isMoveAllowed(grid, removedCuberow, removedCubeColumn, player))
     {
         return SHIFT_STATUS_OTHER_PLAYER;
     }
@@ -169,7 +168,7 @@ int shiftColumnUp(Grid *grid, int removedCuberow, int removedCubeColumn, char pl
 {
     assert(removedCubeColumn >= 0 && removedCubeColumn < grid->width);
 
-    if (!isMoveAllowed(grid, removedCubeColumn, 0, player))
+    if (!isMoveAllowed(grid, removedCuberow, removedCubeColumn, player))
     {
         return SHIFT_STATUS_OTHER_PLAYER;
     }
