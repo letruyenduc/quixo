@@ -2,6 +2,7 @@
 #include <time.h>
 #include "grid.h"
 #include "display.h"
+#include "menu.h"
 
 #ifdef _WIN32
 #include <ncursesw/ncurses.h>
@@ -20,6 +21,7 @@ int main()
 #endif
 
     initscr();
+    afficherMenu();
 
     Grid *grid = createGrid(5, 5);
 
