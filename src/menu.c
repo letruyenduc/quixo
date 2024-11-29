@@ -33,7 +33,7 @@ void traiterChoix(int choix) {
 
 
 // Fonction pour afficher le menu principal
-void afficherMenu() {
+int afficherMenu() {
     const char *options[] = {
         "Nouvelle Partie",
         "Charger une Partie",
@@ -47,7 +47,6 @@ void afficherMenu() {
     // Initialisation de ncurses
     initscr();
     clear();
-    noecho();
     cbreak();
     curs_set(0); // Masque le curseur
 
@@ -85,9 +84,8 @@ void afficherMenu() {
                 choix = (choix + 1) % nbOptions;
                 break;
             case '\n': // Touche Entrée
-                endwin(); // Quitte ncurses
                 traiterChoix(choix + 1); // Appelle la fonction de traitement
-                return;
+                return 1;
             default:
                 break;
         }

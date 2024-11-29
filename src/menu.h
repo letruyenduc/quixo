@@ -2,7 +2,7 @@
 #define MENU_H
 
 // Fonction pour afficher le menu principal
-void afficherMenu();
+int afficherMenu();
 
 // Fonction pour traiter le choix de l'utilisateur
 void traiterChoix(int choix);

@@ -19,16 +19,14 @@ int main()
     // Définir l'encodage de la console en UTF-8
     SetConsoleOutputCP(CP_UTF8);
 #endif
-
     initscr();
-    afficherMenu();
-
     Grid *grid = createGrid(5, 5);
 
-    int row, column, function, status;
+    int row, column, function, status, gridState;
     char player;
+    gridState = afficherMenu();
 
-    while (1)
+    while (gridState == 1)
     {
         status = 0;
         clear();
