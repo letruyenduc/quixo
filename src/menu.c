@@ -4,6 +4,17 @@
 
 
 
+/*Description : 
+* Auteur : Valentin
+* Description : Lors du démarrage, la fonction afficherMenu s'initie. Le choix sélectionné est en surbrillance et on peut sélectionner un choix via les flèches haut et bas
+* Paramètres : 
+    - "choix"
+    - la structure "options"
+    - "nbOptions"
+    - "touche"
+ */
+
+
 
 
 void traiterChoix(int choix) {
