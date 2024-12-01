@@ -1,4 +1,8 @@
+#ifdef _WIN32
+#include <ncursesw/ncurses.h>
+#else
 #include <ncurses.h>
+#endif
 #include <stdlib.h>
 #include "menu.h"
 
