@@ -14,6 +14,5 @@ int shiftRowLeft(Grid *grid, int removedCubeRow, int removedCubeColumn, char pla
 int shiftColumnDown(Grid *grid, int removedCubeRow, int removedCubeColumn, char player);
 int shiftColumnUp(Grid *grid, int removedCubeRow, int removedCubeColumn, char player);
 void freeGrid(Grid *grid);
-void printGrid(Grid *grid);
 
 #endif // GRID_H

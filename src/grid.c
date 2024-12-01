@@ -196,37 +196,3 @@ void freeGrid(Grid *grid)
     free(grid->rows);
     free(grid);
 }
-
-/**
- * Description : Fonction temporaire qui permet d'afficher la grille de jeu. À remplacer par celle utilisant ncurses
- * Auteur : Kevin Carletto
- * Paramètre grid: la structure de la grille de jeu.
- * Traitement : On commence par afficher une délimitation au dessus de la grille
- * On parcours chaque ligne de la grille
- *     On affiche une délimitation sur la gauche de la ligne
- *     On affiche chaque case de la ligne
- *     On affiche une délimitation sur la droite de la ligne
- * On termine par afficher une délimitation en bas de la grille
- */
-void printGrid(Grid *grid)
-{
-    for (int j = -2; j < grid->width; j++)
-    {
-        printf("-");
-    }
-    printf("\n");
-    for (int i = 0; i < grid->height; i++)
-    {
-        printf("|");
-        for (int j = 0; j < grid->width; j++)
-        {
-            printf("%c", grid->rows[i][j]);
-        }
-        printf("|\n");
-    }
-    for (int j = 0; j < grid->width + 2; j++)
-    {
-        printf("-");
-    }
-    printf("\n");
-}
