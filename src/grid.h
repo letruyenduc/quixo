@@ -1,9 +1,6 @@
 #ifndef GRID_H
 #define GRID_H
 
-#define SHIFT_STATUS_OK 0
-#define SHIFT_STATUS_OTHER_PLAYER 1
-
 struct Grid
 {
     int width;

@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-
-#define SHIFT_STATUS_OK 0
-#define SHIFT_STATUS_OTHER_PLAYER 1
+#include "constants.h"
 
 /**
  * Description : Structure qui contient la grille de jeu
@@ -80,7 +78,7 @@ int shiftRowRight(Grid *grid, int removedCuberow, int removedCubecolumn, char pl
 
     if (!isMoveAllowed(grid, removedCuberow, removedCubecolumn, player))
     {
-        return SHIFT_STATUS_OTHER_PLAYER;
+        return TURN_STATUS_OTHER_PLAYER;
     }
 
     for (int i = removedCubecolumn; i > 0; i--)
@@ -89,7 +87,7 @@ int shiftRowRight(Grid *grid, int removedCuberow, int removedCubecolumn, char pl
     }
     grid->rows[removedCuberow][0] = player;
 
-    return SHIFT_STATUS_OK;
+    return TURN_STATUS_OK;
 }
 
 /**
@@ -110,7 +108,7 @@ int shiftRowLeft(Grid *grid, int removedCuberow, int removedCubeColumn, char pla
 
     if (!isMoveAllowed(grid, removedCuberow, removedCubeColumn, player))
     {
-        return SHIFT_STATUS_OTHER_PLAYER;
+        return TURN_STATUS_OTHER_PLAYER;
     }
 
     for (int i = removedCubeColumn + 1; i < grid->width; i++)
@@ -119,7 +117,7 @@ int shiftRowLeft(Grid *grid, int removedCuberow, int removedCubeColumn, char pla
     }
     grid->rows[removedCuberow][grid->width - 1] = player;
 
-    return SHIFT_STATUS_OK;
+    return TURN_STATUS_OK;
 }
 
 /**
@@ -140,7 +138,7 @@ int shiftColumnDown(Grid *grid, int removedCuberow, int removedCubeColumn, char 
 
     if (!isMoveAllowed(grid, removedCuberow, removedCubeColumn, player))
     {
-        return SHIFT_STATUS_OTHER_PLAYER;
+        return TURN_STATUS_OTHER_PLAYER;
     }
 
     for (int i = removedCuberow; i > 0; i--)
@@ -149,7 +147,7 @@ int shiftColumnDown(Grid *grid, int removedCuberow, int removedCubeColumn, char 
     }
     grid->rows[0][removedCubeColumn] = player;
 
-    return SHIFT_STATUS_OK;
+    return TURN_STATUS_OK;
 }
 
 /**
@@ -170,7 +168,7 @@ int shiftColumnUp(Grid *grid, int removedCuberow, int removedCubeColumn, char pl
 
     if (!isMoveAllowed(grid, removedCuberow, removedCubeColumn, player))
     {
-        return SHIFT_STATUS_OTHER_PLAYER;
+        return TURN_STATUS_OTHER_PLAYER;
     }
 
     for (int i = removedCuberow + 1; i < grid->height; i++)
@@ -179,7 +177,7 @@ int shiftColumnUp(Grid *grid, int removedCuberow, int removedCubeColumn, char pl
     }
     grid->rows[grid->height - 1][removedCubeColumn] = player;
 
-    return SHIFT_STATUS_OK;
+    return TURN_STATUS_OK;
 }
 
 /**

@@ -4,64 +4,58 @@
 #include <ncurses.h>
 #endif
 #include <stdlib.h>
-#include "menu.h"
+#include "game.h"
 
-
-
-/*Description : 
-* Auteur : Valentin
-* Description : Lors du démarrage, la fonction afficherMenu s'initie. Le choix sélectionné est en surbrillance et on peut sélectionner un choix via les flèches haut et bas
-* Paramètres : 
-    - "choix"
-    - la structure "options"
-    - "nbOptions"
-    - "touche"
+/**
+* Auteurs : Valentin et Kevin
+* Description : Permet d'effectuer l'action du choix sélectionné.
+* Paramètres :
+- choix : Le choix sélectionné
+- execution : Le pointeur vers une variable qui permet d'arrêter la boucle d'affichage du menu principal une fois mise à 0
+- statusMessage : Le pointeur vers une variable contenant le texte du statut
  */
-
-
-
-
-void traiterChoix(int choix) {
-    switch (choix) {
-        case 1:
-            printf("Nouvelle Partie sélectionnée !\n");
-            // Ajouter la logique pour démarrer une nouvelle partie
-            break;
-        case 2:
-            printf("Charger une Partie sélectionnée !\n");
-            // Ajouter la logique pour charger une partie
-            break;
-        case 3:
-            printf("Options sélectionnées !\n");
-            // Ajouter la logique pour afficher les options
-            break;
-        case 4:
-            printf("Merci d'avoir joué. À bientôt !\n");
-            exit(0); // Quitte le programme
-        default:
-            printf("Choix invalide. Veuillez réessayer.\n");
-            break;
+void traiterChoix(int choix, int *execution, wchar_t **statusMessage)
+{
+    switch (choix)
+    {
+    case 0:
+        startNewGame();
+        break;
+    case 1:
+        *statusMessage = L"L'option pour charger une partie n'est pas encore implementée.";
+        // Ajouter la logique pour charger une partie
+        break;
+    case 2:
+        *statusMessage = L"L'option pour modifier les options n'est pas encore implementée.";
+        // Ajouter la logique pour afficher les options
+        break;
+    case 3:
+        *statusMessage = L"Merci d'avoir joué. À bientôt !";
+        *execution = 0; // Arrêter la boucle du menu
+        break;
+    default:
+        *statusMessage = L"Choix invalide. Veuillez réessayer.";
+        break;
     }
 }
 
-
-
-
-// Fonction pour afficher le menu principal
-int afficherMenu() {
+/**
+ * Auteurs : Valentin et Kevin
+ * Description : Affiche le menu principal. Le choix sélectionné est en surbrillance et on peut sélectionner un choix via les flèches haut et bas
+ */
+int afficherMenu()
+{
     const char *options[] = {
         "Nouvelle Partie",
         "Charger une Partie",
         "Options",
-        "Quitter"
-    };
+        "Quitter"};
+    wchar_t *statusMessage = NULL;
     int nbOptions = sizeof(options) / sizeof(options[0]);
     int choix = 0; // Index de l'option sélectionnée
+    int execution = 1;
     int touche;
 
-    // Initialisation de ncurses
-    initscr();
-    clear();
     cbreak();
     curs_set(0); // Masque le curseur
 
@@ -69,43 +63,52 @@ int afficherMenu() {
     keypad(stdscr, TRUE);
 
     // Affichage du menu
-    while (1) {
-        clear();
+    while (execution)
+    {
         mvprintw(0, 0, "======================================");
         mvprintw(1, 0, "       Bienvenue sur le Quixo !       ");
         mvprintw(2, 0, "======================================");
 
         // Affichage des options
-        for (int i = 0; i < nbOptions; i++) {
-            if (i == choix) {
-                attron(A_REVERSE); // Surligner l'option sélectionnée
+        for (int i = 0; i < nbOptions; i++)
+        {
+            if (i == choix)
+            {
+                attron(A_REVERSE);                    // Surligner l'option sélectionnée
                 mvprintw(4 + i, 2, "%s", options[i]); // Ajout de "%s"
                 attroff(A_REVERSE);
-            } else {
+            }
+            else
+            {
                 mvprintw(4 + i, 2, "%s", options[i]); // Ajout de "%s"
             }
         }
 
-        mvprintw(4 + nbOptions + 1, 0, "Utilisez les flèches pour naviguer, Entrée pour valider.");
+        mvprintw(4 + nbOptions + 1, 0, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider.");
+        if (statusMessage != NULL)
+        {
+            mvprintw(4 + nbOptions + 2, 0, "%ls", statusMessage);
+            statusMessage = NULL;
+        }
+        refresh();
 
         // Lecture de l'entrée utilisateur
         touche = getch();
 
-        switch (touche) {
-            case KEY_UP:
-                choix = (choix - 1 + nbOptions) % nbOptions;
-                break;
-            case KEY_DOWN:
-                choix = (choix + 1) % nbOptions;
-                break;
-            case '\n': // Touche Entrée
-                traiterChoix(choix + 1); // Appelle la fonction de traitement
-                return 1;
-            default:
-                break;
+        switch (touche)
+        {
+        case KEY_UP:
+            choix = (choix - 1 + nbOptions) % nbOptions;
+            break;
+        case KEY_DOWN:
+            choix = (choix + 1) % nbOptions;
+            break;
+        case '\n':                                           // Touche Entrée
+            traiterChoix(choix, &execution, &statusMessage); // Appelle la fonction de traitement
+            // Pas de break car on veut également exécuter le clear à la fin du traitement du choix
+        default:
+            clear();
+            break;
         }
     }
 }
-
-
-

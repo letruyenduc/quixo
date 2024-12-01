@@ -12,8 +12,9 @@
 #define OFFSET_LINE 5
 #define OFFSET_COL 10
 
-void displayGrid(Grid *grid)
+void displayGrid(Grid *grid, char nextPlayer, wchar_t* statusMessage)
 {
+    clear();
     for (int j = 0; j < grid->width; j++)
     {
         mvprintw(OFFSET_LINE + 0, OFFSET_COL + j * 2, "+");
@@ -36,26 +37,27 @@ void displayGrid(Grid *grid)
         mvprintw(OFFSET_LINE + i * 2 + 2, OFFSET_COL + grid->width * 2, "+");
     }
 
+    if (statusMessage != NULL) {
+        mvprintw(OFFSET_LINE + grid->height * 2 + 2, OFFSET_COL, "%ls", statusMessage);
+    }
+
+    mvprintw(OFFSET_LINE + grid->height * 2 + 3, OFFSET_COL, "Le joueur %c joue.", nextPlayer);
+
     refresh();
 }
 
-void handleInput(int *row, int *column, int *function, char *player)
+void handleInput(Grid* grid, int *row, int *column, int *function)
 {
 
-    mvprintw(OFFSET_LINE + 12, OFFSET_COL + 0, "Ligne : ");
+    mvprintw(OFFSET_LINE + grid->height * 2 + 5, OFFSET_COL + 0, "Ligne : ");
     refresh();
     scanw("%d", row);
 
-    mvprintw(OFFSET_LINE + 13, OFFSET_COL + 0, "Colonne : ");
+    mvprintw(OFFSET_LINE + grid->height * 2 + 6, OFFSET_COL + 0, "Colonne : ");
     refresh();
     scanw("%d", column);
 
-    mvprintw(OFFSET_LINE + 14, OFFSET_COL + 0, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp ; Fonction : ");
+    mvprintw(OFFSET_LINE + grid->height * 2 + 7, OFFSET_COL + 0, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp, 4=quitter ; Fonction : ");
     refresh();
     scanw("%d", function);
-
-    mvprintw(OFFSET_LINE + 15, OFFSET_COL + 0, "Joueur : ");
-    refresh();
-    *player = (char)getch();
-    refresh();
 }

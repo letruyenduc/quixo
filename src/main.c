@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <time.h>
-#include "grid.h"
-#include "display.h"
+#include <locale.h>
 #include "menu.h"
+#include "utils.h"
 
 #ifdef _WIN32
 #include <ncursesw/ncurses.h>
@@ -11,52 +11,20 @@
 #include <ncurses.h>
 #endif
 
+/**
+ * Description : Programme principal
+ * Traitement :
+ * - On initialise le générateur de nombre aléatoires.
+ * - On initialise la fenêtre ncurses
+ * - On affiche le menu principal.
+ * - À l'arrêt, on termine la fenêtre ncurses
+ */
 int main()
 {
     srand(time(NULL));
-
-#ifdef _WIN32
-    // Définir l'encodage de la console en UTF-8
-    SetConsoleOutputCP(CP_UTF8);
-#endif
     initscr();
-    Grid *grid = createGrid(5, 5);
-
-    int row, column, function, status, gridState;
-    char player;
-    gridState = afficherMenu();
-
-    while (gridState == 1)
-    {
-        status = 0;
-        clear();
-        displayGrid(grid);
-        handleInput(&row, &column, &function, &player);
-        switch (function)
-        {
-        case 0:
-            status = shiftRowRight(grid, row, column, player);
-            break;
-        case 1:
-            status = shiftRowLeft(grid, row, column, player);
-            break;
-        case 2:
-            status = shiftColumnDown(grid, row, column, player);
-            break;
-        case 3:
-            status = shiftColumnUp(grid, row, column, player);
-            break;
-        default:
-            printf("Fonction invalide !");
-            break;
-        }
-
-        // printf("\n\n\n\n\n\n\nStatut : %d\n", status);
-        refresh();
-    }
-
-    freeGrid(grid);
-    grid = NULL;
+    setlocale(LC_ALL, ""); // Permettre les caractères spéciaux avec ncurses sur Windows
+    afficherMenu();
     endwin();
     return 0;
 }
