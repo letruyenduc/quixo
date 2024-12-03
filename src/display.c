@@ -12,6 +12,15 @@
 #define OFFSET_LINE 5
 #define OFFSET_COL 10
 
+
+/**
+ * Auteurs : Duc et Kevin
+ * Description : Affiche la grille de jeu
+ * Paramètres : 
+ * - grid : La grille de jeu
+ * - nextPlayer : Le joueur qui doit jouer
+ * - statusMessage : Le message de statut
+ */
 void displayGrid(Grid *grid, char nextPlayer, wchar_t* statusMessage)
 {
     clear();
@@ -46,6 +55,12 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t* statusMessage)
     refresh();
 }
 
+/**
+ * Auteurs : Duc et Kevin
+ * Description : Affiche les messages qui propose la ligne, la colonne et la fonction à l'utilisateur
+ * Paramètres : 
+ * - grid : La grille de jeu
+ */
 void handleInput(Grid* grid, int *row, int *column, int *function)
 {
 
