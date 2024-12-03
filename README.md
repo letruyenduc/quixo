@@ -65,7 +65,8 @@ bin/main
 - Interface de jeu  
   - ✅ Affichage de la grille
   - ❌ Récupérer les entrées utilisateur
-- ❌ Tours de jeu
+- ✅ Menu principal
+- ✅ Tours de jeu
 - ❌ Conditions de victoire
 - ❌ Sauvegarde et chargement d'une partie en cours
 
