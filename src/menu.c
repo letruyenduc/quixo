@@ -43,7 +43,7 @@ void traiterChoix(int choix, int *execution, wchar_t **statusMessage)
  * Auteurs : Valentin et Kevin
  * Description : Affiche le menu principal. Le choix sélectionné est en surbrillance et on peut sélectionner un choix via les flèches haut et bas
  */
-int afficherMenu()
+void afficherMenu()
 {
     const char *options[] = {
         "Nouvelle Partie",
