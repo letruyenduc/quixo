@@ -14,7 +14,7 @@
 #define OFFSET_COL 10
 
 /**
- * Auteurs : Duc et Kevin
+ * Auteurs : Duc, Kevin et Zeid
  * Description : Affiche la grille de jeu
  * Paramètres : 
  * - nextPlayer : Le prochain joueur qui doit jouer
@@ -91,13 +91,22 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t* statusMessage, int *row, 
     *row = 0;
     *column = 0;
 
-    while (1)
+    int selecting = 1;
+
+    while (selecting)
     {
+        if (!isMoveAllowed(grid, *row, *column, nextPlayer)) {
+            statusMessage = L"Ce cube appartient à un autre joueur. Vous ne pouvez pas le déplacer. Veuillez rejouer.";
+        } else {
+            statusMessage = NULL;
+        }
+
         // Affiche la grille + le curseur
         displayGrid(grid, nextPlayer, statusMessage, *row, *column);
 
         mvprintw(OFFSET_LINE + grid->height * 2 + 4, OFFSET_COL, "Utilisez les fleches pour naviguer.");
         mvprintw(OFFSET_LINE + grid->height * 2 + 5, OFFSET_COL, "Appuyez sur Entree pour selectionner une case.");
+        mvprintw(OFFSET_LINE + grid->height * 2 + 6, OFFSET_COL, "Echap pour quitter");
         refresh(); 
 
         // touches utili
@@ -106,37 +115,61 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t* statusMessage, int *row, 
         switch (key)
         {
         case KEY_UP: // Flèche haut
-            if (*row > 0)
-                (*row)--;
+            if (*row > 0) {
+                if (*column > 0 && *column < grid->width-1) {
+                    *row = 0;
+                } else {
+                    (*row)--;
+                }
+            }
             break;
         case KEY_DOWN: // Flèche bas
-            if (*row < grid->height - 1)
-                (*row)++;
+            if (*row < grid->height - 1) {
+                if (*column > 0 && *column < grid->width-1) {
+                    *row = 4;
+                } else {
+                    (*row)++;
+                }
+            }
             break;
         case KEY_LEFT: // Flèche gauche
-            if (*column > 0)
-                (*column)--;
+            if (*column > 0) {
+                if (*row > 0 && *row < grid->height-1) {
+                    *column = 0;
+                } else {
+                    (*column)--;
+                }
+            }
             break;
         case KEY_RIGHT: // Flèche droite
-            if (*column < grid->width - 1)
-                (*column)++;
+            if (*column < grid->width - 1) {
+                if (*row > 0 && *row < grid->height-1) {
+                    *column = 4;
+                } else {
+                    (*column)++;
+                }
+            }
             break;
         case '\n': // Entrée
-            // Vérification d'autorisation de déplacement de case, modifier statusMessage
-            // if () 
+            // Si un message de statut est affiché, alors on bloque la sélection
+            if (statusMessage != NULL) {
+                break;
+            }
 
             displayGrid(grid, nextPlayer, statusMessage, *row, *column);
-            mvprintw(OFFSET_LINE + grid->height * 2 + 4, OFFSET_COL, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp, 4=quitter");
-            mvprintw(OFFSET_LINE + grid->height * 2 + 5, OFFSET_COL, "%ls", L"Choisissez une fonction (0 à 4) : ");
+            mvprintw(OFFSET_LINE + grid->height * 2 + 4, OFFSET_COL, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp");
+            mvprintw(OFFSET_LINE + grid->height * 2 + 5, OFFSET_COL, "%ls", L"Choisissez une fonction (0 à 3) : ");
             refresh();
             scanw("%d", function);
-            return; 
-        case 27: 
+            selecting = 0;
+            break;
+        // Echap pour quitter
+        case 27:
             *function = FUNCTION_QUIT_GAME;
-            return;
+            selecting = 0;
+            break;
         default:
             break;
         }
-
     }
 }

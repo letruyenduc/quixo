@@ -9,6 +9,7 @@ struct Grid
 } typedef Grid;
 
 Grid *createGrid(int width, int height);
+int isMoveAllowed(Grid *grid, int row, int column, char player);
 int shiftRowRight(Grid *grid, int removedCubeRow, int removedCubeColumn, char player);
 int shiftRowLeft(Grid *grid, int removedCubeRow, int removedCubeColumn, char player);
 int shiftColumnDown(Grid *grid, int removedCubeRow, int removedCubeColumn, char player);
