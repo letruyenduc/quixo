@@ -102,9 +102,9 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
 
     while (playing)
     {
-        displayGrid(grid, playerList[0], statusMessage);
+        handleInput(grid, playerList[0], statusMessage, &row, &column, &function);
         statusMessage = NULL; // On réinitialise le message de statut après l'avoir affiché
-        handleInput(grid, &row, &column, &function);
+
         // Cas particulier pour la fonction quitter, on n'effectue pas de tour de jeu
         if (function == FUNCTION_QUIT_GAME)
         {
