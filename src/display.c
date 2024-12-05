@@ -126,7 +126,7 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t* statusMessage, int *row, 
         case KEY_DOWN: // Flèche bas
             if (*row < grid->height - 1) {
                 if (*column > 0 && *column < grid->width-1) {
-                    *row = 4;
+                    *row = grid->height-1;
                 } else {
                     (*row)++;
                 }
@@ -144,7 +144,7 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t* statusMessage, int *row, 
         case KEY_RIGHT: // Flèche droite
             if (*column < grid->width - 1) {
                 if (*row > 0 && *row < grid->height-1) {
-                    *column = 4;
+                    *column = grid->width-1;
                 } else {
                     (*column)++;
                 }
