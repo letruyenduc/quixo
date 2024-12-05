@@ -203,11 +203,21 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
                 break;
             }
 
-            displayGrid(grid, nextPlayer, statusMessage, *row, *column);
-            mvprintw(offsetLine + 5, textOffsetCol, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp");
-            mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Choisissez une fonction (0 à 3) : ");
-            refresh();
-            scanw("%d", function);
+            *function = -1;
+            do
+            {
+                displayGrid(grid, nextPlayer, statusMessage, *row, *column);
+                statusMessage = NULL;
+                mvprintw(offsetLine + 5, textOffsetCol, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp");
+                mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Choisissez une fonction (0 à 3) : ");
+                refresh();
+                scanw("%d", function);
+                if (*function < 0 || *function > 3)
+                {
+                    statusMessage = L"Fonction invalide";
+                }
+            } while (statusMessage != NULL);
+
             selecting = 0;
             break;
         case 27: // Echap pour quitter
