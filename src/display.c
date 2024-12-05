@@ -156,6 +156,10 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
                     (*row)--;
                 }
             }
+            else
+            {
+                *row = grid->width - 1;
+            }
             break;
         case KEY_DOWN: // Flèche bas
             if (*row < grid->height - 1)
@@ -168,6 +172,10 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
                 {
                     (*row)++;
                 }
+            }
+            else
+            {
+                *row = 0;
             }
             break;
         case KEY_LEFT: // Flèche gauche
@@ -182,6 +190,10 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
                     (*column)--;
                 }
             }
+            else
+            {
+                *column = grid->height - 1;
+            }
             break;
         case KEY_RIGHT: // Flèche droite
             if (*column < grid->width - 1)
@@ -194,6 +206,10 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
                 {
                     (*column)++;
                 }
+            }
+            else
+            {
+                *column = 0;
             }
             break;
         case '\n': // Entrée
