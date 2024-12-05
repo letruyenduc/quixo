@@ -10,8 +10,22 @@
 #include "grid.h"
 #include "constants.h"
 
-#define OFFSET_LINE 5
-#define OFFSET_COL 10
+#define TEXT_CENTERING 25
+
+int getOffsetLine(Grid *grid)
+{
+    return LINES / 2 - grid->height;
+}
+
+int getOffsetCol(Grid *grid)
+{
+    return COLS / 2 - grid->width * 2 - TEXT_CENTERING;
+}
+
+int getTextOffsetCol(Grid *grid)
+{
+    return COLS / 2 + grid->width * 2 - TEXT_CENTERING + 5;
+}
 
 /**
  * Auteurs : Duc, Kevin et Zeid
@@ -27,7 +41,9 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, i
 {
     clear(); // Efface tout pour un nouvel affichage
 
-    // Affichage des bordures et contenu de la grille
+    int offsetLine = getOffsetLine(grid), offsetCol = getOffsetCol(grid), textOffsetCol = getTextOffsetCol(grid);
+
+    // Affichage du contenu de la grille
     for (int i = 0; i < grid->height; i++)
     {
         for (int j = 0; j < grid->width; j++)
@@ -36,43 +52,51 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, i
             if (i == row && j == column)
             {
                 attron(A_REVERSE); // Surligne la case courante
-                mvprintw(OFFSET_LINE + i * 2 + 1, OFFSET_COL + j * 2 + 1, "%c", grid->rows[i][j]);
+                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", grid->rows[i][j]);
                 attroff(A_REVERSE);
             }
             else
             {
-                mvprintw(OFFSET_LINE + i * 2 + 1, OFFSET_COL + j * 2 + 1, "%c", grid->rows[i][j]);
+                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", grid->rows[i][j]);
             }
         }
     }
 
-    // Affichage des lignes horizontales
+    // Affichage de la première ligne horizontale
     for (int j = 0; j < grid->width; j++)
     {
-        mvprintw(OFFSET_LINE + 0, OFFSET_COL + j * 2, "+");
-        mvprintw(OFFSET_LINE + 0, OFFSET_COL + j * 2 + 1, "-");
+        mvprintw(offsetLine + 0, offsetCol + j * 4, "+");
+        for (int i = 1; i < 4; i++)
+        {
+            mvprintw(offsetLine + 0, offsetCol + j * 4 + i, "-");
+        }
     }
-    mvprintw(OFFSET_LINE + 0, OFFSET_COL + grid->width * 2, "+");
+    mvprintw(offsetLine + 0, offsetCol + grid->width * 4, "+");
 
-    // Affichage des lignes verticales
+    // Affichage des lignes autres lignes
     for (int i = 0; i < grid->height; i++)
     {
-        mvprintw(OFFSET_LINE + i * 2 + 1, OFFSET_COL + 0, "|");
+        // Afficher les délimitations des cases
         for (int j = 0; j < grid->width; j++)
         {
-            mvprintw(OFFSET_LINE + i * 2 + 1, OFFSET_COL + j * 2 + 2, "|");
-            mvprintw(OFFSET_LINE + i * 2 + 2, OFFSET_COL + j * 2, "+");
-            mvprintw(OFFSET_LINE + i * 2 + 2, OFFSET_COL + j * 2 + 1, "-");
+            mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4, "|");
+            mvprintw(offsetLine + i * 2 + 2, offsetCol + j * 4, "+");
+            for (int k = 1; k < 4; k++)
+            {
+                mvprintw(offsetLine + i * 2 + 2, offsetCol + j * 4 + k, "-");
+            }
         }
-        mvprintw(OFFSET_LINE + i * 2 + 2, OFFSET_COL + grid->width * 2, "+");
+        // Afficher la délimitation de la dernière colonne
+        mvprintw(offsetLine + i * 2 + 1, offsetCol + grid->width * 4, "|");
+        mvprintw(offsetLine + i * 2 + 2, offsetCol + grid->width * 4, "+");
     }
 
     if (statusMessage != NULL)
     {
-        mvprintw(OFFSET_LINE + grid->height * 2 + 2, OFFSET_COL, "%ls", statusMessage);
+        mvprintw(offsetLine + 2, textOffsetCol, "%ls", statusMessage);
     }
 
-    mvprintw(OFFSET_LINE + grid->height * 2 + 3, OFFSET_COL, "Le joueur %c joue.", nextPlayer);
+    mvprintw(offsetLine + 3, textOffsetCol, "Le joueur %c joue.", nextPlayer);
 
     refresh();
 }
@@ -88,6 +112,8 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, i
  */
 void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, int *column, int *function)
 {
+    int offsetLine = getOffsetLine(grid), textOffsetCol = getTextOffsetCol(grid);
+
     int key;
     *row = 0;
     *column = 0;
@@ -98,7 +124,7 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
     {
         if (!isMoveAllowed(grid, *row, *column, nextPlayer))
         {
-            statusMessage = L"Ce cube appartient à un autre joueur. Vous ne pouvez pas le déplacer. Veuillez rejouer.";
+            statusMessage = L"Ce cube appartient à un autre joueur. Vous ne pouvez pas le déplacer.";
         }
         else
         {
@@ -108,9 +134,9 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
         // Affiche la grille + le curseur
         displayGrid(grid, nextPlayer, statusMessage, *row, *column);
 
-        mvprintw(OFFSET_LINE + grid->height * 2 + 4, OFFSET_COL, "Utilisez les fleches pour naviguer.");
-        mvprintw(OFFSET_LINE + grid->height * 2 + 5, OFFSET_COL, "Appuyez sur Entree pour selectionner une case.");
-        mvprintw(OFFSET_LINE + grid->height * 2 + 6, OFFSET_COL, "Echap pour quitter");
+        mvprintw(offsetLine + 5, textOffsetCol, "%ls", L"Utilisez les flèches pour naviguer.");
+        mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Appuyez sur Entrer pour sélectionner une case.");
+        mvprintw(offsetLine + 7, textOffsetCol, "Echap pour quitter");
         refresh();
 
         // touches utili
@@ -178,8 +204,8 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
             }
 
             displayGrid(grid, nextPlayer, statusMessage, *row, *column);
-            mvprintw(OFFSET_LINE + grid->height * 2 + 4, OFFSET_COL, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp");
-            mvprintw(OFFSET_LINE + grid->height * 2 + 5, OFFSET_COL, "%ls", L"Choisissez une fonction (0 à 3) : ");
+            mvprintw(offsetLine + 5, textOffsetCol, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp");
+            mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Choisissez une fonction (0 à 3) : ");
             refresh();
             scanw("%d", function);
             selecting = 0;
