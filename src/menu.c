@@ -56,12 +56,6 @@ void afficherMenu()
     int execution = 1;
     int touche;
 
-    cbreak();
-    curs_set(0); // Masque le curseur
-
-    // Activer les touches fléchées
-    keypad(stdscr, TRUE);
-
     // Affichage du menu
     while (execution)
     {

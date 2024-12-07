@@ -11,6 +11,20 @@
 #include <ncurses.h>
 #endif
 
+
+/**
+ * Description : Initialise ncurses
+ * Auteur : Valentin et Kevin
+ * Traitement : On initialise l'affichage ncurses et on définit quelques propriétés
+ */
+void initNcurses() {
+    initscr();
+    
+    cbreak(); // Permettre l'entrée de caractères un par un
+    curs_set(0); // Masque le curseur
+    keypad(stdscr, TRUE); // Activer les touches fléchées
+}
+
 /**
  * Description : Programme principal
  * Traitement :
@@ -22,7 +36,7 @@
 int main()
 {
     srand(time(NULL));
-    initscr();
+    initNcurses();
     setlocale(LC_ALL, ""); // Permettre les caractères spéciaux avec ncurses sur Windows
     afficherMenu();
     endwin();
