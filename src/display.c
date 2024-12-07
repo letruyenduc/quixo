@@ -102,8 +102,9 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, i
 }
 
 /**
- * Auteurs : Zeid
- * Description : Permet à l'utilisateur de naviguer avec les flèches et d'effectuer une sélection
+ * Auteurs : Zeid et Duc
+ * Description : Permet à l'utilisateur de naviguer avec les flèches et d'effectuer une sélection avec la touche Entrée
+ * Et de choisir une action à effectuer avec les flèches directionnelles
  * Paramètres :
  * - grid : La grille de jeu
  * - row : Position de la ligne sélectionnée
@@ -223,6 +224,11 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
             do
             {
                 displayGrid(grid, nextPlayer, statusMessage, *row, *column);
+                mvprintw(offsetLine + 5, textOffsetCol, "Flèche droite : Pousser la case vers la droite");
+                mvprintw(offsetLine + 6, textOffsetCol, "Flèche gauche : Pousser la ligne vers la gauche");
+                mvprintw(offsetLine + 7, textOffsetCol, "Flèche bas : Pousser la colonne vers le bas");
+                mvprintw(offsetLine + 8, textOffsetCol, "Flèche haut : Pousser la colonne vers le haut");
+                mvprintw(offsetLine + 9, textOffsetCol, "Echap pour quitter");
                 statusMessage = NULL;
                 key = getch();
                 switch (key)
@@ -243,11 +249,6 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
                     *function = FUNCTION_QUIT_GAME;
                     break;
                 }
-                mvprintw(offsetLine + 5, textOffsetCol, "Flèche droite : Déplacer la ligne vers la droite");
-                mvprintw(offsetLine + 6, textOffsetCol, "Flèche gauche : Déplacer la ligne vers la gauche");
-                mvprintw(offsetLine + 7, textOffsetCol, "Flèche bas : Déplacer la colonne vers le bas");
-                mvprintw(offsetLine + 8, textOffsetCol, "Flèche haut : Déplacer la colonne vers le haut");
-                mvprintw(offsetLine + 9, textOffsetCol, "Echap pour quitter");
                 refresh();
             } while (statusMessage != NULL);
 
