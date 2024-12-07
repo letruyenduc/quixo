@@ -1,10 +1,9 @@
 #include <stdlib.h>
-
 #include "grid.h"
 #include "display.h"
 #include "utils.h"
 #include "constants.h"
-
+#include "wincond.h"
 /**
  * Description : Modifie la liste des joueurs pour passer au tour suivant
  * Auteur : Kevin Carletto
@@ -93,6 +92,7 @@ void handleTurnStatus(int status, char playerList[], int playerCount, wchar_t **
  * - playerCount : Le nombre de joueurs dans la liste
  * Traitement : On boucle tant que la partie est en cours. À chaque itération, on affiche la grille, on récupère les entrées utilisateur,
  * on exécute l'action demandée. On effectue ensuite les actions de fin de tour en fonction du statut retourné.
+ * Si un joueur a gagné, on arrête la boucle.
  */
 void gameLoop(Grid *grid, char playerList[], int playerCount)
 {
@@ -104,7 +104,6 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
     {
         handleInput(grid, playerList[0], statusMessage, &row, &column, &function);
         statusMessage = NULL; // On réinitialise le message de statut après l'avoir affiché
-
         // Cas particulier pour la fonction quitter, on n'effectue pas de tour de jeu
         if (function == FUNCTION_QUIT_GAME)
         {
@@ -114,6 +113,10 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
         {
             int status = handlePlayerTurn(grid, row, column, function, playerList, playerCount);
             handleTurnStatus(status, playerList, playerCount, &statusMessage);
+            if (winCond(grid) != ' ' && status == TURN_STATUS_OK)
+            {
+                playing = 0; // À ajouter une fonction qui affiche un écran de fin de partie
+            }
         }
     }
 }
