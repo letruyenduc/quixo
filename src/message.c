@@ -44,6 +44,8 @@ int showMessage(wchar_t *message, wchar_t **options, int optionsCount)
 
     // On récupère la longueur de la plus grande ligne
     int messageMaxLength = maxTab(messageLinesLength, messageLineCount);
+
+    // Le tableau de la variable messageLinesLength provient d'une allocation dynamique dans la fonction getLinesLength
     free(messageLinesLength);
     messageLinesLength = NULL;
 
@@ -122,6 +124,13 @@ int showMessage(wchar_t *message, wchar_t **options, int optionsCount)
     return selectedOption;
 }
 
+/**
+ * Description : Affiche un message avec une seule option "OK"
+ * Auteur : Kevin Carletto
+ * Paramètres :
+ * - message : Le message à afficher. Peut contenir plusieurs lignes
+ * Traitement : On appelle la fonction showMessage définie au dessus, avec le message passé en argument ici et la seule option "OK".
+ */
 void showMessageOkButton(wchar_t *message)
 {
     showMessage(message, (wchar_t *[]){L"Ok"}, 1);

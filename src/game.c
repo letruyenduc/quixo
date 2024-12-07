@@ -114,13 +114,10 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
         {
             if (save_grid(grid)) // TODO : Sauvegarder playerList pour savoir dans quel ordre les joueurs doivent continuer à jouer
             {
-                wchar_t *options[] = {
-                    L"Quitter sans sauvegarder",
-                    L"Continuer à jouer"};
-
                 int selectedOption = showMessage(
                     L"Une erreur est survenue lors de la sauvegarde de l'état du jeu !\nSouhaitez vous quitter sans sauvegarder ou continuer à jouer ?",
-                    options, 2);
+                    (wchar_t *[]){L"Quitter sans sauvegarder", L"Continuer à jouer"},
+                    2);
                 if (selectedOption == 0) // Quitter sans sauvegarder, dans le cas contraire on ne modifie pas l'état de la variable playing
                 {
                     playing = 0;
@@ -186,11 +183,11 @@ void startNewGame()
 }
 
 /*
-* Auteur : Duc
-* Description : Charger une partie sauvegardée
-* Paramètres : Aucun
-* Retour : Aucun
-*/
+ * Auteur : Duc
+ * Description : Charger une partie sauvegardée
+ * Paramètres : Aucun
+ * Retour : Aucun
+ */
 void startNewGameFromSave()
 {
     Grid *grid = loadSave(list_saves());

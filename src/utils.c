@@ -47,6 +47,11 @@ int Lstrlen(wchar_t *str)
  * Retour (via paramètres pointeurs) :
  * - linesCount : Le nombre de lignes de la chaine de caractères
  * - linesLength : Le nombre de caractères pour chaque ligne
+ * Traitement :
+ * On initialise le nombre de lignes à 1 et un tableau d'entiers de taille 1 avec la valeur 0
+ * On parcours la chaine de caractères jusqu'à atteindre un caractère NUL
+ * - Si le caractère actuel est un retour à la ligne, on incrémente le nombre de lignes et on ajoute une case au tableau que l'on initialise à 0
+ * - Sinon, on incrémente la dernière case du tableau.
  */
 void getLinesLength(wchar_t *str, int *linesCount, int **linesLength)
 {
@@ -90,7 +95,22 @@ int maxTab(int *tab, int tabLength)
     return maxVal;
 }
 
-void mvprintwLines(int line, int col, wchar_t *str)
+
+/**
+ * Description : Affiche une chaine de caractères larges à une certaine position en alignant les lignes
+ * Auteur : Kevin Carletto
+ * Paramètres :
+ * - line : La ligne à laquelle afficher la première ligne de la chaine de caractère
+ * - col : La colonne à laquelle afficher le début de chaque ligne
+ * - str : La chaine de caractères larges à afficher
+ * Retour : La prochaine ligne sur laquelle rien n'a été affiché. Utilisable pour combiner avec d'autres affichages ensuite
+ * Traitement :
+ * On parcours la chaine de caractères jusqu'à atteindre un caractère NUL.
+ * - Si le caractère actuel est un retour à la ligne, on incrémente la ligne d'affichage et on réinitialise la colonne à celle passée initialement en argument
+ * - Sinon, on affiche le caractère et on incrémente la colonne.
+ * Enfin, on retourne la prochaine ligne sur laquelle rien n'a été affiché
+ */
+int mvprintwLines(int line, int col, wchar_t *str)
 {
     int currentCol = col;
 
@@ -106,4 +126,5 @@ void mvprintwLines(int line, int col, wchar_t *str)
             mvprintw(line, currentCol++, "%lc", str[i]);
         }
     }
+    return line;
 }
