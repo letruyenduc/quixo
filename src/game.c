@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "constants.h"
 #include "wincond.h"
+#include "endscreen.h"
 /**
  * Description : Modifie la liste des joueurs pour passer au tour suivant
  * Auteur : Kevin Carletto
@@ -115,7 +116,7 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
             handleTurnStatus(status, playerList, playerCount, &statusMessage);
             if (status == TURN_STATUS_OK && winCond(grid) != ' ')
             {
-                playing = 0; // À ajouter une fonction qui affiche un écran de fin de partie
+                playing = displayEndScreen(grid, winCond(grid)); // On affiche l'écran de fin de partie
             }
         }
     }
