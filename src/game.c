@@ -5,6 +5,8 @@
 #include "constants.h"
 #include "wincond.h"
 #include "endscreen.h"
+#include "save.h"
+
 /**
  * Description : Modifie la liste des joueurs pour passer au tour suivant
  * Auteur : Kevin Carletto
@@ -108,6 +110,7 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
         // Cas particulier pour la fonction quitter, on n'effectue pas de tour de jeu
         if (function == FUNCTION_QUIT_GAME)
         {
+            save_grid(grid);
             playing = 0;
         }
         else

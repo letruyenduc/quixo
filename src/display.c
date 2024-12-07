@@ -9,7 +9,6 @@
 #endif
 #include "grid.h"
 #include "constants.h"
-#include "save.h"
 
 #define TEXT_CENTERING 25
 
@@ -257,12 +256,8 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
             break;
         case 27: // Echap pour quitter
             *function = FUNCTION_QUIT_GAME;
-            save_grid(grid);
             selecting = 0;
             break;
-        default:
-            break;
-    
         }
     }
 }
