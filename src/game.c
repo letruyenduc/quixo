@@ -113,7 +113,7 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
         {
             int status = handlePlayerTurn(grid, row, column, function, playerList, playerCount);
             handleTurnStatus(status, playerList, playerCount, &statusMessage);
-            if (winCond(grid) != ' ' && status == TURN_STATUS_OK)
+            if (status == TURN_STATUS_OK && winCond(grid) != ' ')
             {
                 playing = 0; // À ajouter une fonction qui affiche un écran de fin de partie
             }
