@@ -21,6 +21,7 @@ void initNcurses() {
     initscr();
     
     cbreak(); // Permettre l'entrée de caractères un par un
+    noecho(); // Désactiver l'affichage des caractères tapés
     curs_set(0); // Masque le curseur
     keypad(stdscr, TRUE); // Activer les touches fléchées
 }
