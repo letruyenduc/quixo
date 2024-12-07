@@ -14,7 +14,14 @@
 #endif
 #define ligne 10
 
-
+/*
+* Auteur : Duc et Kevin
+* Description : Charger la grille depuis un fichier
+* Paramètres :
+* - filename : Le nom du fichier de sauvegarde
+* Retour :
+* - La grille chargée
+*/
 Grid * loadSave(char *filename) {
     // Charger les données de la grille)
     FILE *file = fopen(filename, "r");
@@ -34,7 +41,9 @@ Grid * loadSave(char *filename) {
 * Auteur : Duc
 * Description : Affiche la liste des sauvegardes et permet de charger une sauvegarde
 * Paramètres :
-* - grid : La grille de jeu
+* - Aucun
+* Retour :
+* - Le nom du fichier de sauvegarde sélectionné
 */
 char * list_saves() {
     Grid *grid;

@@ -163,6 +163,12 @@ void startNewGame()
     grid = NULL;
 }
 
+/*
+* Auteur : Duc
+* Description : Charger une partie sauvegardée
+* Paramètres : Aucun
+* Retour : Aucun
+*/
 void startNewGameFromSave()
 {
     Grid *grid = loadSave(list_saves());

@@ -111,6 +111,12 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, i
  * - row : Position de la ligne sélectionnée
  * - column : Position de la colonne sélectionnée
  * - function : Action choisie par l'utilisateur
+ * - nextPlayer : Le prochain joueur qui doit jouer
+ * - statusMessage : Le message de statut
+ * Traitement : On affiche la grille et le curseur. On récupère les entrées utilisateur et on effectue les actions
+ * en fonction de la touche appuyée.
+ * On bloque la sélection si un message de statut est affiché.
+ * On affiche les instructions pour choisir une action.
  */
 void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, int *column, int *function)
 {
