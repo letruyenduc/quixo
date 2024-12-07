@@ -15,18 +15,19 @@
 #define ligne 10
 
 
-void loadSave(Grid *grid, char *filename) {
-    // Charger les données de la grille
+Grid * loadSave(char *filename) {
+    // Charger les données de la grille)
     FILE *file = fopen(filename, "r");
-    fscanf(file, "%d %d\n", &grid->width, &grid->height);
-    grid->rows = malloc(grid->height * sizeof(char *));
-    for (int i = 0; i < grid->height; i++) {
-        grid->rows[i] = malloc(grid->width * sizeof(char));
-        for (int j = 0; j < grid->width; j++) {
-            fscanf(file, "%c ", &grid->rows[i][j]);
+    int width, height;
+    fscanf(file, "%d %d\n", &width, &height);
+    Grid *grid = createGrid(width, height);
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            fscanf(file, "%c", &grid->rows[i][j]);
         }
     }
     fclose(file);
+    return grid;
 }
 
 /*
@@ -35,7 +36,7 @@ void loadSave(Grid *grid, char *filename) {
 * Paramètres :
 * - grid : La grille de jeu
 */
-void list_saves() {
+char * list_saves() {
     Grid *grid;
     DIR *d;
     struct dirent *dir;
@@ -46,7 +47,7 @@ void list_saves() {
         int row = 0;
         int count = 0;
         char *options[100]; // Tableau pour stocker les noms de fichiers
-        mvprintw(ligne + row++, 0, "List de sauvegardes:                                                            ");
+        mvprintw(ligne + row++, 0, "Liste de sauvegarde:                                                            ");
         while ((dir = readdir(d)) != NULL) {
             if (dir->d_type == DT_REG) {
                 options[count] = strdup(dir->d_name); // Copier le nom du fichier dans le tableau
@@ -72,21 +73,21 @@ void list_saves() {
                 selected = (selected + 1) % count;
                 break;
             case 10: // Touche Entrée
-                loadSave(grid, options[selected]); // On peut utiliser options[selected] ici
                 endwin(); // End ncurses mode
                 for (int i = 0; i < count; i++) {
                     free(options[i]); // Libérer la mémoire allouée
                 }
-                return;
+                return options[selected];
             case 27: // Touche Echap
                 endwin(); // End ncurses mode
                 for (int i = 0; i < count; i++) {
                     free(options[i]); // Libérer la mémoire allouée
                 }
-                return;
+            return NULL;
             }
         }
     } else {
         perror("opendir");
     }
+    return NULL;
 }
