@@ -64,12 +64,16 @@ bin/main
 - ✅ Gestion des déplacements élémentaires ( Déplacer les colonnes et les lignes )
 - Interface de jeu  
   - ✅ Affichage de la grille
-  - ❌ Récupérer les entrées utilisateur
+  - ✅ Récupérer les entrées utilisateur
 - ✅ Menu principal
 - ✅ Tours de jeu
-- ❌ Conditions de victoire
-- ❌ Sauvegarde et chargement d'une partie en cours
+- ✅ Conditions de victoire
+- ✅ Sauvegarde d'une partie en cours
+- ❌ Charger une partie en cours
 
 ### Fonctionnalités bonus :
 - ❌ Jouer contre un ordinateur
 - ❌ Jouer à plus de 2
+
+## Exemple d'utilisation
+
