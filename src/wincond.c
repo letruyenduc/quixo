@@ -9,11 +9,11 @@
 */
 char winCondHorizontal(Grid *grid){
     for (int i = 0; i < grid->height; i++){
-        if (grid->rows[i][0] == grid->rows[i][1] && grid->rows[i][1] == grid->rows[i][2] && grid->rows[i][2] == grid->rows[i][3] && grid->rows[i][3] == grid->rows[i][4]){
-            return grid->rows[i][0];
-        }
-        else{
-            return ' ';
+        char first = grid->rows[i][0];
+        int j;
+        for (j = 1; j < grid->width && grid->rows[i][j] == first; j++);
+        if (j == grid->width) {
+            return first;
         }
     }
     return ' ';
@@ -27,11 +27,11 @@ char winCondHorizontal(Grid *grid){
 */
 char winCondVertical(Grid *grid){
     for (int i = 0; i < grid->width; i++){
-        if (grid->rows[0][i] == grid->rows[1][i] && grid->rows[1][i] == grid->rows[2][i] && grid->rows[2][i] == grid->rows[3][i] && grid->rows[3][i] == grid->rows[4][i]){
-            return grid->rows[0][i];
-        }
-        else{
-            return ' ';
+        char first = grid->rows[0][i];
+        int j;
+        for (j = 1; j < grid->height && grid->rows[j][i] == first; j++);
+        if (j == grid->height){
+            return first;
         }
     }
     return ' ';
@@ -62,18 +62,15 @@ char winCondDiagonal(Grid *grid){
 * Retour : Le joueur gagnant
 */
 char winCond(Grid *grid) {
-    char winner = ' ';
-    if (winCondHorizontal(grid) != ' '){
-        winner = winCondHorizontal(grid);
+    char winner = winCondHorizontal(grid);
+    if (winner != ' '){
+        return winner;
     }
-    else if (winCondVertical(grid) != ' '){
-        winner = winCondVertical(grid);
+
+    winner = winCondVertical(grid);
+    if (winner != ' '){
+        return winner;
     }
-    else if (winCondDiagonal(grid) != ' '){
-        winner = winCondDiagonal(grid);
-    }
-    else{
-        winner = ' ';
-    }
-    return winner;
+
+    return winCondDiagonal(grid);
 }
