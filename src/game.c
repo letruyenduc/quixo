@@ -117,7 +117,8 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
             handleTurnStatus(status, playerList, playerCount, &statusMessage);
             if (status == TURN_STATUS_OK && winCond(grid) != ' ')
             {
-                playing = displayEndScreen(grid, winCond(grid)); // On affiche l'écran de fin de partie
+                displayEndScreen(grid, winCond(grid));
+                playing = 0; // On affiche l'écran de fin de partie
             }
         }
     }
