@@ -6,34 +6,37 @@
 
 // Définir le séparateur de chemin selon l'OS
 #ifdef _WIN32
-    #include <direct.h> // Pour _mkdir sur Windows
-    #define SEPARATEUR "\\"
+#include <direct.h> // Pour _mkdir sur Windows
+#define SEPARATEUR "\\"
 #else
-    #include <sys/stat.h> // Pour mkdir sur Linux/macOS
-    #define SEPARATEUR "/"
+#include <sys/stat.h> // Pour mkdir sur Linux/macOS
+#define SEPARATEUR "/"
 #endif
 
 #include "grid.h"
 #include "save.h"
 
 // Définir le dossier de sauvegarde
-const char* savesDirectory = "saves";
+const char *savesDirectory = "saves";
 
-int createSavesDirectory() {
-    #ifdef _WIN32
+int createSavesDirectory()
+{
+#ifdef _WIN32
     // Sous Windows, on utilise _mkdir
     return _mkdir(savesDirectory) != 0 && errno != EEXIST;
-    #else
+#else
     // Sous Linux et MacOS, on utilise mkdir avec le flag 0777 pour les droits d'accès
     return mkdir(savesDirectory, 0777) != 0 && errno != EEXIST;
-    #endif
+#endif
 }
 
-int save_grid(Grid *grid) {
+int save_grid(Grid *grid)
+{
     char cheminFichier[256];
 
     // Essayer de créer le répertoire
-    if (createSavesDirectory()) {
+    if (createSavesDirectory())
+    {
         return 1;
     }
 
@@ -50,13 +53,16 @@ int save_grid(Grid *grid) {
     FILE *fichier = fopen(cheminFichier, "w");
 
     // Vérifie si le fichier est ouvert
-    if (fichier == NULL) {
+    if (fichier == NULL)
+    {
         return 1;
     }
 
     // Écriture des données de la grille dans le fichier
-    for (int i = 0; i < grid->height; i++) {
-        for (int j = 0; j < grid->width; j++) {
+    for (int i = 0; i < grid->height; i++)
+    {
+        for (int j = 0; j < grid->width; j++)
+        {
             fprintf(fichier, "%c", grid->rows[i][j]);
         }
         fprintf(fichier, "\n"); // Fin de ligne après chaque rangée

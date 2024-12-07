@@ -95,7 +95,6 @@ int maxTab(int *tab, int tabLength)
     return maxVal;
 }
 
-
 /**
  * Description : Affiche une chaine de caractères larges à une certaine position en alignant les lignes
  * Auteur : Kevin Carletto

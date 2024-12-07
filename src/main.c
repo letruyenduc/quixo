@@ -11,18 +11,18 @@
 #include <ncurses.h>
 #endif
 
-
 /**
  * Description : Initialise ncurses
  * Auteur : Valentin et Kevin
  * Traitement : On initialise l'affichage ncurses et on définit quelques propriétés
  */
-void initNcurses() {
+void initNcurses()
+{
     initscr();
-    
-    cbreak(); // Permettre l'entrée de caractères un par un
-    noecho(); // Désactiver l'affichage des caractères tapés
-    curs_set(0); // Masque le curseur
+
+    cbreak();             // Permettre l'entrée de caractères un par un
+    noecho();             // Désactiver l'affichage des caractères tapés
+    curs_set(0);          // Masque le curseur
     keypad(stdscr, TRUE); // Activer les touches fléchées
 }
 
