@@ -224,14 +224,31 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
             {
                 displayGrid(grid, nextPlayer, statusMessage, *row, *column);
                 statusMessage = NULL;
-                mvprintw(offsetLine + 5, textOffsetCol, "0=shiftRowRight, 1=shiftRowLeft, 2=shiftColumnDown, 3=shiftColumnUp");
-                mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Choisissez une fonction (0 à 3) : ");
-                refresh();
-                scanw("%d", function);
-                if (*function < 0 || *function > 3)
+                key = getch();
+                switch (key)
                 {
-                    statusMessage = L"Fonction invalide";
+                case KEY_RIGHT:
+                    *function = FUNCTION_SHIFT_ROW_RIGHT;
+                    break;
+                case KEY_LEFT:
+                    *function = FUNCTION_SHIFT_ROW_LEFT;
+                    break;
+                case KEY_DOWN:
+                    *function = FUNCTION_SHIFT_COLUMN_DOWN;
+                    break;
+                case KEY_UP:
+                    *function = FUNCTION_SHIFT_COLUMN_UP;
+                    break;
+                case 27: // Echap pour quitter
+                    *function = FUNCTION_QUIT_GAME;
+                    break;
                 }
+                mvprintw(offsetLine + 5, textOffsetCol, "Flèche droite : Déplacer la ligne vers la droite");
+                mvprintw(offsetLine + 6, textOffsetCol, "Flèche gauche : Déplacer la ligne vers la gauche");
+                mvprintw(offsetLine + 7, textOffsetCol, "Flèche bas : Déplacer la colonne vers le bas");
+                mvprintw(offsetLine + 8, textOffsetCol, "Flèche haut : Déplacer la colonne vers le haut");
+                mvprintw(offsetLine + 9, textOffsetCol, "Echap pour quitter");
+                refresh();
             } while (statusMessage != NULL);
 
             selecting = 0;
@@ -242,6 +259,7 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
             break;
         default:
             break;
+    
         }
     }
 }
