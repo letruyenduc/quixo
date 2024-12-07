@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "wincond.h"
 #include "endscreen.h"
+#include "loadGame.h"
 #include "save.h"
 #include "message.h"
 
@@ -137,7 +138,8 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
             handleTurnStatus(status, playerList, playerCount, &statusMessage);
             if (status == TURN_STATUS_OK && winCond(grid) != ' ')
             {
-                playing = displayEndScreen(grid, winCond(grid)); // On affiche l'écran de fin de partie
+                displayEndScreen(grid, winCond(grid));
+                playing = 0; // On affiche l'écran de fin de partie
             }
         }
     }
@@ -174,6 +176,24 @@ void shufflePlayerList(char playerList[], int playerCount)
 void startNewGame()
 {
     Grid *grid = createGrid(5, 5);
+    char playerList[] = {'X', 'O'};
+    int playerCount = 2;
+    shufflePlayerList(playerList, playerCount);
+
+    gameLoop(grid, playerList, playerCount);
+    freeGrid(grid);
+    grid = NULL;
+}
+
+/*
+* Auteur : Duc
+* Description : Charger une partie sauvegardée
+* Paramètres : Aucun
+* Retour : Aucun
+*/
+void startNewGameFromSave()
+{
+    Grid *grid = loadSave(list_saves());
     char playerList[] = {'X', 'O'};
     int playerCount = 2;
     shufflePlayerList(playerList, playerCount);

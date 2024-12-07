@@ -17,7 +17,7 @@
 * - winner : Le joueur gagnant
 * Retour : 0 qui indique la fin du jeu, on peut donc quitter le programme
 */
-char displayEndScreen(Grid *grid, int winner)
+void displayEndScreen(Grid *grid, int winner)
 {
     char key;
     initscr();
@@ -32,5 +32,5 @@ char displayEndScreen(Grid *grid, int winner)
     mvprintw(LINES / 2 + 2, (COLS - strlen("Appuyez sur n'importe quelle touche pour quitter")) / 2, "Appuyez sur n'importe quelle touche pour quitter");
     refresh();
     getch();
-    return 0;
+
 }
