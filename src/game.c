@@ -6,6 +6,7 @@
 #include "wincond.h"
 #include "endscreen.h"
 #include "save.h"
+#include "message.h"
 
 /**
  * Description : Modifie la liste des joueurs pour passer au tour suivant
@@ -110,8 +111,25 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
         // Cas particulier pour la fonction quitter, on n'effectue pas de tour de jeu
         if (function == FUNCTION_QUIT_GAME)
         {
-            save_grid(grid);
-            playing = 0;
+            if (save_grid(grid)) // TODO : Sauvegarder playerList pour savoir dans quel ordre les joueurs doivent continuer à jouer
+            {
+                wchar_t *options[] = {
+                    L"Quitter sans sauvegarder",
+                    L"Continuer à jouer"};
+
+                int selectedOption = showMessage(
+                    L"Une erreur est survenue lors de la sauvegarde de l'état du jeu !\nSouhaitez vous quitter sans sauvegarder ou continuer à jouer ?",
+                    options, 2);
+                if (selectedOption == 0) // Quitter sans sauvegarder, dans le cas contraire on ne modifie pas l'état de la variable playing
+                {
+                    playing = 0;
+                }
+            }
+            else
+            {
+                showMessageOkButton(L"L'état du jeu a été sauvegardé");
+                playing = 0;
+            }
         }
         else
         {

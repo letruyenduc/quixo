@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <errno.h>
 
 // Définir le séparateur de chemin selon l'OS
 #ifdef _WIN32
     #include <direct.h> // Pour _mkdir sur Windows
     #define SEPARATEUR "\\"
-    #define mkdir _mkdir // Alias pour uniformiser les appels
 #else
     #include <sys/stat.h> // Pour mkdir sur Linux/macOS
     #define SEPARATEUR "/"
@@ -16,20 +16,25 @@
 #include "grid.h"
 #include "save.h"
 
-void save_grid(Grid *grid) {
-    // Définir le dossier de sauvegarde
-    const char *dossier = "saves";
+// Définir le dossier de sauvegarde
+const char* savesDirectory = "saves";
+
+int createSavesDirectory() {
+    #ifdef _WIN32
+    // Sous Windows, on utilise _mkdir
+    return _mkdir(savesDirectory) != 0 && errno != EEXIST;
+    #else
+    // Sous Linux et MacOS, on utilise mkdir avec le flag 0777 pour les droits d'accès
+    return mkdir(savesDirectory, 0777) != 0 && errno != EEXIST;
+    #endif
+}
+
+int save_grid(Grid *grid) {
     char cheminFichier[256];
 
-    // Vérifier si le dossier existe, sinon le créer
-    struct stat st = {0};
-    if (stat(dossier, &st) == -1) { // Si le dossier n'existe pas
-        if (mkdir(dossier, 0700) == 0) { // Créer le dossier avec les permissions
-            printf("Dossier '%s' créé avec succès.\n", dossier);
-        } else {
-            printf("Erreur : Impossible de créer le dossier '%s'.\n", dossier);
-            exit(1); // Quitter si la création du dossier échoue
-        }
+    // Essayer de créer le répertoire
+    if (createSavesDirectory()) {
+        return 1;
     }
 
     // Définition des variables du temps actuel avec <time.h>
@@ -37,7 +42,7 @@ void save_grid(Grid *grid) {
     struct tm *tempsLocal = localtime(&maintenant);
 
     // Générer le nom du fichier avec le chemin complet
-    snprintf(cheminFichier, sizeof(cheminFichier), "%s%s%s", dossier, SEPARATEUR, "sauvegarde_");
+    snprintf(cheminFichier, sizeof(cheminFichier), "%s%s%s", savesDirectory, SEPARATEUR, "sauvegarde_");
     strftime(cheminFichier + strlen(cheminFichier), sizeof(cheminFichier) - strlen(cheminFichier),
              "%Y-%m-%d_%H-%M-%S.txt", tempsLocal);
 
@@ -46,8 +51,7 @@ void save_grid(Grid *grid) {
 
     // Vérifie si le fichier est ouvert
     if (fichier == NULL) {
-        printf("Erreur lors de l'ouverture du fichier : %s\n", cheminFichier);
-        exit(1);
+        return 1;
     }
 
     // Écriture des données de la grille dans le fichier
@@ -60,4 +64,5 @@ void save_grid(Grid *grid) {
 
     // Fermeture du fichier
     fclose(fichier);
+    return 0;
 }
