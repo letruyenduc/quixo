@@ -9,6 +9,7 @@
 #endif
 #include "grid.h"
 #include "constants.h"
+#include "save.h"
 
 #define TEXT_CENTERING 25
 
@@ -137,7 +138,7 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
 
         mvprintw(offsetLine + 5, textOffsetCol, "%ls", L"Utilisez les flèches pour naviguer.");
         mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Appuyez sur Entrer pour sélectionner une case.");
-        mvprintw(offsetLine + 7, textOffsetCol, "Echap pour quitter");
+        mvprintw(offsetLine + 7, textOffsetCol, "Echap pour sauvegarder et quitter.");
         refresh();
 
         // touches utili
@@ -256,6 +257,7 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
             break;
         case 27: // Echap pour quitter
             *function = FUNCTION_QUIT_GAME;
+            save_grid(grid);
             selecting = 0;
             break;
         default:
