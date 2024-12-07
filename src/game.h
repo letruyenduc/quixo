@@ -4,6 +4,7 @@
 #define GAME_H
 
 // Fonction pour lancer une nouvelle partie
-int startNewGame();
+void startNewGame();
+void startNewGameFromSave();
 
 #endif // GAME_H

@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "wincond.h"
 #include "endscreen.h"
+#include "loadGame.h"
 /**
  * Description : Modifie la liste des joueurs pour passer au tour suivant
  * Auteur : Kevin Carletto
@@ -153,6 +154,18 @@ void shufflePlayerList(char playerList[], int playerCount)
 void startNewGame()
 {
     Grid *grid = createGrid(5, 5);
+    char playerList[] = {'X', 'O'};
+    int playerCount = 2;
+    shufflePlayerList(playerList, playerCount);
+
+    gameLoop(grid, playerList, playerCount);
+    freeGrid(grid);
+    grid = NULL;
+}
+
+void startNewGameFromSave()
+{
+    Grid *grid = loadSave(list_saves());
     char playerList[] = {'X', 'O'};
     int playerCount = 2;
     shufflePlayerList(playerList, playerCount);
