@@ -5,6 +5,8 @@
 #endif
 #include <stdlib.h>
 #include "game.h"
+#include "loadGame.h"
+#include "grid.h"
 
 /**
 * Auteurs : Valentin et Kevin
@@ -16,13 +18,14 @@
  */
 void traiterChoix(int choix, int *execution, wchar_t **statusMessage)
 {
+    Grid *grid;
     switch (choix)
     {
     case 0:
         startNewGame();
         break;
     case 1:
-        *statusMessage = L"L'option pour charger une partie n'est pas encore implementée.";
+        startNewGameFromSave();
         // Ajouter la logique pour charger une partie
         break;
     case 2:
