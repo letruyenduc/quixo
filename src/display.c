@@ -36,8 +36,9 @@ int getTextOffsetCol(Grid *grid)
  * - grid : La grille de jeu
  * - row : Position actuelle du curseur (ligne)
  * - column : Position actuelle du curseur (colonne)
+ * - selectingFunction : Valeur booléenne définissant s'il s'agit de la sélection du mouvement de déplacement
  */
-void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, int column)
+void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, int column, int selectingFunction)
 {
     clear(); // Efface tout pour un nouvel affichage
 
@@ -52,7 +53,7 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, i
             if (i == row && j == column)
             {
                 attron(A_REVERSE); // Surligne la case courante
-                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", grid->rows[i][j]);
+                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", selectingFunction ? ' ' : grid->rows[i][j]);
                 attroff(A_REVERSE);
             }
             else
@@ -102,29 +103,207 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, i
 }
 
 /**
- * Auteurs : Zeid et Duc
+ * Auteurs : Duc et Kevin
+ * Description : Permet à l'utilisateur de choisir une action à effectuer en fonction de la case sélectionnée
+ * Paramètres :
+ * - grid : La grille de jeu
+ * - nextPlayer : Le prochain joueur qui doit jouer
+ * - offsetLine : Décalage de la ligne
+ * - textOffsetCol : Décalage de la colonne pour le texte
+ * - row : Ligne de la grille de la case sélectionnée
+ * - column : Colonne de la grille de la case sélectionnée
+ * - statusMessage : Le message de statut
+ * Retour (par paramètres pointeurs) :
+ * - statusMessage : Le message de statut
+ * - function : L'action choisie par l'utilisateur
+ * Retour (par instruction return) : 0 si l'utilisateur a choisi une action, 1 sinon
+ */
+int handleFunctionSelection(Grid *grid, char nextPlayer, int offsetLine, int textOffsetCol, int row, int column, wchar_t **statusMessage, int *function)
+{
+    *function = -1;
+    do
+    {
+        displayGrid(grid, nextPlayer, *statusMessage, row, column, 1);
+        int textLine = 5;
+        if (column != 0)
+            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche droite : Réinsérer le cube par la droite");
+        if (column != grid->width - 1)
+            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche gauche : Réinsérer le cube par le gauche");
+        if (row != 0)
+            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche bas : Réinsérer le cube par le bas");
+        if (row != grid->height - 1)
+            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche haut : Réinsérer le cube par le haut");
+        mvprintw(offsetLine + textLine, textOffsetCol, "Echap pour revenir à la sélection de la case");
+        *statusMessage = NULL;
+        int key = getch();
+        switch (key)
+        {
+        case KEY_RIGHT:
+            if (column != 0)
+                *function = FUNCTION_SHIFT_ROW_RIGHT;
+            else
+                *statusMessage = L"Ce déplacement est interdit";
+            break;
+        case KEY_LEFT:
+            if (column != grid->width - 1)
+                *function = FUNCTION_SHIFT_ROW_LEFT;
+            else
+                *statusMessage = L"Ce déplacement est interdit";
+            break;
+        case KEY_DOWN:
+            if (row != 0)
+                *function = FUNCTION_SHIFT_COLUMN_DOWN;
+            else
+                *statusMessage = L"Ce déplacement est interdit";
+            break;
+        case KEY_UP:
+            if (row != grid->height - 1)
+                *function = FUNCTION_SHIFT_COLUMN_UP;
+            else
+                *statusMessage = L"Ce déplacement est interdit";
+            break;
+        case 27: // Echap pour revenir à la sélection de la case
+            return 1;
+        }
+        refresh();
+    } while (*function < 0 || *statusMessage != NULL);
+    return 0;
+}
+
+/**
+ * Auteurs : Zeid et Kevin
  * Description : Permet à l'utilisateur de naviguer avec les flèches et d'effectuer une sélection avec la touche Entrée
  * Et de choisir une action à effectuer avec les flèches directionnelles
  * Paramètres :
  * - grid : La grille de jeu
+ * - nextPlayer : Le prochain joueur qui doit jouer
+ * - statusMessage : Le message de statut
+ * Retours (par paramètres pointeurs) :
+ * - statusMessage : Le message de statut
  * - row : Position de la ligne sélectionnée
  * - column : Position de la colonne sélectionnée
  * - function : Action choisie par l'utilisateur
- * - nextPlayer : Le prochain joueur qui doit jouer
- * - statusMessage : Le message de statut
- * Traitement : On affiche la grille et le curseur. On récupère les entrées utilisateur et on effectue les actions
- * en fonction de la touche appuyée.
- * On bloque la sélection si un message de statut est affiché.
- * On affiche les instructions pour choisir une action.
+ * Retour (par instruction return) : 0 si l'utilisateur a choisi une action, 1 sinon
+ * Traitement : On affiche les instructions, on récupère l'entrée utilisateur et on effectue les actions en fonction de la touche appuyée :
+ * - Flèches pour naviguer
+ * - Entrée pour sélectionner une case puis sélectionner un déplacement à effectuer
+ * - Echap pour quitter
  */
-void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, int *column, int *function)
+int handleGridPointSelection(Grid *grid, char nextPlayer, wchar_t **statusMessage, int *row, int *column, int *function)
 {
     int offsetLine = getOffsetLine(grid), textOffsetCol = getTextOffsetCol(grid);
 
-    int key;
-    *row = 0;
-    *column = 0;
+    mvprintw(offsetLine + 5, textOffsetCol, "%ls", L"Utilisez les flèches pour naviguer.");
+    mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Appuyez sur Entrer pour sélectionner une case.");
+    mvprintw(offsetLine + 7, textOffsetCol, "Echap pour sauvegarder et quitter.");
+    refresh();
 
+    int key = getch();
+
+    switch (key)
+    {
+    case KEY_UP: // Flèche haut
+        if (*row > 0)
+        {
+            if (*column > 0 && *column < grid->width - 1)
+            {
+                *row = 0;
+            }
+            else
+            {
+                (*row)--;
+            }
+        }
+        else
+        {
+            *row = grid->width - 1;
+        }
+        break;
+    case KEY_DOWN: // Flèche bas
+        if (*row < grid->height - 1)
+        {
+            if (*column > 0 && *column < grid->width - 1)
+            {
+                *row = grid->height - 1;
+            }
+            else
+            {
+                (*row)++;
+            }
+        }
+        else
+        {
+            *row = 0;
+        }
+        break;
+    case KEY_LEFT: // Flèche gauche
+        if (*column > 0)
+        {
+            if (*row > 0 && *row < grid->height - 1)
+            {
+                *column = 0;
+            }
+            else
+            {
+                (*column)--;
+            }
+        }
+        else
+        {
+            *column = grid->height - 1;
+        }
+        break;
+    case KEY_RIGHT: // Flèche droite
+        if (*column < grid->width - 1)
+        {
+            if (*row > 0 && *row < grid->height - 1)
+            {
+                *column = grid->width - 1;
+            }
+            else
+            {
+                (*column)++;
+            }
+        }
+        else
+        {
+            *column = 0;
+        }
+        break;
+    case '\n': // Entrée
+        // Si un message de statut est affiché, alors on bloque la sélection
+        if (*statusMessage != NULL)
+        {
+            break;
+        }
+
+        return handleFunctionSelection(grid, nextPlayer, offsetLine, textOffsetCol, *row, *column, statusMessage, function);
+    case 27: // Echap pour quitter
+        *function = FUNCTION_QUIT_GAME;
+        return 0;
+        break;
+    }
+    return 1;
+}
+
+/**
+ * Auteurs : Kevin et Zeid 
+ * Description : Permet à l'utilisateur de naviguer avec les flèches et d'effectuer une sélection avec la touche Entrée
+ * Et de choisir une action à effectuer avec les flèches directionnelles
+ * Paramètres :
+ * - grid : La grille de jeu
+ * - nextPlayer : Le prochain joueur qui doit jouer
+ * - statusMessage : Le message de statut
+ * Retours (par paramètres pointeurs) :
+ * - row : Position de la ligne sélectionnée
+ * - column : Position de la colonne sélectionnée
+ * - function : Action choisie par l'utilisateur
+ * Traitement : On boucle tant qu'une action n'a pas été sélectionnée.
+ * - On affiche la grille et le curseur.
+ * - On récupère l'entrée utilisateur et on effectue les actions en fonction de la touche appuyée.
+ */
+void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, int *column, int *function)
+{
     int selecting = 1;
 
     while (selecting)
@@ -139,131 +318,8 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
         }
 
         // Affiche la grille + le curseur
-        displayGrid(grid, nextPlayer, statusMessage, *row, *column);
+        displayGrid(grid, nextPlayer, statusMessage, *row, *column, 0);
 
-        mvprintw(offsetLine + 5, textOffsetCol, "%ls", L"Utilisez les flèches pour naviguer.");
-        mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Appuyez sur Entrer pour sélectionner une case.");
-        mvprintw(offsetLine + 7, textOffsetCol, "Echap pour sauvegarder et quitter.");
-        refresh();
-
-        // touches utili
-        key = getch();
-
-        switch (key)
-        {
-        case KEY_UP: // Flèche haut
-            if (*row > 0)
-            {
-                if (*column > 0 && *column < grid->width - 1)
-                {
-                    *row = 0;
-                }
-                else
-                {
-                    (*row)--;
-                }
-            }
-            else
-            {
-                *row = grid->width - 1;
-            }
-            break;
-        case KEY_DOWN: // Flèche bas
-            if (*row < grid->height - 1)
-            {
-                if (*column > 0 && *column < grid->width - 1)
-                {
-                    *row = grid->height - 1;
-                }
-                else
-                {
-                    (*row)++;
-                }
-            }
-            else
-            {
-                *row = 0;
-            }
-            break;
-        case KEY_LEFT: // Flèche gauche
-            if (*column > 0)
-            {
-                if (*row > 0 && *row < grid->height - 1)
-                {
-                    *column = 0;
-                }
-                else
-                {
-                    (*column)--;
-                }
-            }
-            else
-            {
-                *column = grid->height - 1;
-            }
-            break;
-        case KEY_RIGHT: // Flèche droite
-            if (*column < grid->width - 1)
-            {
-                if (*row > 0 && *row < grid->height - 1)
-                {
-                    *column = grid->width - 1;
-                }
-                else
-                {
-                    (*column)++;
-                }
-            }
-            else
-            {
-                *column = 0;
-            }
-            break;
-        case '\n': // Entrée
-            // Si un message de statut est affiché, alors on bloque la sélection
-            if (statusMessage != NULL)
-            {
-                break;
-            }
-
-            *function = -1;
-            do
-            {
-                displayGrid(grid, nextPlayer, statusMessage, *row, *column);
-                mvprintw(offsetLine + 5, textOffsetCol, "Flèche droite : Pousser la case vers la droite");
-                mvprintw(offsetLine + 6, textOffsetCol, "Flèche gauche : Pousser la ligne vers la gauche");
-                mvprintw(offsetLine + 7, textOffsetCol, "Flèche bas : Pousser la colonne vers le bas");
-                mvprintw(offsetLine + 8, textOffsetCol, "Flèche haut : Pousser la colonne vers le haut");
-                mvprintw(offsetLine + 9, textOffsetCol, "Echap pour quitter");
-                statusMessage = NULL;
-                key = getch();
-                switch (key)
-                {
-                case KEY_RIGHT:
-                    *function = FUNCTION_SHIFT_ROW_RIGHT;
-                    break;
-                case KEY_LEFT:
-                    *function = FUNCTION_SHIFT_ROW_LEFT;
-                    break;
-                case KEY_DOWN:
-                    *function = FUNCTION_SHIFT_COLUMN_DOWN;
-                    break;
-                case KEY_UP:
-                    *function = FUNCTION_SHIFT_COLUMN_UP;
-                    break;
-                case 27: // Echap pour quitter
-                    *function = FUNCTION_QUIT_GAME;
-                    break;
-                }
-                refresh();
-            } while (statusMessage != NULL);
-
-            selecting = 0;
-            break;
-        case 27: // Echap pour quitter
-            *function = FUNCTION_QUIT_GAME;
-            selecting = 0;
-            break;
-        }
+        selecting = handleGridPointSelection(grid, nextPlayer, &statusMessage, row, column, function);
     }
 }

@@ -101,7 +101,7 @@ void handleTurnStatus(int status, char playerList[], int playerCount, wchar_t **
  */
 void gameLoop(Grid *grid, char playerList[], int playerCount)
 {
-    int row, column, function;
+    int row = 0, column = 0, function;
     int playing = 1;
     wchar_t *statusMessage = NULL;
 
