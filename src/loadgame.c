@@ -8,6 +8,7 @@
 #include <string.h>
 #include <dirent.h> // For DIR, struct dirent, opendir, readdir, closedir
 #include "grid.h"
+#include "save.h"
 #ifdef _WIN32
 #include <direct.h> // Pour _mkdir sur Windows
 #define SEPARATEUR "\\"
@@ -75,6 +76,13 @@ char *list_saves()
                 count++;
             }
         }
+        if (count == 0)
+        {
+            createSavesDirectory();
+            refresh();
+            getch();
+            return NULL;
+        }
         int selected = 0;
         int key;
         while (1)
@@ -95,25 +103,30 @@ char *list_saves()
                 selected = (selected + 1) % count;
                 break;
             case 10:      // Touche Entrée
-                endwin(); // End ncurses mode
+                refresh(); // Rafraîchir l'écran
                 for (int i = 0; i < count; i++)
                 {
                     free(options[i]); // Libérer la mémoire allouée
                 }
+                closedir(d);
                 return options[selected];
             case 27:      // Touche Echap
-                endwin(); // End ncurses mode
+                refresh(); // Rafraîchir l'écran
                 for (int i = 0; i < count; i++)
                 {
                     free(options[i]); // Libérer la mémoire allouée
                 }
+                closedir(d);
                 return NULL;
             }
         }
     }
     else
     {
-        perror("opendir");
+        mvprintw(ligne, 0, "Aucune sauvegarde trouvée. Appuyez sur une touche pour continuer.");
+        getch();
+        refresh();
+        return NULL;
     }
     return NULL;
 }
