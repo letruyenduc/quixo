@@ -3,5 +3,5 @@
 #define SAVE_H
 
 int save_grid(Grid *grid);
-
+int createSavesDirectory();
 #endif // SAVE_H
