@@ -5,7 +5,7 @@
 #endif
 #include <stdlib.h>
 #include "game.h"
-#include "loadGame.h"
+#include "loadgame.h"
 #include "grid.h"
 
 /**
