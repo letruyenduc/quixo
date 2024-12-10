@@ -5,6 +5,6 @@
 
 // Fonction pour lancer une nouvelle partie
 void startNewGame();
-void startNewGameFromSave();
+void startNewGameFromSave(char *saveStatus);
 
 #endif // GAME_H

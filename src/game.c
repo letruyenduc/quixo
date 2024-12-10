@@ -188,9 +188,9 @@ void startNewGame()
  * Paramètres : Aucun
  * Retour : Aucun
  */
-void startNewGameFromSave()
+void startNewGameFromSave(char *saveStatus)
 {
-    Grid *grid = loadSave(list_saves());
+    Grid *grid = loadSave(saveStatus);
     char playerList[] = {'X', 'O'};
     int playerCount = 2;
     shufflePlayerList(playerList, playerCount);
