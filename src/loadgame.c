@@ -18,6 +18,7 @@
 #define SEPARATEUR "/"
 #endif
 #define ligne 10
+#define MAX_PATH_LENGTH 256
 
 /*
  * Auteur : Duc et Kevin
@@ -27,20 +28,48 @@
  * Retour :
  * - La grille chargée
  */
-Grid *loadSave(char *filename)
-{
-    // Charger les données de la grille)
-    FILE *file = fopen(filename, "r");
+Grid *loadSave(char *filename) {
+    char filepath[MAX_PATH_LENGTH];
+    snprintf(filepath, sizeof(filepath), ".%ssaves%s%s", SEPARATEUR, SEPARATEUR, filename);
+
+    FILE *file = fopen(filepath, "r");
+    if (file == NULL) {
+        perror("Erreur lors de l'ouverture du fichier");
+        return NULL;
+    }
+
     int width, height;
-    fscanf(file, "%d %d\n", &width, &height);
+    if (fscanf(file, "%d %d\n", &width, &height) != 2) {
+        perror("Erreur lors de la lecture des dimensions de la grille");
+        fclose(file);
+        return NULL;
+    }
+
     Grid *grid = createGrid(width, height);
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width; j++)
-        {
-            fscanf(file, "%c", &grid->rows[i][j]);
+    if (grid == NULL) {
+        perror("Erreur lors de la création de la grille");
+        fclose(file);
+        return NULL;
+    }
+
+    char line[MAX_PATH_LENGTH];
+    for (int i = 0; i < height; i++) {
+        if (fgets(line, sizeof(line), file) != NULL) {
+            for (int j = 0; j < width; j++) {
+                if (j < strlen(line) && line[j] != '\n') {
+                    grid->rows[i][j] = line[j];
+                } else {
+                    grid->rows[i][j] = ' '; // Remplir avec des espaces si la ligne est trop courte
+                }
+            }
+        } else {
+            perror("Erreur lors de la lecture de la grille");
+            freeGrid(grid);
+            fclose(file);
+            return NULL;
         }
     }
+
     fclose(file);
     return grid;
 }
@@ -53,7 +82,7 @@ Grid *loadSave(char *filename)
  * Retour :
  * - Le nom du fichier de sauvegarde sélectionné
  */
-char *list_saves()
+char *list_saves(char **selected_option)
 {
     Grid *grid;
     DIR *d;
@@ -78,7 +107,6 @@ char *list_saves()
         }
         if (count == 0)
         {
-            createSavesDirectory();
             refresh();
             getch();
             return NULL;
@@ -93,7 +121,7 @@ char *list_saves()
             refresh();
 
             key = getch();
-            mvprintw(ligne + selected + 1, 0, "%s", options[selected]); // Clear previous highlight
+            mvprintw(ligne + selected + 1, 0, "%s", options[selected]);
             switch (key)
             {
             case KEY_UP:
@@ -104,12 +132,13 @@ char *list_saves()
                 break;
             case 10:      // Touche Entrée
                 refresh(); // Rafraîchir l'écran
+                *selected_option = strdup(options[selected]);
                 for (int i = 0; i < count; i++)
                 {
                     free(options[i]); // Libérer la mémoire allouée
                 }
                 closedir(d);
-                return options[selected];
+                return *selected_option;
             case 27:      // Touche Echap
                 refresh(); // Rafraîchir l'écran
                 for (int i = 0; i < count; i++)
@@ -123,10 +152,6 @@ char *list_saves()
     }
     else
     {
-        mvprintw(ligne, 0, "Aucune sauvegarde trouvée. Appuyez sur une touche pour continuer.");
-        getch();
-        refresh();
         return NULL;
     }
-    return NULL;
 }

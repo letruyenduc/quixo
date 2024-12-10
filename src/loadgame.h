@@ -2,5 +2,5 @@
 #ifndef LOADGAME_H
 #define LOADGAME_H
 Grid * loadSave(char *filename);
-char * list_saves();
+void list_saves(char **selected_option);
 #endif // LOADGAME_H

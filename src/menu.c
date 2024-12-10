@@ -5,6 +5,7 @@
 #endif
 #include <stdlib.h>
 #include "game.h"
+#include <wchar.h>
 #include "loadgame.h"
 #include "grid.h"
 
@@ -19,13 +20,24 @@
 void traiterChoix(int choix, int *execution, wchar_t **statusMessage)
 {
     Grid *grid;
+    char *fileStatus = NULL;
+
     switch (choix)
     {
     case 0:
         startNewGame();
         break;
     case 1:
-        startNewGameFromSave();
+        list_saves(&fileStatus);
+        if (fileStatus == NULL)
+        {
+            *statusMessage = L"Aucune sauvegarde trouvée.";
+        }
+        else
+        {
+            startNewGameFromSave(fileStatus);
+            break;
+        }
         // Ajouter la logique pour charger une partie
         break;
     case 2:

@@ -12,6 +12,10 @@ char winCondHorizontal(Grid *grid)
     for (int i = 0; i < grid->height; i++)
     {
         char first = grid->rows[i][0];
+        if (first == ' ')
+        {
+            continue;
+        }
         int j;
         for (j = 1; j < grid->width && grid->rows[i][j] == first; j++)
             ;
