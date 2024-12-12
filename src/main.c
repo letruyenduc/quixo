@@ -39,7 +39,7 @@ int main()
     srand(time(NULL));
     initNcurses();
     setlocale(LC_ALL, ""); // Permettre les caractères spéciaux avec ncurses sur Windows
-    afficherMenu();
+    displayMenu();
     endwin();
     return 0;
 }

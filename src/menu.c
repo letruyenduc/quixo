@@ -17,7 +17,7 @@
 - execution : Le pointeur vers une variable qui permet d'arrêter la boucle d'affichage du menu principal une fois mise à 0
 - statusMessage : Le pointeur vers une variable contenant le texte du statut
  */
-void traiterChoix(int choix, int *execution, wchar_t **statusMessage)
+void treatChoice(int choix, int *execution, wchar_t **statusMessage) //Changement de la fonction "traiterChoix" en anglais
 {
     Grid *grid;
     char *fileStatus = NULL;
@@ -58,7 +58,7 @@ void traiterChoix(int choix, int *execution, wchar_t **statusMessage)
  * Auteurs : Valentin et Kevin
  * Description : Affiche le menu principal. Le choix sélectionné est en surbrillance et on peut sélectionner un choix via les flèches haut et bas
  */
-void afficherMenu()
+void displayMenu()
 {
     const char *options[] = {
         "Nouvelle Partie",
@@ -113,7 +113,7 @@ void afficherMenu()
             choix = (choix + 1) % nbOptions;
             break;
         case '\n':                                           // Touche Entrée
-            traiterChoix(choix, &execution, &statusMessage); // Appelle la fonction de traitement
+            treatChoice(choix, &execution, &statusMessage); // Appelle la fonction de traitement
             // Pas de break car on veut également exécuter le clear à la fin du traitement du choix
         default:
             clear();
