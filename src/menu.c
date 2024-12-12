@@ -41,10 +41,6 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) //Changemen
         // Ajouter la logique pour charger une partie
         break;
     case 2:
-        *statusMessage = L"L'option pour modifier les options n'est pas encore implementée.";
-        // Ajouter la logique pour afficher les options
-        break;
-    case 3:
         *statusMessage = L"Merci d'avoir joué. À bientôt !";
         *execution = 0; // Arrêter la boucle du menu
         break;
@@ -63,7 +59,6 @@ void displayMenu()
     const char *options[] = {
         "Nouvelle Partie",
         "Charger une Partie",
-        "Options",
         "Quitter"};
     wchar_t *statusMessage = NULL;
     int nbOptions = sizeof(options) / sizeof(options[0]);
