@@ -1,6 +1,6 @@
 #ifndef ENDSCREEN_H
 #define ENDSCREEN_H
-
-void displayEndScreen(Grid *grid, int winner);
+#include "grid.h"
+void displayEndScreen(Grid *grid, char winner);
 
 #endif // ENDSCREEN_H
