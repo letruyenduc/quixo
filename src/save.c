@@ -30,7 +30,7 @@ int createSavesDirectory()
 #endif
 }
 
-int save_grid(Grid *grid)
+int save_grid(Grid *grid, char playerList[], int playerCount)
 {
     char cheminFichier[256];
 
@@ -67,6 +67,12 @@ int save_grid(Grid *grid)
             fprintf(fichier, "%c", grid->rows[i][j]);
         }
         fprintf(fichier, "\n"); // Fin de ligne après chaque rangée
+    }
+
+    // Écriture de la liste des joueurs dans le fichier 
+    for (int i = 0; i < playerCount; i++)
+    {
+        fprintf(fichier, "%c", playerList[i]);
     }
 
     // Fermeture du fichier
