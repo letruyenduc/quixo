@@ -7,8 +7,7 @@
 #include <ncurses.h>
 #endif
 #include "grid.h"
-#include "endscreen.h"
-#include "wincond.h"
+#include "display.h"
 /*
  * Auteur : Duc
  * Description : Affiche l'écran de fin de partie
@@ -17,24 +16,12 @@
  * - winner : Le joueur gagnant
  * Retour : 0 qui indique la fin du jeu, on peut donc quitter le programme
  */
-void displayEndScreen(Grid *grid, int winner)
+void displayEndScreen(Grid *grid, char winner)
 {
     char key;
-    initscr();
-    clear();
-    if (winner == winCond(grid))
-    {
-        mvprintw(LINES / 2, (COLS - strlen("Le joueur 1 gagne!")) / 2, "Le joueur %c gagne!", winCond(grid));
-    }
-    else if (winner == 2)
-    {
-        mvprintw(LINES / 2, (COLS - strlen("Le joueur 2 gagne!")) / 2, "Le joueur %c gagne!", winCond(grid));
-    }
-    else
-    {
-        mvprintw(LINES / 2, (COLS - strlen("Égalité!")) / 2, "Égalité!");
-    }
-    mvprintw(LINES / 2 + 2, (COLS - strlen("Appuyez sur n'importe quelle touche pour quitter")) / 2, "Appuyez sur n'importe quelle touche pour quitter");
+    refresh();
+    mvprintw(getTextOffsetCol(grid), getOffsetLine(grid), "Le joueur %c gagne!", winner);
+    mvprintw(getTextOffsetCol(grid), getOffsetLine(grid) + 2, "Appuyez sur n'importe quelle touche pour quitter");
     refresh();
     getch();
 }
