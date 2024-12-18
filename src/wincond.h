@@ -1,7 +1,8 @@
 #ifndef WINCON_H
 #define WINCON_H
-char winCondHorizontal(Grid *grid);
-char winCondVertical(Grid *grid);
-char winCondDiagonal(Grid *grid);
-char winCond(Grid *grid);
+int winCondHorizontal(Grid *grid, char player);
+int winCondVertical(Grid *grid, char player);
+int winCondDiagonal(Grid *grid, char player);
+int winCondPlayer(Grid *grid, char player);
+char winCond(Grid *grid, char* playerList, int playerCount);
 #endif // WINCON_H

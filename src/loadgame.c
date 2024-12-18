@@ -58,11 +58,13 @@ Grid *loadSave(char *filename) {
             for (int j = 0; j < width; j++) {
                 if (j < strlen(line) && line[j] != '\n') {
                     grid->rows[i][j] = line[j];
-                } else {
+                } 
+                else {
                     grid->rows[i][j] = ' '; // Remplir avec des espaces si la ligne est trop courte
                 }
             }
-        } else {
+        } 
+        else {
             perror("Erreur lors de la lecture de la grille");
             freeGrid(grid);
             fclose(file);

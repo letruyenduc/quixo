@@ -7,24 +7,21 @@
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
  */
-char winCondHorizontal(Grid *grid)
+int winCondHorizontal(Grid *grid, char player)
 {
     for (int i = 0; i < grid->height; i++)
     {
-        char first = grid->rows[i][0];
-        if (first == ' ')
+        int j = 0;
+        while (j < grid->width && grid->rows[i][j] == player)
         {
-            continue;
+            j++;
         }
-        int j;
-        for (j = 1; j < grid->width && grid->rows[i][j] == first; j++)
-            ;
         if (j == grid->width)
         {
-            return first;
+            return 1;
         }
     }
-    return ' ';
+    return 0;
 }
 
 /*
@@ -33,20 +30,20 @@ char winCondHorizontal(Grid *grid)
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
  */
-char winCondVertical(Grid *grid)
+int winCondVertical(Grid *grid, char player)
 {
+
     for (int i = 0; i < grid->width; i++)
     {
-        char first = grid->rows[0][i];
-        int j;
-        for (j = 1; j < grid->height && grid->rows[j][i] == first; j++)
-            ;
+        int j = 0;
+        while (j < grid->height && grid->rows[j][i] == player)
+            j++;
         if (j == grid->height)
         {
-            return first;
+            return 1;
         }
     }
-    return ' ';
+    return 0;
 }
 
 /*
@@ -55,41 +52,47 @@ char winCondVertical(Grid *grid)
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
  */
-char winCondDiagonal(Grid *grid)
+int winCondDiagonal(Grid *grid, char player)
 {
-    if (grid->rows[0][0] == grid->rows[1][1] && grid->rows[1][1] == grid->rows[2][2] && grid->rows[2][2] == grid->rows[3][3] && grid->rows[3][3] == grid->rows[4][4])
+    if (grid->width != grid->height)
     {
-        return grid->rows[0][0];
+        return 0;
     }
-    else if (grid->rows[0][4] == grid->rows[1][3] && grid->rows[1][3] == grid->rows[2][2] && grid->rows[2][2] == grid->rows[3][1] && grid->rows[3][1] == grid->rows[4][0])
+    int j = 0;
+    while (j < grid->height && grid->rows[j][j] == player)
+        j++;
+    if (j == grid->height)
     {
-        return grid->rows[0][4];
+        return 1;
     }
-    else
+    j = 0;
+    while (j < grid->height && grid->rows[j][grid->height - j - 1] == player)
+        j++;
+    if (j == grid->height)
     {
-        return ' ';
+        return 1;
     }
+    return 0;
 }
 
+int winCondplayer(Grid *grid, char player)
+{
+    return winCondDiagonal(grid, player) || winCondHorizontal(grid, player) || winCondVertical(grid, player);
+}
 /*
  * Auteur : Duc
  * Description : Fonction qui vérifie si un joueur a gagné
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
  */
-char winCond(Grid *grid)
+char winCond(Grid *grid, char *playerList, int playerCount)
 {
-    char winner = winCondHorizontal(grid);
-    if (winner != ' ')
+    for (int i = playerCount - 1; i >= 0; i--)
     {
-        return winner;
+        if (winCondplayer(grid, playerList[i]))
+        {
+            return playerList[i];
+        }
     }
-
-    winner = winCondVertical(grid);
-    if (winner != ' ')
-    {
-        return winner;
-    }
-
-    return winCondDiagonal(grid);
+    return ' ';
 }
