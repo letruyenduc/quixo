@@ -112,7 +112,7 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
         // Cas particulier pour la fonction quitter, on n'effectue pas de tour de jeu
         if (function == FUNCTION_QUIT_GAME)
         {
-            if (save_grid(grid)) // TODO : Sauvegarder playerList pour savoir dans quel ordre les joueurs doivent continuer à jouer
+            if (save_grid(grid, playerList, playerCount)) // TODO : Sauvegarder playerList pour savoir dans quel ordre les joueurs doivent continuer à jouer
             {
                 int selectedOption = showMessage(
                     L"Une erreur est survenue lors de la sauvegarde de l'état du jeu !\nSouhaitez vous quitter sans sauvegarder ou continuer à jouer ?",
