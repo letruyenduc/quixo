@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
+#include <string.h>
 #ifdef _WIN32
 #include <ncursesw/ncurses.h>
 #else
@@ -126,4 +127,28 @@ int mvprintwLines(int line, int col, wchar_t *str)
         }
     }
     return line;
+}
+
+/**
+ * Description : Vérifie si une chaine de caractères se termine par un certain suffixe
+ * Auteur : Kevin Carletto
+ * Paramètres :
+ * - str : La chaine de caractères
+ * - suffix : Le suffixe à vérifier
+ * Retour : 1 si str se termine par suffix, 0 sinon
+ * Traitement : On obtient la taille de str et de suffix.
+ * Si suffix est plus long que str, alors str ne peut pas se terminer par suffix.
+ * Sinon, on compare str à partir de la fin moins la taille de suffix à suffix
+ */
+int strEndsWith(const char *str, const char *suffix)
+{
+    int strLen = strlen(str);
+    int suffixLen = strlen(suffix);
+
+    if (suffixLen > strLen)
+    {
+        return 0;
+    }
+
+    return strcmp(str + strLen - suffixLen, suffix) == 0;
 }

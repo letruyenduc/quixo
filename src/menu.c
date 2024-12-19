@@ -8,6 +8,7 @@
 #include <wchar.h>
 #include "loadgame.h"
 #include "grid.h"
+#include "constants.h"
 
 /**
 * Auteurs : Valentin et Kevin
@@ -17,10 +18,11 @@
 - execution : Le pointeur vers une variable qui permet d'arrêter la boucle d'affichage du menu principal une fois mise à 0
 - statusMessage : Le pointeur vers une variable contenant le texte du statut
  */
-void treatChoice(int choix, int *execution, wchar_t **statusMessage) //Changement de la fonction "traiterChoix" en anglais
+void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changement de la fonction "traiterChoix" en anglais
 {
-    Grid *grid;
     char *fileStatus = NULL;
+    Save *saves;
+    int savesCount;
 
     switch (choix)
     {
@@ -28,17 +30,25 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) //Changemen
         startNewGame();
         break;
     case 1:
-        list_saves(&fileStatus);
-        if (fileStatus == NULL)
+        if (listSaves(&saves, &savesCount) == 0)
         {
-            *statusMessage = L"Aucune sauvegarde trouvée.";
+            if (savesCount == 0)
+            {
+                *statusMessage = L"Aucune sauvegarde.";
+            }
+            else
+            {
+                char *selectedFilePath;
+                if (selectSave(saves, savesCount, &selectedFilePath) == 0)
+                {
+                    startGameFromSave(selectedFilePath, statusMessage);
+                }
+            }
         }
         else
         {
-            startNewGameFromSave(fileStatus);
-            break;
+            *statusMessage = L"Impossible de lister les sauvegardes";
         }
-        // Ajouter la logique pour charger une partie
         break;
     case 2:
         *statusMessage = L"L'option pour modifier les options n'est pas encore implementée.";
@@ -112,7 +122,7 @@ void displayMenu()
         case KEY_DOWN:
             choix = (choix + 1) % nbOptions;
             break;
-        case '\n':                                           // Touche Entrée
+        case '\n':                                          // Touche Entrée
             treatChoice(choix, &execution, &statusMessage); // Appelle la fonction de traitement
             // Pas de break car on veut également exécuter le clear à la fin du traitement du choix
         default:

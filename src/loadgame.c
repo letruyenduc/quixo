@@ -1,159 +1,223 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <assert.h>
+#include <dirent.h> // For DIR, struct dirent, opendir, readdir, closedir
+#include <sys/stat.h>
 #ifdef _WIN32
 #include <ncursesw/ncurses.h>
 #else
 #include <ncurses.h>
 #endif
-#include <string.h>
-#include <dirent.h> // For DIR, struct dirent, opendir, readdir, closedir
+#include "constants.h"
 #include "grid.h"
 #include "save.h"
-#ifdef _WIN32
-#include <direct.h> // Pour _mkdir sur Windows
-#define SEPARATEUR "\\"
-#define mkdir _mkdir // Alias pour uniformiser les appels
-#else
-#include <sys/stat.h> // Pour mkdir sur Linux/macOS
-#define SEPARATEUR "/"
-#endif
-#define ligne 10
+#include "utils.h"
+#include "debug.h"
+
 #define MAX_PATH_LENGTH 256
+
+typedef struct
+{
+    char *saveName;
+    char *filePath;
+} Save;
 
 /*
  * Auteur : Duc et Kevin
  * Description : Charger la grille depuis un fichier
  * Paramètres :
  * - filename : Le nom du fichier de sauvegarde
- * Retour :
+ * Retour (par paramètres pointeurs):
  * - La grille chargée
+ * Retour (via instruction return) : 0 si la fonction s'est terminée, ou un code de statut en fonction de l'erreur
  */
-Grid *loadSave(char *filename) {
-    char filepath[MAX_PATH_LENGTH];
-    snprintf(filepath, sizeof(filepath), ".%ssaves%s%s", SEPARATEUR, SEPARATEUR, filename);
-
+int loadSave(char *filepath, Grid **grid)
+{
     FILE *file = fopen(filepath, "r");
-    if (file == NULL) {
+    if (file == NULL)
+    {
         perror("Erreur lors de l'ouverture du fichier");
-        return NULL;
+        return LOAD_SAVE_FILE_ERROR;
     }
 
     int width, height;
-    if (fscanf(file, "%d %d\n", &width, &height) != 2) {
+    if (fscanf(file, "%d %d", &width, &height) != 2)
+    {
         perror("Erreur lors de la lecture des dimensions de la grille");
         fclose(file);
-        return NULL;
+        return LOAD_SAVE_INVALID_CONTENT;
     }
 
-    Grid *grid = createGrid(width, height);
-    if (grid == NULL) {
-        perror("Erreur lors de la création de la grille");
-        fclose(file);
-        return NULL;
-    }
+    assert(width > 0 && height > 0);
 
-    char line[MAX_PATH_LENGTH];
-    for (int i = 0; i < height; i++) {
-        if (fgets(line, sizeof(line), file) != NULL) {
-            for (int j = 0; j < width; j++) {
-                if (j < strlen(line) && line[j] != '\n') {
-                    grid->rows[i][j] = line[j];
-                } 
-                else {
-                    grid->rows[i][j] = ' '; // Remplir avec des espaces si la ligne est trop courte
-                }
-            }
-        } 
-        else {
-            perror("Erreur lors de la lecture de la grille");
-            freeGrid(grid);
+    *grid = createGrid(width, height);
+
+    char *line = malloc(sizeof(char) * (width + 2));
+
+    // Continuer à lire jusqu'à un retour à la ligne, sinon la première ligne de la grille n'est pas lue correctement
+    do
+    {
+        if (fgets(line, 2, file) == NULL)
+        {
+            free(line);
+            freeGrid(*grid);
             fclose(file);
-            return NULL;
+            return LOAD_SAVE_FILE_ERROR;
+        }
+    } while (line[0] != '\n');
+
+    // Lire chaque ligne
+    for (int i = 0; i < height; i++)
+    {
+        if (fgets(line, width + 2, file) == NULL)
+        {
+            free(line);
+            freeGrid(*grid);
+            fclose(file);
+            return LOAD_SAVE_FILE_ERROR;
+        }
+
+        for (int j = 0; j < width; j++)
+        {
+            (*grid)->rows[i][j] = line[j];
         }
     }
-
+    free(line);
     fclose(file);
-    return grid;
+    return NO_ERROR;
+}
+
+/**
+ * Description : Fonction pour lister les fichiers de sauvegarde et retourner la liste des fichiers
+ * Auteurs : Kevin et Duc
+ * Retours par paramètres :
+ * - files : La liste des sauvegardes
+ * - count : Le nombre de fichiers trouvés
+ * Traitement : On ouvre le répertoire et on parcours la liste des fichiers.
+ * - On ignore les fichiers s'appelant '.', '..' et ne terminant pas par '.txt'.
+ * - On ajoute à un tableau une structure contenant le nom de la sauvegarde et son chemin.
+ * */
+int listSaves(Save **files, int *count)
+{
+    *count = 0;
+    *files = NULL;
+
+    // Ouvrir le répertoire
+    DIR *dir = opendir(SAVES_DIR);
+    if (dir == NULL)
+    {
+        return 1;
+    }
+
+    // Lire les entrées du répertoire
+    struct dirent *entry;
+    struct stat entry_info;
+    while ((entry = readdir(dir)) != NULL)
+    {
+        // Ignorer les entrées "." et ".."
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0 || !strEndsWith(entry->d_name, ".txt"))
+        {
+            continue;
+        }
+
+        int filenameLen = strlen(entry->d_name);
+        int entryPathSize = strlen(SAVES_DIR) + strlen(PATH_SEP) + filenameLen + 1;
+        char *entryPath = calloc(entryPathSize, sizeof(char));
+
+        // Construire le chemin complet de l'entrée
+        snprintf(entryPath, entryPathSize, "%s%s%s", SAVES_DIR, PATH_SEP, entry->d_name);
+
+        // Récupérer les informations sur l'entrée et vérifier s'il s'agit d'un fichier
+        if (stat(entryPath, &entry_info) != 0 || !S_ISREG(entry_info.st_mode))
+        {
+            continue;
+        }
+
+        // Allouer de l'espace pour le nouveau fichier
+        *files = realloc(*files, (*count + 1) * sizeof(Save));
+
+        // On crée une variable saveName qui contiendra le nom du fichier sans l'extension
+        char *saveName = calloc(filenameLen - 3, sizeof(char));
+        strncpy(saveName, entry->d_name, filenameLen - 4);
+
+        (*files)[(*count)++] = (Save){saveName, entryPath};
+    }
+
+    // Fermer le répertoire
+    closedir(dir);
+    return 0;
 }
 
 /*
- * Auteur : Duc
- * Description : Affiche la liste des sauvegardes et permet de charger une sauvegarde
+ * Auteur : Duc et Kevin
+ * Description : Affiche la liste des sauvegardes et permet d'en sélectionner une
  * Paramètres :
- * - Aucun
- * Retour :
- * - Le nom du fichier de sauvegarde sélectionné
+ * - files : La liste des sauvegardes trouvées
+ * - filesCount : Le nombre de fichiers trouvés
+ * Retour (par paramètres pointeurs):
+ * - selectedFilePath : Le chemin de la sauvegarde sélectionnée
+ * Retour (par instruction return): Le statut de sélection
+ * Traitement : On affiche la liste des sauvegardes et les instructions. Ensuite, tant qu'on n'a pas sélectionné une option :
+ * - On surligne la sauvegarde sélectionnée, on récupère les entrées utilisateur
+ *   - Les flèches haut et bas permettent de changer la sauvegarde sélectionnée
+ *   - La touche entrée modifie la valeu du paramètre pointeur avec le chemin de la sauvegarde, et retourne un statut indiquant que la sélection s'est bien passée
+ *   - La touche echap permet de revenir au menu précédent en retournant un statut différent
  */
-char *list_saves(char **selected_option)
+int selectSave(Save *files, int filesCount, char **selectedFilePath)
 {
-    Grid *grid;
-    DIR *d;
-    struct dirent *dir;
-    char path[256];
-    snprintf(path, sizeof(path), ".%ssaves", SEPARATEUR);
-    d = opendir(path);
-    if (d)
+    assert(filesCount > 0);
+    clear();
+    mvprintw(0, 0, "======================================");
+    mvprintw(1, 4, "%ls", L"Sélectionnez une sauvegarde :");
+    mvprintw(2, 0, "======================================");
+    for (int i = 0; i < filesCount; i++)
     {
-        int row = 0;
-        int count = 0;
-        char *options[100]; // Tableau pour stocker les noms de fichiers
-        mvprintw(ligne + row++, 0, "Liste de sauvegarde:                                                            ");
-        while ((dir = readdir(d)) != NULL)
-        {
-            if (dir->d_type == DT_REG)
-            {
-                options[count] = strdup(dir->d_name); // Copier le nom du fichier dans le tableau
-                mvprintw((row++) + ligne, 0, "%s", dir->d_name);
-                count++;
-            }
-        }
-        if (count == 0)
-        {
-            refresh();
-            getch();
-            return NULL;
-        }
-        int selected = 0;
-        int key;
-        while (1)
-        {
-            attron(A_REVERSE); // Activer l'attribut de surlignage
-            mvprintw(ligne + selected + 1, 0, "%s", options[selected]);
-            attroff(A_REVERSE); // Désactiver l'attribut de surlignage
-            refresh();
-
-            key = getch();
-            mvprintw(ligne + selected + 1, 0, "%s", options[selected]);
-            switch (key)
-            {
-            case KEY_UP:
-                selected = (selected - 1 + count) % count;
-                break;
-            case KEY_DOWN:
-                selected = (selected + 1) % count;
-                break;
-            case 10:      // Touche Entrée
-                refresh(); // Rafraîchir l'écran
-                *selected_option = strdup(options[selected]);
-                for (int i = 0; i < count; i++)
-                {
-                    free(options[i]); // Libérer la mémoire allouée
-                }
-                closedir(d);
-                return *selected_option;
-            case 27:      // Touche Echap
-                refresh(); // Rafraîchir l'écran
-                for (int i = 0; i < count; i++)
-                {
-                    free(options[i]); // Libérer la mémoire allouée
-                }
-                closedir(d);
-                return NULL;
-            }
-        }
+        mvprintw(4 + i, 0, "%s", files[i].saveName);
     }
-    else
+    mvprintw(5 + filesCount, 0, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider,");
+    mvprintw(6 + filesCount, 0, "%ls", L"Échap pour revenir au menu principal");
+
+    int selected = 0;
+    int key;
+    while (1)
     {
-        return NULL;
+        attron(A_REVERSE); // Activer l'attribut de surlignage
+        mvprintw(4 + selected, 0, "%s", files[selected].saveName);
+        attroff(A_REVERSE); // Désactiver l'attribut de surlignage
+        refresh();
+
+        key = getch();
+        mvprintw(4 + selected, 0, "%s", files[selected].saveName);
+        switch (key)
+        {
+        case KEY_UP:
+            selected = (selected - 1 + filesCount) % filesCount;
+            break;
+        case KEY_DOWN:
+            selected = (selected + 1) % filesCount;
+            break;
+        case '\n': // Touche Entrée
+            *selectedFilePath = files[selected].filePath;
+            for (int i = 0; i < filesCount; i++)
+            {
+                free(files[i].saveName);
+                if (i != selected)
+                {
+                    free(files[i].filePath);
+                }
+            }
+            free(files);
+            return NO_ERROR;
+        case 27: // Touche Echap
+            for (int i = 0; i < filesCount; i++)
+            {
+                free(files[i].saveName);
+                free(files[i].filePath);
+            }
+            free(files);
+            return SELECT_SAVE_QUIT;
+        }
     }
 }

@@ -11,4 +11,18 @@
 #define FUNCTION_SHIFT_COLUMN_UP 3
 #define FUNCTION_QUIT_GAME 4
 
+#define NO_ERROR 0
+
+#define SELECT_SAVE_QUIT 1
+
+#define LOAD_SAVE_INVALID_CONTENT 1
+#define LOAD_SAVE_FILE_ERROR 2
+
+#ifdef _WIN32
+#define PATH_SEP "\\"
+#else
+#define PATH_SEP "/"
+#endif
+#define SAVES_DIR "saves"
+
 #endif // CONSTANTS_H

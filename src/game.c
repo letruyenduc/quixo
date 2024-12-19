@@ -188,9 +188,21 @@ void startNewGame()
  * Paramètres : Aucun
  * Retour : Aucun
  */
-void startNewGameFromSave(char *saveStatus)
+void startGameFromSave(char *saveFilePath, wchar_t **statusMessage)
 {
-    Grid *grid = loadSave(saveStatus);
+    Grid *grid;
+    int loadStatus = loadSave(saveFilePath, &grid);
+    free(saveFilePath);
+
+    switch (loadStatus)
+    {
+    case LOAD_SAVE_FILE_ERROR:
+        *statusMessage = L"Une erreur est survenue lors du chargement du fichier";
+        return;
+    case LOAD_SAVE_INVALID_CONTENT:
+        *statusMessage = L"Le contenu du fichier est invalide";
+        return;
+    }
     char playerList[] = {'X', 'O'};
     int playerCount = 2;
     shufflePlayerList(playerList, playerCount);
