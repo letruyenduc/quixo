@@ -96,11 +96,14 @@ Les symboles **"X"** et **"O"** seront attribués aléatoirement aux deux joueur
 Ensuite le joueur actif pourra se déplacer à l'aide des **flèches directionnelles.**
 Il pourra appuyer sur la touche Entrée pour sélectionner le cube qu'il souhaite déplacer.
 
+
 **Cette interface s'affichera lorsqu'il aura sélectionné son cube:**
 ![image](https://github.com/user-attachments/assets/c082c55c-ecfe-43d1-bcb5-0793b6f728ba)
 
+
 Le joueur pourra alors choisir, à l'aide des flèches directionnelles, dans quelle **direction** il souhaite réinsérer son cube.
 ![image](https://github.com/user-attachments/assets/8fac78b8-e19c-4ddc-b044-9356ac1e1543)
+
 
 Ce sera alors au tour du prochain joueur de jouer.
 ![image](https://github.com/user-attachments/assets/948e57fb-49d0-4f95-8287-c3fd938c1bda)
@@ -115,14 +118,18 @@ Le joueur gagnant est celui qui crée une ligne horizontale, verticale ou diagon
 Cependant, si un joueur crée une ligne de marque adverse, il **perd** la partie, même s'il créer en même temps une ligne avec son propre symbole.
 
 Voici les exemples:
+
 - **Horizontalement**
 ![image](https://github.com/user-attachments/assets/48b560f9-9345-4c76-b2c8-04513646afd7)
 Dans ce cas-là, le joueur **"X"** sera déclaré gagnant si le joueur **"O"** insère son cube **de bas vers le haut**, créant ainsi une ligne complète pour le joueur **"X"**.
+
 
 - **Verticalement**
 ![image](https://github.com/user-attachments/assets/ca3a6d44-f49b-464b-adea-1d5471fd5da7)
 
 Dans ce cas-là, le joueur **"O"** sera déclaré gagnant si le joueur **"X"** insère son cube **de droite vers la gauche**, créant ainsi une ligne complète pour le joueur **"O"**.
 
+
 - **En diagonale**
 ![Uploading image.png…]()
+
