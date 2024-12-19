@@ -70,12 +70,59 @@ bin/main
 - ✅ Conditions de victoire
 - ✅ Sauvegarde d'une partie en cours
 - ✅ Charger une partie en cours
+- ❌ Choisir les noms des joueurs
 
 ### Fonctionnalités bonus :
 - ❌ Choisir les symboles des joueurs
 - ❌ Jouer contre un ordinateur
 - ❌ Jouer à plus de 2
 - ❌ Faire les options
+- ❌ Changer la taille de la grille
 
 ## Exemple d'utilisation
 
+__Voici comment se présente l'écran d'accueil :__ 
+![image](https://github.com/user-attachments/assets/23c852e6-bde4-4a62-8da6-b932c28b1248)
+Nous avons ici le menu, nous avons en options :
+- Créer une nouvelle partie
+- Charger une partie à partir d'une sauvegarde
+- Quitter le jeu
+
+__Lorsque vous commencez une nouvelle partie vous vous retrouverez sur cette interface :__
+![image](https://github.com/user-attachments/assets/e2e03bc4-611b-4821-92b1-c30984de8c9f)
+
+Vous aurez votre grille de jeu représentée en **5x5 cases.**
+Les symboles **"X"** et **"O"** seront attribués aléatoirement aux deux joueurs.
+Ensuite le joueur actif pourra se déplacer à l'aide des **flèches directionnelles.**
+Il pourra appuyer sur la touche Entrée pour sélectionner le cube qu'il souhaite déplacer.
+
+**Cette interface s'affichera lorsqu'il aura sélectionné son cube:**
+![image](https://github.com/user-attachments/assets/c082c55c-ecfe-43d1-bcb5-0793b6f728ba)
+
+Le joueur pourra alors choisir, à l'aide des flèches directionnelles, dans quelle **direction** il souhaite réinsérer son cube.
+![image](https://github.com/user-attachments/assets/8fac78b8-e19c-4ddc-b044-9356ac1e1543)
+
+Ce sera alors au tour du prochain joueur de jouer.
+![image](https://github.com/user-attachments/assets/948e57fb-49d0-4f95-8287-c3fd938c1bda)
+
+--- 
+### Fin de partie :
+
+La partie se termine lorsqu’un joueur aligne ses 5 symboles identiques **horizontalement**, **verticalement** ou en **diagonale**.
+En revanche, il n'y a pas **d'égalité possible**. 
+Le joueur gagnant est celui qui crée une ligne horizontale, verticale ou diagonale de cinq cubes avec son propre symbole.
+
+Cependant, si un joueur crée une ligne de marque adverse, il **perd** la partie, même s'il créer en même temps une ligne avec son propre symbole.
+
+Voici les exemples:
+- **Horizontalement**
+![image](https://github.com/user-attachments/assets/48b560f9-9345-4c76-b2c8-04513646afd7)
+Dans ce cas-là, le joueur **"X"** sera déclaré gagnant si le joueur **"O"** insère son cube **de bas vers le haut**, créant ainsi une ligne complète pour le joueur **"X"**.
+
+- **Verticalement**
+![image](https://github.com/user-attachments/assets/ca3a6d44-f49b-464b-adea-1d5471fd5da7)
+
+Dans ce cas-là, le joueur **"O"** sera déclaré gagnant si le joueur **"X"** insère son cube **de droite vers la gauche**, créant ainsi une ligne complète pour le joueur **"O"**.
+
+- **En diagonale**
+![Uploading image.png…]()
