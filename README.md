@@ -72,8 +72,10 @@ bin/main
 - ❌ Charger une partie en cours
 
 ### Fonctionnalités bonus :
+- ❌ Choisir les symboles des joueurs
 - ❌ Jouer contre un ordinateur
 - ❌ Jouer à plus de 2
+- ❌ Faire les options
 
 ## Exemple d'utilisation
 
