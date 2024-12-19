@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "grid.h"
 /*
- * Auteur : Duc
+ * Auteur : Duc et Kevin
  * Description : Fonction qui vérifie si un joueur a gagné en alignant 5 cubes horizontalement
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
@@ -25,7 +25,7 @@ int winCondHorizontal(Grid *grid, char player)
 }
 
 /*
- * Auteur : Duc
+ * Auteur : Duc et Kevin
  * Description : Fonction qui vérifie si un joueur a gagné en alignant 5 cubes verticalement
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
@@ -47,7 +47,7 @@ int winCondVertical(Grid *grid, char player)
 }
 
 /*
- * Auteur : Duc
+ * Auteur : Duc et Kevin
  * Description : Fonction qui vérifie si un joueur a gagné en alignant 5 cubes diagonalement
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
