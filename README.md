@@ -173,7 +173,7 @@ Les contributeurs de ce projet sont :
 
 ## Licence
 
-Ce projet est sous licence **WTFPL** (*Do What the F*** You Want to Public License*).  
-Vous êtes libre de faire absolument tout ce que vous voulez avec ce projet.  
+Ce projet est sous licence **WTFPL** (`Do What the F*** You Want to Public License`).  
+Vous êtes libre de faire absolument tout ce que vous voulez avec ce projet.
 
 Pour plus de détails, consultez le fichier [LICENSE](./LICENSE).
