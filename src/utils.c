@@ -152,3 +152,16 @@ int strEndsWith(const char *str, const char *suffix)
 
     return strcmp(str + strLen - suffixLen, suffix) == 0;
 }
+
+/**
+ * Description : Retourne le maximum entre deux entiers
+ * Auteur : Kevin Carletto & Valentin Verneuil
+ * Paramètres :
+ * - a : Le premier entier
+ * - b : Le second entier
+ * Retour : Le plus grand des deux entiers
+ */
+int maxi(int a, int b)
+{
+    return a > b ? a : b;
+}

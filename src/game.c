@@ -204,7 +204,9 @@ void startNewGame()
 void startGameFromSave(char *saveFilePath, wchar_t **statusMessage)
 {
     Grid *grid;
-    int loadStatus = loadSave(saveFilePath, &grid);
+    char *playerList;
+    int playerCount;
+    int loadStatus = loadSave(saveFilePath, &grid, &playerList, &playerCount);
     free(saveFilePath);
 
     switch (loadStatus)
@@ -216,11 +218,9 @@ void startGameFromSave(char *saveFilePath, wchar_t **statusMessage)
         *statusMessage = L"Le contenu du fichier est invalide";
         return;
     }
-    char playerList[] = {'X', 'O'};
-    int playerCount = 2;
-    shufflePlayerList(playerList, playerCount);
 
     gameLoop(grid, playerList, playerCount);
+    free(playerList);
     freeGrid(grid);
     grid = NULL;
 }

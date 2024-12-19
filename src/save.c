@@ -59,7 +59,7 @@ int save_grid(Grid *grid, char playerList[], int playerCount)
     }
 
     // Écriture des données de la grille dans le fichier
-    fprintf(fichier, "%d %d\n", grid->width, grid->height);
+    fprintf(fichier, "%d %d %d\n", grid->width, grid->height, playerCount);
     for (int i = 0; i < grid->height; i++)
     {
         for (int j = 0; j < grid->width; j++)

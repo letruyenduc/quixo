@@ -33,7 +33,7 @@ typedef struct
  * - La grille chargée
  * Retour (via instruction return) : 0 si la fonction s'est terminée, ou un code de statut en fonction de l'erreur
  */
-int loadSave(char *filepath, Grid **grid)
+int loadSave(char *filepath, Grid **grid, char **playerList, int *playerCount)
 {
     FILE *file = fopen(filepath, "r");
     if (file == NULL)
@@ -43,7 +43,7 @@ int loadSave(char *filepath, Grid **grid)
     }
 
     int width, height;
-    if (fscanf(file, "%d %d", &width, &height) != 2)
+    if (fscanf(file, "%d %d %d", &width, &height, playerCount) != 3)
     {
         perror("Erreur lors de la lecture des dimensions de la grille");
         fclose(file);
@@ -54,7 +54,7 @@ int loadSave(char *filepath, Grid **grid)
 
     *grid = createGrid(width, height);
 
-    char *line = malloc(sizeof(char) * (width + 2));
+    char *line = malloc(sizeof(char) * (maxi(width, *playerCount) + 2));
 
     // Continuer à lire jusqu'à un retour à la ligne, sinon la première ligne de la grille n'est pas lue correctement
     do
@@ -84,6 +84,21 @@ int loadSave(char *filepath, Grid **grid)
             (*grid)->rows[i][j] = line[j];
         }
     }
+
+    // Lire la liste des joueurs
+    *playerList = malloc(sizeof(char) * (*playerCount));
+    if (fgets(line, *playerCount + 2, file) == NULL)
+    {
+        free(line);
+        freeGrid(*grid);
+        fclose(file);
+        return LOAD_SAVE_FILE_ERROR;
+    }
+    for (int i = 0; i < *playerCount; i++)
+    {
+        (*playerList)[i] = line[i];
+    }
+
     free(line);
     fclose(file);
     return NO_ERROR;
