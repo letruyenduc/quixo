@@ -93,10 +93,22 @@ void displayGrid(Grid *grid, int row, int column, int selectingFunction)
     }
 }
 
-void displayGridAndStatus(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, int column, int selectingFunction){
+/*
+ * Auteurs : Duc et Kevin
+ * Description : Affiche la grille de jeu et le message de statut
+ * Paramètres :
+ * - grid : La grille de jeu
+ * - nextPlayer : Le prochain joueur qui doit jouer
+ * - statusMessage : Le message de statut
+ * - row : Position actuelle du curseur (ligne)
+ * - column : Position actuelle du curseur (colonne)
+ * - selectingFunction : Valeur booléenne définissant s'il s'agit de la sélection du mouvement de déplacement
+ */
+void displayGridAndStatus(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, int column, int selectingFunction)
+{
     int offsetLine = getOffsetLine(grid), textOffsetCol = getTextOffsetCol(grid);
 
-    displayGrid(grid,row,column,selectingFunction);
+    displayGrid(grid, row, column, selectingFunction);
 
     if (statusMessage != NULL)
     {
@@ -292,7 +304,7 @@ int handleGridPointSelection(Grid *grid, char nextPlayer, wchar_t **statusMessag
 }
 
 /**
- * Auteurs : Kevin et Zeid 
+ * Auteurs : Kevin et Zeid
  * Description : Permet à l'utilisateur de naviguer avec les flèches et d'effectuer une sélection avec la touche Entrée
  * Et de choisir une action à effectuer avec les flèches directionnelles
  * Paramètres :
