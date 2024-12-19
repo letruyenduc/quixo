@@ -38,14 +38,12 @@ int loadSave(char *filepath, Grid **grid, char **playerList, int *playerCount)
     FILE *file = fopen(filepath, "r");
     if (file == NULL)
     {
-        perror("Erreur lors de l'ouverture du fichier");
         return LOAD_SAVE_FILE_ERROR;
     }
 
     int width, height;
     if (fscanf(file, "%d %d %d", &width, &height, playerCount) != 3)
     {
-        perror("Erreur lors de la lecture des dimensions de la grille");
         fclose(file);
         return LOAD_SAVE_INVALID_CONTENT;
     }
