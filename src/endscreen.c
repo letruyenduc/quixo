@@ -14,14 +14,12 @@
  * Paramètres :
  * - grid : La grille de jeu
  * - winner : Le joueur gagnant
- * Retour : 0 qui indique la fin du jeu, on peut donc quitter le programme
  */
 void displayEndScreen(Grid *grid, char winner)
 {
-    char key;
-    refresh();
-    mvprintw(getTextOffsetCol(grid), getOffsetLine(grid), "Le joueur %c gagne!", winner);
-    mvprintw(getTextOffsetCol(grid), getOffsetLine(grid) + 2, "Appuyez sur n'importe quelle touche pour quitter");
+    displayGrid(grid, -1, -1, 0);
+    mvprintw(getOffsetLine(grid) + 4, getTextOffsetCol(grid), "Le joueur %c gagne!", winner);
+    mvprintw(getOffsetLine(grid) + 6, getTextOffsetCol(grid), "Appuyez sur n'importe quelle touche pour quitter");
     refresh();
     getch();
 }
