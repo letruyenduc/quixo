@@ -125,6 +125,9 @@ void displayMenu()
         case '\n':                                          // Touche Entrée
             treatChoice(choix, &execution, &statusMessage); // Appelle la fonction de traitement
             // Pas de break car on veut également exécuter le clear à la fin du traitement du choix
+        case 27: // Touche Echap
+            execution = 0;
+            break;
         default:
             clear();
             break;
