@@ -221,7 +221,7 @@ int handleGridPointSelection(Grid *grid, char nextPlayer, wchar_t **statusMessag
         }
         else
         {
-            *row = grid->width - 1;
+            *row = grid->height - 1;
         }
         break;
     case KEY_DOWN: // Flèche bas
@@ -255,7 +255,7 @@ int handleGridPointSelection(Grid *grid, char nextPlayer, wchar_t **statusMessag
         }
         else
         {
-            *column = grid->height - 1;
+            *column = grid->width - 1;
         }
         break;
     case KEY_RIGHT: // Flèche droite
