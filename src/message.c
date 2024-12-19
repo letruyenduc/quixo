@@ -119,6 +119,8 @@ int showMessage(wchar_t *message, wchar_t **options, int optionsCount)
         }
     }
 
+    free(optionsLength);
+
     // On efface l'écran et on retourne l'option sélectionnée
     clear();
     return selectedOption;
