@@ -87,7 +87,7 @@ int winCondplayer(Grid *grid, char player)
  */
 char winCond(Grid *grid, char *playerList, int playerCount)
 {
-    for (int i = playerCount - 1; i >= 0; i--)
+    for (int i = 0; i < playerCount; i++)
     {
         if (winCondplayer(grid, playerList[i]))
         {
