@@ -38,11 +38,11 @@ int getTextOffsetCol(Grid *grid)
  * - column : Position actuelle du curseur (colonne)
  * - selectingFunction : Valeur booléenne définissant s'il s'agit de la sélection du mouvement de déplacement
  */
-void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, int column, int selectingFunction)
+void displayGrid(Grid *grid, int row, int column, int selectingFunction)
 {
     clear(); // Efface tout pour un nouvel affichage
 
-    int offsetLine = getOffsetLine(grid), offsetCol = getOffsetCol(grid), textOffsetCol = getTextOffsetCol(grid);
+    int offsetLine = getOffsetLine(grid), offsetCol = getOffsetCol(grid);
 
     // Affichage du contenu de la grille
     for (int i = 0; i < grid->height; i++)
@@ -91,6 +91,12 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, i
         mvprintw(offsetLine + i * 2 + 1, offsetCol + grid->width * 4, "|");
         mvprintw(offsetLine + i * 2 + 2, offsetCol + grid->width * 4, "+");
     }
+}
+
+void displayGridAndStatus(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, int column, int selectingFunction){
+    int offsetLine = getOffsetLine(grid), textOffsetCol = getTextOffsetCol(grid);
+
+    displayGrid(grid,row,column,selectingFunction);
 
     if (statusMessage != NULL)
     {
@@ -101,7 +107,6 @@ void displayGrid(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, i
 
     refresh();
 }
-
 /**
  * Auteurs : Duc et Kevin
  * Description : Permet à l'utilisateur de choisir une action à effectuer en fonction de la case sélectionnée
@@ -123,7 +128,7 @@ int handleFunctionSelection(Grid *grid, char nextPlayer, int offsetLine, int tex
     *function = -1;
     do
     {
-        displayGrid(grid, nextPlayer, *statusMessage, row, column, 1);
+        displayGridAndStatus(grid, nextPlayer, *statusMessage, row, column, 1);
         int textLine = 5;
         if (column != 0)
             mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche droite : Réinsérer le cube par la droite");
@@ -318,7 +323,7 @@ void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, 
         }
 
         // Affiche la grille + le curseur
-        displayGrid(grid, nextPlayer, statusMessage, *row, *column, 0);
+        displayGridAndStatus(grid, nextPlayer, statusMessage, *row, *column, 0);
 
         selecting = handleGridPointSelection(grid, nextPlayer, &statusMessage, row, column, function);
     }
