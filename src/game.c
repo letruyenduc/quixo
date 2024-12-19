@@ -112,21 +112,34 @@ void gameLoop(Grid *grid, char playerList[], int playerCount)
         // Cas particulier pour la fonction quitter, on n'effectue pas de tour de jeu
         if (function == FUNCTION_QUIT_GAME)
         {
-            if (save_grid(grid, playerList, playerCount)) // TODO : Sauvegarder playerList pour savoir dans quel ordre les joueurs doivent continuer à jouer
+            int selectedOption = showMessage(
+                L"Le jeu a été mis en pause\nSouhaitez-vous continuer la partie, sauvegarder, ou quitter sans sauvegarder ?",
+                (wchar_t *[]){L"Continuer", L"Sauvegarder", L"Quitter sans sauvegarder"},
+                3);
+
+            switch (selectedOption)
             {
-                int selectedOption = showMessage(
-                    L"Une erreur est survenue lors de la sauvegarde de l'état du jeu !\nSouhaitez vous quitter sans sauvegarder ou continuer à jouer ?",
-                    (wchar_t *[]){L"Quitter sans sauvegarder", L"Continuer à jouer"},
-                    2);
-                if (selectedOption == 0) // Quitter sans sauvegarder, dans le cas contraire on ne modifie pas l'état de la variable playing
+            case 1:
+                if (save_grid(grid, playerList, playerCount))
                 {
+                    selectedOption = showMessage(
+                        L"Une erreur est survenue lors de la sauvegarde de l'état du jeu !\nSouhaitez vous quitter sans sauvegarder ou continuer à jouer ?",
+                        (wchar_t *[]){L"Quitter sans sauvegarder", L"Continuer à jouer"},
+                        2);
+                    if (selectedOption == 0) // Quitter sans sauvegarder, dans le cas contraire on ne modifie pas l'état de la variable playing
+                    {
+                        playing = 0;
+                    }
+                }
+                else
+                {
+                    showMessageOkButton(L"L'état du jeu a été sauvegardé");
                     playing = 0;
                 }
-            }
-            else
-            {
-                showMessageOkButton(L"L'état du jeu a été sauvegardé");
+                break;
+            case 2:
                 playing = 0;
+                break;
             }
         }
         else
