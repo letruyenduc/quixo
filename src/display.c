@@ -131,14 +131,14 @@ int handleFunctionSelection(Grid *grid, char nextPlayer, int offsetLine, int tex
         displayGridAndStatus(grid, nextPlayer, *statusMessage, row, column, 1);
         int textLine = 5;
         if (column != 0)
-            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche droite : Réinsérer le cube par la droite");
+            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche droite : Réinsérer par la gauche et pousser vers droite");
         if (column != grid->width - 1)
-            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche gauche : Réinsérer le cube par le gauche");
+            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche gauche : Réinsérer par la droite et pousser vers la gauche");
         if (row != 0)
-            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche bas : Réinsérer le cube par le bas");
+            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche bas : Réinsérer par le haut et pousser vers le bas");
         if (row != grid->height - 1)
-            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche haut : Réinsérer le cube par le haut");
-        mvprintw(offsetLine + textLine, textOffsetCol, "Echap pour revenir à la sélection de la case");
+            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche haut : Réinsérer par le bas et pousser vers le haut");
+        mvprintw(offsetLine + textLine, textOffsetCol, "%ls", L"Echap pour revenir à la sélection de la case");
         *statusMessage = NULL;
         int key = getch();
         switch (key)
@@ -200,7 +200,7 @@ int handleGridPointSelection(Grid *grid, char nextPlayer, wchar_t **statusMessag
 
     mvprintw(offsetLine + 5, textOffsetCol, "%ls", L"Utilisez les flèches pour naviguer.");
     mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Appuyez sur Entrer pour sélectionner une case.");
-    mvprintw(offsetLine + 7, textOffsetCol, "Echap pour sauvegarder et quitter.");
+    mvprintw(offsetLine + 7, textOffsetCol, "Echap pour afficher le menu de jeu.");
     refresh();
 
     int key = getch();
