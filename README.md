@@ -69,7 +69,7 @@ bin/main
 - ✅ Tours de jeu
 - ✅ Conditions de victoire
 - ✅ Sauvegarde d'une partie en cours
-- ❌ Charger une partie en cours
+- ✅ Charger une partie en cours
 
 ### Fonctionnalités bonus :
 - ❌ Choisir les symboles des joueurs
