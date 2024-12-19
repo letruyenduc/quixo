@@ -192,7 +192,7 @@ int selectSave(Save *files, int filesCount, char **selectedFilePath)
         mvprintw(4 + i, 0, "%s", files[i].saveName);
     }
     mvprintw(5 + filesCount, 0, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider,");
-    mvprintw(6 + filesCount, 0, "%ls", L"Échap pour revenir au menu principal");
+    mvprintw(6 + filesCount, 0, "%ls", L"Echap pour revenir au menu principal");
 
     int selected = 0;
     int key;
