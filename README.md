@@ -79,10 +79,11 @@ bin/main
 - ❌ Faire les options
 - ❌ Changer la taille de la grille
 
-## Exemple d'utilisation
+## Exemple d'utilisation 
 
 __Voici comment se présente l'écran d'accueil :__ 
 ![image](https://github.com/user-attachments/assets/23c852e6-bde4-4a62-8da6-b932c28b1248)
+
 Nous avons ici le menu, nous avons en options :
 - Créer une nouvelle partie
 - Charger une partie à partir d'une sauvegarde
@@ -107,6 +108,30 @@ Le joueur pourra alors choisir, à l'aide des flèches directionnelles, dans que
 
 Ce sera alors au tour du prochain joueur de jouer.
 ![image](https://github.com/user-attachments/assets/948e57fb-49d0-4f95-8287-c3fd938c1bda)
+--- 
+
+__Sauvegarder, quitter sans sauvegarder et quitter en sauvegardant une partie :__
+
+Vous pouvez quitter la partie à tout moment en appuyant sur la touche **Échap**.
+Un menu s’affichera, vous offrant les options suivantes :
+- Continuer la partie
+- Quitter et sauvegarder
+- Quitter sans sauvegarder
+![image](https://github.com/user-attachments/assets/74fb1432-3f58-449d-9f9a-a7bbf0cbb33d)
+
+
+---
+__Chargement d'une partie :__
+
+Après avoir sélectionné **“Charger une partie”**, l’interface suivante s’affichera. Vous pourrez alors :
+	1.	Choisir le **fichier de sauvegarde** correspondant à une partie précédemment enregistrée.
+	2.	Une fois le fichier sélectionné, la partie se chargera automatiquement, et vous pourrez continuer à jouer et vous amuser ! 
+![image](https://github.com/user-attachments/assets/8a1f2274-9487-456f-9627-e4b67e195547)
+
+
+Mais si vous n'avez aucune sauvegarde disponible, cet écran s'affichera :
+![image](https://github.com/user-attachments/assets/77d7c4dd-c42e-4859-848a-5a0a50c08b61)
+
 
 --- 
 ### Fin de partie :
@@ -131,5 +156,24 @@ Dans ce cas-là, le joueur **"O"** sera déclaré gagnant si le joueur **"X"** i
 
 
 - **En diagonale**
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/0e527c75-1390-4c74-920b-3f898651e0e9)
 
+Dans ce cas-là, le joueur **“O”** est gagnant. Cependant, la condition particulière des deux exemples précédents est **impossible**.
+
+
+## Contributions
+
+Les contributeurs de ce projet sont :
+
+- [Truyên Duc](https://github.com/letruyenduc)
+- [Kevin](https://github.com/Kevin-OVI)
+- [Clément](https://github.com/Clemg62)
+- [Valentin](https://github.com/YakoShiza)
+- [Zeid](https://github.com/SeldomZed)
+
+## Licence
+
+Ce projet est sous licence **WTFPL** (*Do What the F*** You Want to Public License*).  
+Vous êtes libre de faire absolument tout ce que vous voulez avec ce projet.  
+
+Pour plus de détails, consultez le fichier [LICENSE](./LICENSE).
