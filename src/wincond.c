@@ -7,7 +7,7 @@
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
  */
-int winCondHorizontal(Grid *grid, char player)
+int winCondHorizontal(Grid *grid, Player *player)
 {
     for (int i = 0; i < grid->height; i++)
     {
@@ -30,7 +30,7 @@ int winCondHorizontal(Grid *grid, char player)
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
  */
-int winCondVertical(Grid *grid, char player)
+int winCondVertical(Grid *grid, Player *player)
 {
 
     for (int i = 0; i < grid->width; i++)
@@ -52,7 +52,7 @@ int winCondVertical(Grid *grid, char player)
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
  */
-int winCondDiagonal(Grid *grid, char player)
+int winCondDiagonal(Grid *grid, Player *player)
 {
     if (grid->width != grid->height)
     {
@@ -75,7 +75,7 @@ int winCondDiagonal(Grid *grid, char player)
     return 0;
 }
 
-int winCondplayer(Grid *grid, char player)
+int winCondPlayer(Grid *grid, Player *player)
 {
     return winCondDiagonal(grid, player) || winCondHorizontal(grid, player) || winCondVertical(grid, player);
 }
@@ -85,14 +85,14 @@ int winCondplayer(Grid *grid, char player)
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
  */
-char winCond(Grid *grid, char *playerList, int playerCount)
+Player *winCond(Grid *grid, Player *playerList, int playerCount)
 {
     for (int i = 0; i < playerCount; i++)
     {
-        if (winCondplayer(grid, playerList[i]))
+        if (winCondPlayer(grid, &playerList[i]))
         {
-            return playerList[i];
+            return &playerList[i];
         }
     }
-    return ' ';
+    return NULL;
 }

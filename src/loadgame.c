@@ -17,7 +17,21 @@
 #include "debug.h"
 #include "structures.h"
 
-#define MAX_PATH_LENGTH 256
+Player *findPlayerBySymbol(Player **playerList, int playerCount, char symbol)
+{
+    if (symbol == ' ')
+    {
+        return NULL;
+    }
+    for (int i = 0; i < playerCount; i++)
+    {
+        if (playerList[i]->playerSymbol == symbol)
+        {
+            return playerList[i];
+        }
+    }
+    return NULL;
+}
 
 /*
  * Auteur : Duc et Kevin
@@ -28,7 +42,7 @@
  * - La grille chargée
  * Retour (via instruction return) : 0 si la fonction s'est terminée, ou un code de statut en fonction de l'erreur
  */
-int loadSave(char *filepath, Grid **grid, char **playerList, int *playerCount)
+int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount)
 {
     FILE *file = fopen(filepath, "r");
     if (file == NULL)
@@ -36,6 +50,7 @@ int loadSave(char *filepath, Grid **grid, char **playerList, int *playerCount)
         return LOAD_SAVE_FILE_ERROR;
     }
 
+    // Lire la largeur, la hauteur et le nombre de joueurs
     int width, height;
     if (fscanf(file, "%d %d %d", &width, &height, playerCount) != 3)
     {
@@ -45,9 +60,7 @@ int loadSave(char *filepath, Grid **grid, char **playerList, int *playerCount)
 
     assert(width > 0 && height > 0);
 
-    *grid = createGrid(width, height);
-
-    char *line = malloc(sizeof(char) * (maxi(width, *playerCount) + 2));
+    char *line = malloc(sizeof(char) * (width + 2)); // +2 pour le caractère de fin de ligne et le caractère nul
 
     // Continuer à lire jusqu'à un retour à la ligne, sinon la première ligne de la grille n'est pas lue correctement
     do
@@ -60,6 +73,22 @@ int loadSave(char *filepath, Grid **grid, char **playerList, int *playerCount)
             return LOAD_SAVE_FILE_ERROR;
         }
     } while (line[0] != '\n');
+
+    // Lire la liste des joueurs
+    *playerList = (Player**) malloc(sizeof(Player*) * (*playerCount));
+    for (int i = 0; i < *playerCount; i++)
+    {
+        playerList[i] = malloc(sizeof(Player));
+        if (fscanf(file, "%c %ms", &(*playerList)[i]->playerSymbol, &(*playerList)[i]->playerName) != 2)
+        {
+            free(*playerList);
+            fclose(file);
+            return LOAD_SAVE_INVALID_CONTENT;
+        }
+    }
+
+    // Lire la grille - on commence par créer la grille
+    *grid = createGrid(width, height);
 
     // Lire chaque ligne
     for (int i = 0; i < height; i++)
@@ -74,22 +103,9 @@ int loadSave(char *filepath, Grid **grid, char **playerList, int *playerCount)
 
         for (int j = 0; j < width; j++)
         {
-            (*grid)->rows[i][j] = line[j];
+            Player *player = findPlayerBySymbol(*playerList, *playerCount, line[j]);
+            (*grid)->rows[i][j] = player;
         }
-    }
-
-    // Lire la liste des joueurs
-    *playerList = malloc(sizeof(char) * (*playerCount));
-    if (fgets(line, *playerCount + 2, file) == NULL)
-    {
-        free(line);
-        freeGrid(*grid);
-        fclose(file);
-        return LOAD_SAVE_FILE_ERROR;
-    }
-    for (int i = 0; i < *playerCount; i++)
-    {
-        (*playerList)[i] = line[i];
     }
 
     free(line);

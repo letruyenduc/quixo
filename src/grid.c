@@ -17,11 +17,14 @@
  */
 Grid *createGrid(int width, int height)
 {
-    char **gridLines = malloc(sizeof(char *) * height);
+    Player ***gridLines = malloc(sizeof(Player **) * height);
     for (int i = 0; i < height; i++)
     {
-        gridLines[i] = malloc(sizeof(char) * width);
-        memset(gridLines[i], ' ', width);
+        gridLines[i] = malloc(sizeof(Player *) * width);
+        for (int j = 0; j < width; j++)
+        {
+            gridLines[i][j] = NULL;
+        }
     }
 
     Grid *grid = malloc(sizeof(Grid));
@@ -42,11 +45,11 @@ Grid *createGrid(int width, int height)
  * Traitement : On récupère le cube modifié. On retourne 1 si le cube est vide ou si il appartient au joueur, 0 sinon.
  * Retour : Une valeur booléenne (1 = autorisé, 0 = interdit)
  */
-int isMoveAllowed(Grid *grid, int row, int column, char player)
+int isMoveAllowed(Grid *grid, int row, int column, Player *player)
 {
     assert(row >= 0 && row < grid->height && column >= 0 && column < grid->width);
-    char movingCube = grid->rows[row][column];
-    return movingCube == ' ' || movingCube == player;
+    Player *movingCube = grid->rows[row][column];
+    return movingCube == NULL || movingCube == player;
 }
 
 /**
@@ -61,7 +64,7 @@ int isMoveAllowed(Grid *grid, int row, int column, char player)
  * Enfin, on définit la première case de la ligne avec le caractère du joueur qui joue.
  * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
  */
-int shiftRowRight(Grid *grid, int removedCuberow, int removedCubecolumn, char player)
+int shiftRowRight(Grid *grid, int removedCuberow, int removedCubecolumn, Player *player)
 {
     assert(removedCuberow >= 0 && removedCuberow < grid->height);
 
@@ -91,7 +94,7 @@ int shiftRowRight(Grid *grid, int removedCuberow, int removedCubecolumn, char pl
  * Enfin, on définit la dernière case de la ligne avec le caractère du joueur qui joue.
  * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
  */
-int shiftRowLeft(Grid *grid, int removedCuberow, int removedCubeColumn, char player)
+int shiftRowLeft(Grid *grid, int removedCuberow, int removedCubeColumn, Player *player)
 {
     assert(removedCuberow >= 0 && removedCuberow < grid->height);
 
@@ -121,7 +124,7 @@ int shiftRowLeft(Grid *grid, int removedCuberow, int removedCubeColumn, char pla
  * Enfin, on définit la première case de la colonne avec le caractère du joueur qui joue.
  * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
  */
-int shiftColumnDown(Grid *grid, int removedCuberow, int removedCubeColumn, char player)
+int shiftColumnDown(Grid *grid, int removedCuberow, int removedCubeColumn, Player *player)
 {
     assert(removedCubeColumn >= 0 && removedCubeColumn < grid->width);
 
@@ -151,7 +154,7 @@ int shiftColumnDown(Grid *grid, int removedCuberow, int removedCubeColumn, char 
  * Enfin, on définit la dernière case de la colonne avec le caractère du joueur qui joue.
  * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
  */
-int shiftColumnUp(Grid *grid, int removedCuberow, int removedCubeColumn, char player)
+int shiftColumnUp(Grid *grid, int removedCuberow, int removedCubeColumn, Player *player)
 {
     assert(removedCubeColumn >= 0 && removedCubeColumn < grid->width);
 

@@ -49,16 +49,18 @@ void displayGrid(Grid *grid, int row, int column, int selectingFunction)
     {
         for (int j = 0; j < grid->width; j++)
         {
+            Player *player = grid->rows[i][j];
+            char symbol = player == NULL ? ' ' : player->playerSymbol;
             // Curseur sur la position actuelle
             if (i == row && j == column)
             {
                 attron(A_REVERSE); // Surligne la case courante
-                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", selectingFunction ? ' ' : grid->rows[i][j]);
+                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", selectingFunction ? ' ' : symbol);
                 attroff(A_REVERSE);
             }
             else
             {
-                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", grid->rows[i][j]);
+                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", symbol);
             }
         }
     }
@@ -104,7 +106,7 @@ void displayGrid(Grid *grid, int row, int column, int selectingFunction)
  * - column : Position actuelle du curseur (colonne)
  * - selectingFunction : Valeur booléenne définissant s'il s'agit de la sélection du mouvement de déplacement
  */
-void displayGridAndStatus(Grid *grid, char nextPlayer, wchar_t *statusMessage, int row, int column, int selectingFunction)
+void displayGridAndStatus(Grid *grid, Player *nextPlayer, wchar_t *statusMessage, int row, int column, int selectingFunction)
 {
     int offsetLine = getOffsetLine(grid), textOffsetCol = getTextOffsetCol(grid);
 
@@ -115,7 +117,7 @@ void displayGridAndStatus(Grid *grid, char nextPlayer, wchar_t *statusMessage, i
         mvprintw(offsetLine + 2, textOffsetCol, "%ls", statusMessage);
     }
 
-    mvprintw(offsetLine + 3, textOffsetCol, "Le joueur %c joue.", nextPlayer);
+    mvprintw(offsetLine + 3, textOffsetCol, "%s (%c) joue.", nextPlayer->playerName, nextPlayer->playerSymbol);
 
     refresh();
 }
@@ -135,7 +137,7 @@ void displayGridAndStatus(Grid *grid, char nextPlayer, wchar_t *statusMessage, i
  * - function : L'action choisie par l'utilisateur
  * Retour (par instruction return) : 0 si l'utilisateur a choisi une action, 1 sinon
  */
-int handleFunctionSelection(Grid *grid, char nextPlayer, int offsetLine, int textOffsetCol, int row, int column, wchar_t **statusMessage, int *function)
+int handleFunctionSelection(Grid *grid, Player *nextPlayer, int offsetLine, int textOffsetCol, int row, int column, wchar_t **statusMessage, int *function)
 {
     *function = -1;
     do
@@ -206,7 +208,7 @@ int handleFunctionSelection(Grid *grid, char nextPlayer, int offsetLine, int tex
  * - Entrée pour sélectionner une case puis sélectionner un déplacement à effectuer
  * - Echap pour quitter
  */
-int handleGridPointSelection(Grid *grid, char nextPlayer, wchar_t **statusMessage, int *row, int *column, int *function)
+int handleGridPointSelection(Grid *grid, Player *nextPlayer, wchar_t **statusMessage, int *row, int *column, int *function)
 {
     int offsetLine = getOffsetLine(grid), textOffsetCol = getTextOffsetCol(grid);
 
@@ -319,7 +321,7 @@ int handleGridPointSelection(Grid *grid, char nextPlayer, wchar_t **statusMessag
  * - On affiche la grille et le curseur.
  * - On récupère l'entrée utilisateur et on effectue les actions en fonction de la touche appuyée.
  */
-void handleInput(Grid *grid, char nextPlayer, wchar_t *statusMessage, int *row, int *column, int *function)
+void handleInput(Grid *grid, Player *nextPlayer, wchar_t *statusMessage, int *row, int *column, int *function)
 {
     int selecting = 1;
 
