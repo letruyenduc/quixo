@@ -187,12 +187,17 @@ void shufflePlayerList(Player *playerList[], int playerCount)
  * Traitement : On initialise une grille, on crée la liste des joueurs triée de manière aléatoire, puis on lance la boucle de jeu.
  * Enfin, on libère la mémoire utilisée par la grille.
  */
-void startNewGame(Player** playerList, int *playerCount, int width, int height)
+void startNewGame(Player** playerList, int playerCount, int width, int height)
 {
     Grid *grid = createGrid(width, height);
     shufflePlayerList(playerList, playerCount);
 
     gameLoop(grid, playerList, playerCount);
+    for (int i = 0; i < playerCount; i++)
+    {
+        free(playerList[i]->playerName);
+        free(playerList[i]);
+    }
     freeGrid(grid);
     grid = NULL;
 }
@@ -208,7 +213,7 @@ void startGameFromSave(char *saveFilePath, wchar_t **statusMessage)
     Grid *grid;
     Player **playerList;
     int playerCount;
-    int loadStatus = loadSave(saveFilePath, &grid, playerList, &playerCount);
+    int loadStatus = loadSave(saveFilePath, &grid, &playerList, &playerCount);
     free(saveFilePath);
 
     switch (loadStatus)

@@ -10,6 +10,25 @@
 #include "grid.h"
 #include "constants.h"
 #include "structures.h"
+#include "utils.h"
+#include "message.h"
+
+/**
+ * Auteurs : Duc & Kevin
+ * Description : Permet de saisir le nom du joueur
+ * Paramètres :
+ * - player : La structure du joueur
+ */
+Player *inputPlayerName(char playerSymbol, int line)
+{
+    Player *player = malloc(sizeof(Player));
+    clearLine(line);
+    mvprintw(line, 0, "Nom du joueur %c : ", playerSymbol);
+    refresh();
+    player->playerSymbol = playerSymbol;
+    scanw("%ms", &player->playerName);
+    return player;
+}
 
 /**
  * Auteurs : Duc
@@ -24,20 +43,19 @@ void inputUser(Player ***playerList, int *playerCount)
     echo();
     curs_set(1);
     mvprintw(0, 0, "======================================");
-    mvprintw(1, 0, "Veuillez entrer le nombre de joueurs : ");
     mvprintw(2, 0, "======================================");
+    mvprintw(1, 0, "Veuillez entrer le nombre de joueurs : ");
     refresh();
     scanw("%d", playerCount);
     *playerList = (Player **)malloc(sizeof(Player *) * (*playerCount));
     for (int i = 0; i < *playerCount; i++)
     {
-        (*playerList)[i] = (Player *)malloc(sizeof(Player));
-        mvprintw(4, 0, "Nom du joueur %d : ", i + 1);
-        refresh();
-        scanw("%ms", &(*playerList)[i]->playerName);
+        char playerSymbol;
+        clearLine(4);
         mvprintw(4, 0, "Symbole du joueur %d : ", i + 1);
         refresh();
-        scanw("%c", &(*playerList)[i]->playerSymbol);
+        scanw("%c", &playerSymbol);
+        (*playerList)[i] = inputPlayerName(playerSymbol, 4);
     }
     noecho();
     curs_set(0);
@@ -56,11 +74,12 @@ void inputSize(int *width, int *height)
     echo();
     curs_set(1);
     mvprintw(0, 0, "======================================");
-    mvprintw(1, 0, "Veuillez entrer la largeur de la grille : ");
     mvprintw(2, 0, "======================================");
+    mvprintw(1, 0, "Veuillez entrer la largeur de la grille : ");
     refresh();
     scanw("%d", width);
-    mvprintw(4, 0, "Veuillez entrer la hauteur de la grille : ");
+    clearLine(1);
+    mvprintw(1, 0, "Veuillez entrer la hauteur de la grille : ");
     refresh();
     scanw("%d", height);
     noecho();
@@ -80,15 +99,35 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changeme
     char *fileStatus = NULL;
     Save *saves;
     Player **playerList;
-    int *playerCount;
+    int playerCount;
     int savesCount;
     int width, height;
 
     switch (choix)
     {
     case 0:
-        inputUser(&playerList, &playerCount);
-        inputSize(&width, &height);
+        if (showMessage(L"Souhaitez-vous faire une partie personnalisée ou une partie par défaut ?",
+                        (wchar_t *[]){L"Personnalisée", L"Par défaut"}, 2) == 0)
+        {
+
+            inputUser(&playerList, &playerCount);
+            inputSize(&width, &height);
+        }
+        else
+        {
+
+            clear();
+            echo();
+            curs_set(1);
+            playerList = (Player **)malloc(sizeof(Player *) * 2);
+            playerCount = 2;
+            playerList[0] = inputPlayerName('X', 0);
+            playerList[1] = inputPlayerName('O', 0);
+            width = 5;
+            height = 5;
+            noecho();
+            curs_set(0);
+        }
         startNewGame(playerList, playerCount, width, height);
         break;
     case 1:

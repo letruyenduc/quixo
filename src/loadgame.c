@@ -17,6 +17,18 @@
 #include "debug.h"
 #include "structures.h"
 
+/**
+ * Description : Trouver un joueur par son symbole
+ * Auteurs : Kevin
+ * Paramètres :
+ * - playerList : La liste des joueurs
+ * - playerCount : Le nombre de joueurs
+ * - symbol : Le symbole du joueur à trouver
+ * Retour : Le joueur trouvé, ou NULL si aucun joueur n'a été trouvé
+ * Traitement : On parcourt la liste des joueurs, et on compare le symbole du joueur actuel avec le symbole recherché.
+ * Si on trouve un joueur avec le symbole recherché, on le retourne.
+ * Sinon, on retourne NULL.
+ */
 Player *findPlayerBySymbol(Player **playerList, int playerCount, char symbol)
 {
     if (symbol == ' ')
@@ -63,29 +75,41 @@ int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount
     char *line = malloc(sizeof(char) * (width + 2)); // +2 pour le caractère de fin de ligne et le caractère nul
 
     // Continuer à lire jusqu'à un retour à la ligne, sinon la première ligne de la grille n'est pas lue correctement
-    do
+    if (skipLine(file))
     {
-        if (fgets(line, 2, file) == NULL)
-        {
-            free(line);
-            freeGrid(*grid);
-            fclose(file);
-            return LOAD_SAVE_FILE_ERROR;
-        }
-    } while (line[0] != '\n');
+        free(line);
+        fclose(file);
+        return LOAD_SAVE_FILE_ERROR;
+    }
 
     // Lire la liste des joueurs
-    *playerList = (Player**) malloc(sizeof(Player*) * (*playerCount));
+    *playerList = malloc(sizeof(Player *) * (*playerCount));
     for (int i = 0; i < *playerCount; i++)
     {
-        playerList[i] = malloc(sizeof(Player));
-        if (fscanf(file, "%c %ms", &(*playerList)[i]->playerSymbol, &(*playerList)[i]->playerName) != 2)
+        (*playerList)[i] = malloc(sizeof(Player));
+        showDebugMessage(L"Loading player %d\n", i);
+        char buffer[32];
+        if (fscanf(file, "%c %32s", &(*playerList)[i]->playerSymbol, buffer) != 2)
         {
             free(*playerList);
+            free(line);
             fclose(file);
             return LOAD_SAVE_INVALID_CONTENT;
         }
+        (*playerList)[i]->playerName = strdup(buffer);
+
+        // Continuer à lire jusqu'à un retour à la ligne, sinon la première ligne de la grille n'est pas lue correctement
+        if (skipLine(file))
+        {
+            free(line);
+            fclose(file);
+            return LOAD_SAVE_FILE_ERROR;
+        }
+
+        showDebugMessage(L"Loaded player %c %s\n", (*playerList)[i]->playerSymbol, buffer);
     }
+
+    showDebugMessage(L"Loaded %d players\n", *playerCount);
 
     // Lire la grille - on commence par créer la grille
     *grid = createGrid(width, height);
@@ -95,8 +119,9 @@ int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount
     {
         if (fgets(line, width + 2, file) == NULL)
         {
-            free(line);
             freeGrid(*grid);
+            free(playerList);
+            free(line);
             fclose(file);
             return LOAD_SAVE_FILE_ERROR;
         }
@@ -104,6 +129,10 @@ int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount
         for (int j = 0; j < width; j++)
         {
             Player *player = findPlayerBySymbol(*playerList, *playerCount, line[j]);
+            if (player != NULL)
+            {
+                showDebugMessage(L"Found player %c at %d %d : %s\n", line[j], i, j, player->playerName);
+            }
             (*grid)->rows[i][j] = player;
         }
     }

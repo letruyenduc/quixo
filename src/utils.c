@@ -165,3 +165,41 @@ int maxi(int a, int b)
 {
     return a > b ? a : b;
 }
+
+/**
+ * Description : Supprime une ligne de la console
+ * Auteur : Kevin Carletto
+ * Paramètres :
+ * - line : La ligne à supprimer
+ * Traitement : On parcours la ligne en affichant un espace à chaque caractère pour la supprimer
+ */
+void clearLine(int line)
+{
+    for (int i = 0; i < COLS; i++)
+    {
+        mvprintw(line, i, " ");
+    }
+}
+
+/**
+ * Description : Permet de sauter une ligne dans un fichier
+ * Auteur : Kevin Carletto
+ * Paramètres :
+ * - file : Le fichier dans lequel sauter une ligne
+ * Retour : 0 si la ligne a été sautée, 1 si on est arrivé à la fin du fichier
+ * Traitement : On lit un caractère à chaque fois jusqu'à atteindre un retour à la ligne
+ * Si on atteint la fin du fichier, on retourne 1
+ * Sinon, on retourne 0
+ */
+int skipLine(FILE *file)
+{
+    char buff[2];
+    do
+    {
+        if (fgets(buff, 2, file) == NULL)
+        {
+            return 1;
+        }
+    } while (buff[0] != '\n');
+    return 0;
+}

@@ -30,12 +30,14 @@ int createSavesDirectory()
 
 char *createFilePath(Player *playerList[], int playerCount)
 {
-    int saveFileLength = playerCount + strlen(SAVES_DIR); // Un caractère de séparation entre chaque nom de joueur + le null-terminator
+    int saveFileLength = strlen(SAVES_DIR) + strlen(PATH_SEP) + playerCount + 4; // Un caractère de séparation entre chaque nom de joueur + le null-terminator
     for (int i = 0; i < playerCount; i++)
     {
         saveFileLength += strlen(playerList[i]->playerName);
     }
     char *fileName = calloc(saveFileLength, sizeof(char));
+    strcat(fileName, SAVES_DIR);
+    strcat(fileName, PATH_SEP);
     for (int i = 0; i < playerCount; i++)
     {
         if (i > 0)
@@ -44,6 +46,7 @@ char *createFilePath(Player *playerList[], int playerCount)
         }
         strcat(fileName, playerList[i]->playerName);
     }
+    strcat(fileName, ".txt");
     return fileName;
 }
 

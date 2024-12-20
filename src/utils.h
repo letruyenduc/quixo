@@ -1,3 +1,4 @@
+#include <stdio.h>
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -8,5 +9,7 @@ int maxTab(int *tab, int tabLength);
 int mvprintwLines(int line, int col, wchar_t *str);
 int strEndsWith(const char *str, const char *suffix);
 int maxi(int a, int b);
+void clearLine(int line);
+int skipLine(FILE *file);
 
 #endif // UTILS_H
