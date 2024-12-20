@@ -15,14 +15,9 @@
 #include "save.h"
 #include "utils.h"
 #include "debug.h"
+#include "structures.h"
 
 #define MAX_PATH_LENGTH 256
-
-typedef struct
-{
-    char *saveName;
-    char *filePath;
-} Save;
 
 /*
  * Auteur : Duc et Kevin

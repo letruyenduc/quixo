@@ -3,18 +3,7 @@
 #include <string.h>
 #include <assert.h>
 #include "constants.h"
-
-/**
- * Description : Structure qui contient la grille de jeu
- * Auteur : Kevin Carletto
- * Champs : width contient la largeur de la grille, height la hauteur, et rows les lignes qui elle-mêmes contiennent les cases.
- */
-typedef struct
-{
-    int width;
-    int height;
-    char **rows;
-} Grid;
+#include "structures.h"
 
 /**
  * Description : Fonction de création d'une grille de jeu

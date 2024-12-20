@@ -1,12 +1,6 @@
 #ifndef GRID_H
 #define GRID_H
-
-struct Grid
-{
-    int width;
-    int height;
-    char **rows;
-} typedef Grid;
+#include "structures.h"
 
 Grid *createGrid(int width, int height);
 int isMoveAllowed(Grid *grid, int row, int column, char player);
