@@ -24,7 +24,7 @@ int createSavesDirectory()
     return _mkdir(SAVES_DIR) != 0 && errno != EEXIST;
 #else
     // Sous Linux et MacOS, on utilise mkdir avec le flag 0777 pour les droits d'accès
-    return mkdir(savesDirectory, 0777) != 0 && errno != EEXIST;
+    return mkdir(SAVES_DIR, 0777) != 0 && errno != EEXIST;
 #endif
 }
 
