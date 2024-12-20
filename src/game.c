@@ -39,18 +39,18 @@ void nextPlayer(Player *playerList[], int playerCount)
  * - playerList : La liste des caractères des joueurs
  * - playerCount : Le nombre de joueurs dans la liste
  */
-int handlePlayerTurn(Grid *grid, int row, int column, int function, Player playerList[], int playerCount)
+int handlePlayerTurn(Grid *grid, int row, int column, int function, Player *playerList[], int playerCount)
 {
     switch (function)
     {
     case FUNCTION_SHIFT_ROW_RIGHT:
-        return shiftRowRight(grid, row, column, &playerList[0]);
+        return shiftRowRight(grid, row, column, playerList[0]);
     case FUNCTION_SHIFT_ROW_LEFT:
-        return shiftRowLeft(grid, row, column, &playerList[0]);
+        return shiftRowLeft(grid, row, column, playerList[0]);
     case FUNCTION_SHIFT_COLUMN_DOWN:
-        return shiftColumnDown(grid, row, column, &playerList[0]);
+        return shiftColumnDown(grid, row, column, playerList[0]);
     case FUNCTION_SHIFT_COLUMN_UP:
-        return shiftColumnUp(grid, row, column, &playerList[0]);
+        return shiftColumnUp(grid, row, column, playerList[0]);
     default:
         return TURN_STATUS_INVALID_FUNCTION;
     }
@@ -69,7 +69,7 @@ int handlePlayerTurn(Grid *grid, int row, int column, int function, Player playe
  * - Si l'action est correctement exécutée, on passe au joueur suivant et on réinitialise le message de statut.
  * - Sinon on affiche un message d'erreur en fonction du statut et on fait rejouer le même joueur.
  */
-void handleTurnStatus(int status, Player playerList[], int playerCount, wchar_t **statusMessage)
+void handleTurnStatus(int status, Player *playerList[], int playerCount, wchar_t **statusMessage)
 {
     switch (status)
     {
@@ -99,7 +99,7 @@ void handleTurnStatus(int status, Player playerList[], int playerCount, wchar_t 
  * on exécute l'action demandée. On effectue ensuite les actions de fin de tour en fonction du statut retourné.
  * Si un joueur a gagné, on arrête la boucle.
  */
-void gameLoop(Grid *grid, Player playerList[], int playerCount)
+void gameLoop(Grid *grid, Player *playerList[], int playerCount)
 {
     int row = 0, column = 0, function;
     int playing = 1;
@@ -107,7 +107,7 @@ void gameLoop(Grid *grid, Player playerList[], int playerCount)
 
     while (playing)
     {
-        handleInput(grid, &playerList[0], statusMessage, &row, &column, &function);
+        handleInput(grid, playerList[0], statusMessage, &row, &column, &function);
         statusMessage = NULL; // On réinitialise le message de statut après l'avoir affiché
         // Cas particulier pour la fonction quitter, on n'effectue pas de tour de jeu
         if (function == FUNCTION_QUIT_GAME)
@@ -167,14 +167,14 @@ void gameLoop(Grid *grid, Player playerList[], int playerCount)
  * - playerCount : Le nombre de joueurs dans la liste
  * Traitement : On parcourt chaque indice possible de la liste, et on échange la position du caractère à cet endroit avec une autre position choisie aléatoirement.
  */
-void shufflePlayerList(Player* playerList[], int playerCount)
+void shufflePlayerList(Player *playerList[], int playerCount)
 {
     for (int i1 = 0; i1 < playerCount; i1++)
     {
         int i2 = randInt(0, playerCount);
         if (i1 != i2)
         {
-            Player* save = playerList[i1];
+            Player *save = playerList[i1];
             playerList[i1] = playerList[i2];
             playerList[i2] = save;
         }
@@ -196,11 +196,11 @@ void startNewGame()
     {
         playerList[i] = malloc(sizeof(Player));
     }
+    Player player1 = {'O', "Joueur 1"};
+    Player player2 = {'X', "Joueur 2"};
+    playerList[0] = &player1;
+    playerList[1] = &player2;
 
-    playerList[0]->playerName = "Joueur 1";
-    playerList[0]->playerSymbol = 'O';
-    playerList[1]->playerName = "Joueur 2";
-    playerList[1]->playerSymbol = 'X';
     shufflePlayerList(playerList, playerCount);
 
     gameLoop(grid, playerList, playerCount);
@@ -219,7 +219,7 @@ void startGameFromSave(char *saveFilePath, wchar_t **statusMessage)
     Grid *grid;
     Player **playerList;
     int playerCount;
-    int loadStatus = loadSave(saveFilePath, &grid, &playerList, &playerCount);
+    int loadStatus = loadSave(saveFilePath, &grid, playerList, &playerCount);
     free(saveFilePath);
 
     switch (loadStatus)
@@ -235,7 +235,8 @@ void startGameFromSave(char *saveFilePath, wchar_t **statusMessage)
     gameLoop(grid, playerList, playerCount);
     for (int i = 0; i < playerCount; i++)
     {
-        free(playerList[i].playerName);
+        free(playerList[i]->playerName);
+        free(playerList[i]);
     }
     free(playerList);
     freeGrid(grid);

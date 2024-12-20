@@ -85,13 +85,13 @@ int winCondPlayer(Grid *grid, Player *player)
  * Paramètres : La grille de jeu
  * Retour : Le joueur gagnant
  */
-Player *winCond(Grid *grid, Player *playerList, int playerCount)
+Player *winCond(Grid *grid, Player *playerList[], int playerCount)
 {
     for (int i = 0; i < playerCount; i++)
     {
-        if (winCondPlayer(grid, &playerList[i]))
+        if (winCondPlayer(grid, playerList[i]))
         {
-            return &playerList[i];
+            return playerList[i];
         }
     }
     return NULL;

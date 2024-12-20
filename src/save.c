@@ -28,12 +28,12 @@ int createSavesDirectory()
 #endif
 }
 
-char *createFilePath(Player playerList[], int playerCount)
+char *createFilePath(Player *playerList[], int playerCount)
 {
     int saveFileLength = playerCount + strlen(SAVES_DIR); // Un caractère de séparation entre chaque nom de joueur + le null-terminator
     for (int i = 0; i < playerCount; i++)
     {
-        saveFileLength += strlen(playerList[i].playerName);
+        saveFileLength += strlen(playerList[i]->playerName);
     }
     char *fileName = calloc(saveFileLength, sizeof(char));
     for (int i = 0; i < playerCount; i++)
@@ -42,12 +42,12 @@ char *createFilePath(Player playerList[], int playerCount)
         {
             strcat(fileName, "+");
         }
-        strcat(fileName, playerList[i].playerName);
+        strcat(fileName, playerList[i]->playerName);
     }
     return fileName;
 }
 
-int save_grid(Grid *grid, Player playerList[], int playerCount)
+int save_grid(Grid *grid, Player *playerList[], int playerCount)
 {
     char *filePath = createFilePath(playerList, playerCount);
     // Essayer de créer le répertoire
@@ -71,7 +71,7 @@ int save_grid(Grid *grid, Player playerList[], int playerCount)
     // Écriture de la liste des joueurs dans le fichier
     for (int i = 0; i < playerCount; i++)
     {
-        fprintf(fichier, "%c %s\n", playerList[i].playerSymbol, playerList[i].playerName);
+        fprintf(fichier, "%c %s\n", playerList[i]->playerSymbol, playerList[i]->playerName);
     }
 
     // Écriture de la grille dans le fichier
