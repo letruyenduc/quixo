@@ -9,6 +9,63 @@
 #include "loadgame.h"
 #include "grid.h"
 #include "constants.h"
+#include "structures.h"
+
+/**
+ * Auteurs : Duc
+ * Description : Permet de saisir le nombre de joueurs et leurs noms
+ * Paramètres :
+ * - playerList : La liste des joueurs
+ * - playerCount : Le nombre de joueurs
+ */
+void inputUser(Player ***playerList, int *playerCount)
+{
+    clear();
+    echo();
+    curs_set(1);
+    mvprintw(0, 0, "======================================");
+    mvprintw(1, 0, "Veuillez entrer le nombre de joueurs : ");
+    mvprintw(2, 0, "======================================");
+    refresh();
+    scanw("%d", playerCount);
+    *playerList = (Player **)malloc(sizeof(Player *) * (*playerCount));
+    for (int i = 0; i < *playerCount; i++)
+    {
+        (*playerList)[i] = (Player *)malloc(sizeof(Player));
+        mvprintw(4, 0, "Nom du joueur %d : ", i + 1);
+        refresh();
+        scanw("%ms", &(*playerList)[i]->playerName);
+        mvprintw(4, 0, "Symbole du joueur %d : ", i + 1);
+        refresh();
+        scanw("%c", &(*playerList)[i]->playerSymbol);
+    }
+    noecho();
+    curs_set(0);
+}
+
+/**
+ * Auteurs : Duc
+ * Description : Permet de saisir la taille de la grille
+ * Paramètres :
+ * - width : La largeur de la grille
+ * - height : La hauteur de la grille
+ */
+void inputSize(int *width, int *height)
+{
+    clear();
+    echo();
+    curs_set(1);
+    mvprintw(0, 0, "======================================");
+    mvprintw(1, 0, "Veuillez entrer la largeur de la grille : ");
+    mvprintw(2, 0, "======================================");
+    refresh();
+    scanw("%d", width);
+    mvprintw(4, 0, "Veuillez entrer la hauteur de la grille : ");
+    refresh();
+    scanw("%d", height);
+    noecho();
+    curs_set(0);
+}
 
 /**
 * Auteurs : Valentin et Kevin
@@ -22,12 +79,17 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changeme
 {
     char *fileStatus = NULL;
     Save *saves;
+    Player **playerList;
+    int *playerCount;
     int savesCount;
+    int width, height;
 
     switch (choix)
     {
     case 0:
-        startNewGame();
+        inputUser(&playerList, &playerCount);
+        inputSize(&width, &height);
+        startNewGame(playerList, playerCount, width, height);
         break;
     case 1:
         if (listSaves(&saves, &savesCount) == 0)
