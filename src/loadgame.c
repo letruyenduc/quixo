@@ -14,7 +14,6 @@
 #include "grid.h"
 #include "save.h"
 #include "utils.h"
-#include "debug.h"
 #include "structures.h"
 
 /**
@@ -87,7 +86,6 @@ int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount
     for (int i = 0; i < *playerCount; i++)
     {
         (*playerList)[i] = malloc(sizeof(Player));
-        showDebugMessage(L"Loading player %d\n", i);
         char buffer[32];
         if (fscanf(file, "%c %31s", &(*playerList)[i]->playerSymbol, buffer) != 2)
         {
@@ -105,11 +103,7 @@ int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount
             fclose(file);
             return LOAD_SAVE_FILE_ERROR;
         }
-
-        showDebugMessage(L"Loaded player %c %s\n", (*playerList)[i]->playerSymbol, buffer);
     }
-
-    showDebugMessage(L"Loaded %d players\n", *playerCount);
 
     // Lire la grille - on commence par créer la grille
     *grid = createGrid(width, height);
@@ -129,10 +123,6 @@ int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount
         for (int j = 0; j < width; j++)
         {
             Player *player = findPlayerBySymbol(*playerList, *playerCount, line[j]);
-            if (player != NULL)
-            {
-                showDebugMessage(L"Found player %c at %d %d : %s\n", line[j], i, j, player->playerName);
-            }
             (*grid)->rows[i][j] = player;
         }
     }
