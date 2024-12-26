@@ -24,23 +24,6 @@ int randInt(int min, int max)
 }
 
 /**
- * Description : Trouver la taille d'une chaine de caractères larges
- * Auteur : Kevin Carletto
- * Paramètres :
- * - str : La chaine de caractères larges
- * Retour : La taille de la chaine
- * Traitement : On parcours la chaine de caractères jusqu'à atteindre un caractère NUL, en incrémentant à chaque fois un compteur.
- * Enfin, on retourne ce compteur.
- */
-int Lstrlen(wchar_t *str)
-{
-    int length = 0;
-    while (str[length] != 0)
-        length++;
-    return length - 1;
-}
-
-/**
  * Description : Calculer la longueur de la ligne la plus longue d'une chaine de caractères larges
  * Auteur : Kevin Carletto
  * Paramètres :
@@ -97,6 +80,38 @@ int maxTab(int *tab, int tabLength)
 }
 
 /**
+ * Description : Affiche une chaine de caractères larges à une certaine position en alignant les lignes, avec la taille des lignes connue
+ * Auteur : Kevin Carletto
+ * Paramètres :
+ * - line : La ligne à laquelle afficher la première ligne de la chaine de caractère
+ * - col : La colonne à laquelle afficher le début de chaque ligne
+ * - str : La chaine de caractères larges à afficher
+ * - messageLinesLength : Le nombre de caractères pour chaque ligne de la chaine de caractères
+ * - messageLineCount : Le nombre de lignes de la chaine de caractères
+ * Traitement :
+ * On alloue un tableau de caractères larges de la taille de la ligne la plus longue
+ * On parcours chaque ligne de la chaine de caractères
+ * - On copie les caractères de la ligne actuelle dans le tableau alloué
+ * - On affiche le tableau
+ * On libère la mémoire allouée pour le tableau
+ */
+void mvprintwLinesKnownCount(int line, int col, wchar_t *str, int *messageLinesLength, int messageLineCount)
+{
+    wchar_t *lineBuffer = calloc(maxTab(messageLinesLength, messageLineCount) + 1, sizeof(wchar_t));
+    int strOffset = 0;
+    for (int i = 0; i < messageLineCount; i++)
+    {
+        for (int j = 0; j < messageLinesLength[i]; j++)
+        {
+            lineBuffer[j] = str[strOffset + j];
+        }
+        mvprintw(line + i, col, "%ls", lineBuffer);
+        strOffset += messageLinesLength[i] + 1;
+    }
+    free(lineBuffer);
+}
+
+/**
  * Description : Affiche une chaine de caractères larges à une certaine position en alignant les lignes
  * Auteur : Kevin Carletto
  * Paramètres :
@@ -105,28 +120,18 @@ int maxTab(int *tab, int tabLength)
  * - str : La chaine de caractères larges à afficher
  * Retour : La prochaine ligne sur laquelle rien n'a été affiché. Utilisable pour combiner avec d'autres affichages ensuite
  * Traitement :
- * On parcours la chaine de caractères jusqu'à atteindre un caractère NUL.
- * - Si le caractère actuel est un retour à la ligne, on incrémente la ligne d'affichage et on réinitialise la colonne à celle passée initialement en argument
- * - Sinon, on affiche le caractère et on incrémente la colonne.
- * Enfin, on retourne la prochaine ligne sur laquelle rien n'a été affiché
+ * On récupère la longueur de chaque ligne de la chaine de caractères
+ * On appelle la fonction mvprintwLinesKnownCount avec les paramètres donnés
+ * On libère la mémoire allouée pour le tableau de longueurs des lignes
+ * On retourne la prochaine ligne sur laquelle rien n'a été affiché
  */
 int mvprintwLines(int line, int col, wchar_t *str)
 {
-    int currentCol = col;
-
-    for (int i = 0; str[i] != 0; i++)
-    {
-        if (str[i] == L'\n')
-        {
-            line++;
-            currentCol = col;
-        }
-        else
-        {
-            mvprintw(line, currentCol++, "%lc", str[i]);
-        }
-    }
-    return line;
+    int *messageLinesLength, messageLineCount;
+    getLinesLength(str, &messageLineCount, &messageLinesLength);
+    mvprintwLinesKnownCount(line, col, str, messageLinesLength, messageLineCount);
+    free(messageLinesLength);
+    return line + messageLineCount;
 }
 
 /**

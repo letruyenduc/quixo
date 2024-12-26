@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 #include "utils.h"
 
 /**
@@ -45,10 +46,6 @@ int showMessage(wchar_t *message, wchar_t **options, int optionsCount)
     // On récupère la longueur de la plus grande ligne
     int messageMaxLength = maxTab(messageLinesLength, messageLineCount);
 
-    // Le tableau de la variable messageLinesLength provient d'une allocation dynamique dans la fonction getLinesLength
-    free(messageLinesLength);
-    messageLinesLength = NULL;
-
     // On initialise la largeur de l'affichage à la taille de la plus longue ligne
     int width = messageMaxLength;
 
@@ -56,7 +53,7 @@ int showMessage(wchar_t *message, wchar_t **options, int optionsCount)
     int *optionsLength = calloc(optionsCount, sizeof(int)); // Chaque élément est initialisé à 0 avec calloc
     for (int i = 0; i < optionsCount; i++)
     {
-        optionsLength[i] = Lstrlen(options[i]);
+        optionsLength[i] = wcslen(options[i]);
         if (optionsLength[i] > width)
         {
             width = optionsLength[i];
@@ -83,8 +80,13 @@ int showMessage(wchar_t *message, wchar_t **options, int optionsCount)
         mvprintw(startLine + i, startCol + width - 1, "#");
     }
 
-    // Afficher le message
-    mvprintwLines(startLine + 1, startCol + (width - messageMaxLength) / 2, message);
+    // Afficher le message, on utilise mvprintwLinesKnownCount car on connait déjà la longueur des lignes
+    mvprintwLinesKnownCount(startLine + 1, startCol + (width - messageMaxLength) / 2, message, messageLinesLength, messageLineCount);
+
+    // Le tableau de la variable messageLinesLength provient d'une allocation dynamique dans la fonction getLinesLength
+    // On libère la mémoire allouée pour ce tableau car elle n'est plus nécessaire
+    free(messageLinesLength);
+    messageLinesLength = NULL;
 
     int selectedOption = 0;
     int selecting = 1;

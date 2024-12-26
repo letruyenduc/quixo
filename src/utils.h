@@ -3,9 +3,9 @@
 #define UTILS_H
 
 int randInt(int min, int max);
-int Lstrlen(wchar_t *s);
 void getLinesLength(wchar_t *str, int *linesCount, int **linesLength);
 int maxTab(int *tab, int tabLength);
+void mvprintwLinesKnownCount(int line, int col, wchar_t *str, int *messageLinesLength, int messageLineCount);
 int mvprintwLines(int line, int col, wchar_t *str);
 int strEndsWith(const char *str, const char *suffix);
 int maxi(int a, int b);
