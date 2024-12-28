@@ -24,6 +24,7 @@ void initNcurses()
     noecho();             // Désactiver l'affichage des caractères tapés
     curs_set(0);          // Masque le curseur
     keypad(stdscr, TRUE); // Activer les touches fléchées
+    ESCDELAY = 25;        // Réduire le délai d'attente après un appui sur la touche ESC
 }
 
 /**
