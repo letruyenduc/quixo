@@ -177,8 +177,8 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changeme
     switch (choix)
     {
     case 0:
-        if (showMessage(L"Souhaitez-vous faire une partie personnalisée ou une partie par défaut ?",
-                        (wchar_t *[]){L"Personnalisée", L"Par défaut"}, 2) == 0)
+        if (showMessage(L"Souhaitez-vous faire une partie par défaut ou personnalisée ?",
+                (wchar_t *[]){L"Par défaut", L"Personnalisée"}, 2) == 1)
         {
 
             inputUser(&playerList, &playerCount);
