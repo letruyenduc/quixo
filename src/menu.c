@@ -4,6 +4,7 @@
 #include <ncurses.h>
 #endif
 #include <stdlib.h>
+#include <string.h>
 #include "game.h"
 #include <wchar.h>
 #include "loadgame.h"
@@ -14,6 +15,43 @@
 #include "message.h"
 
 /**
+ * Auteur : Kevin
+ * Description : Vérifie si le nom du joueur est valide
+ * Paramètres :
+ * - playerName : Le nom du joueur
+ * Retour :
+ * - '\0' si le nom est valide
+ * - '\1' si le nom est vide
+ * - '\2' si le nom est trop long (plus de 20 caractères)
+ * - Le caractère interdit si le nom contient un caractère interdit. Les caractères interdits sont : ./\*?:"><|
+ * Traitement :
+ * - Vérifie si le nom est vide
+ * - Vérifie si le nom est trop long
+ * - Parcourse chaque caractère du nom pour vérifier s'il contient un caractère interdit
+ */
+char checkPlayerName(char *playerName)
+{
+    if (playerName == NULL || playerName[0] == '\0')
+    {
+        return CHECK_PLAYER_NAME_EMPTY;
+    }
+    int len = strlen(playerName);
+    if (len > 20)
+    {
+        return CHECK_PLAYER_NAME_TOO_LONG;
+    }
+    const char *invalidChars = "./\\*?:\"<>|";
+    for (int i = 0; i < len; i++)
+    {
+        if (strchr(invalidChars, playerName[i]) != NULL)
+        {
+            return playerName[i];
+        }
+    }
+    return CHECK_PLAYER_NAME_OK;
+}
+
+/**
  * Auteurs : Duc & Kevin
  * Description : Permet de saisir le nom du joueur
  * Paramètres :
@@ -22,11 +60,44 @@
 Player *inputPlayerName(char playerSymbol, int line)
 {
     Player *player = malloc(sizeof(Player));
+    player->playerSymbol = playerSymbol;
+
     clearLine(line);
     mvprintw(line, 0, "Nom du joueur %c : ", playerSymbol);
-    refresh();
-    player->playerSymbol = playerSymbol;
-    scanw("%ms", &player->playerName);
+    int validInput = 0;
+
+    while (!validInput)
+    {
+        refresh();
+        scanw("%ms", &player->playerName);
+        char checkStatus = checkPlayerName(player->playerName);
+        if (checkStatus == CHECK_PLAYER_NAME_OK) // Changement de la fonction "verifierNomJoueur" en anglais
+        {
+            validInput = 1;
+        }
+        else
+        {
+            free(player->playerName);
+            clearLine(line);
+            wchar_t errorMessage[80];
+
+            switch (checkStatus)
+            {
+            case CHECK_PLAYER_NAME_EMPTY:
+                wcscpy(errorMessage, L"Le nom ne doit pas être vide. Veuillez réessayer.");
+                break;
+            case CHECK_PLAYER_NAME_TOO_LONG:
+                wcscpy(errorMessage, L"Le nom ne doit pas dépasser 20 caractères. Veuillez réessayer.");
+                break;
+            default:
+                wcscpy(errorMessage, L"Le nom ne doit pas contenir le caractère suivant : ' ' . Veuillez réessayer.");
+                errorMessage[52] = (wchar_t)checkStatus; // Position précise dans la chaine précédente
+                break;
+            }
+            mvprintw(line, 0, "%ls Nom du joueur %c : ", errorMessage, playerSymbol);
+        }
+    }
+
     return player;
 }
 

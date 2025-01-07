@@ -18,6 +18,10 @@
 #define LOAD_SAVE_INVALID_CONTENT 1
 #define LOAD_SAVE_FILE_ERROR 2
 
+#define CHECK_PLAYER_NAME_OK '\0'
+#define CHECK_PLAYER_NAME_EMPTY '\1'
+#define CHECK_PLAYER_NAME_TOO_LONG '\2'
+
 #ifdef _WIN32
 #define PATH_SEP "\\"
 #else
