@@ -11,5 +11,6 @@ int strEndsWith(const char *str, const char *suffix);
 int maxi(int a, int b);
 void clearLine(int line);
 int skipLine(FILE *file);
+void sortStrings(char **strings, int stringsCount);
 
 #endif // UTILS_H

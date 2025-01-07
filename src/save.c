@@ -16,6 +16,7 @@
 #include "grid.h"
 #include "save.h"
 #include "constants.h"
+#include "utils.h"
 
 int createSavesDirectory()
 {
@@ -28,12 +29,25 @@ int createSavesDirectory()
 #endif
 }
 
+char **getPlayerNames(Player *playerList[], int playerCount)
+{
+    char **playerNames = malloc(playerCount * sizeof(char *));
+    for (int i = 0; i < playerCount; i++)
+    {
+        playerNames[i] = playerList[i]->playerName;
+    }
+    return playerNames;
+}
+
 char *createFilePath(Player *playerList[], int playerCount)
 {
     int saveFileLength = strlen(SAVES_DIR) + strlen(PATH_SEP) + playerCount + 4; // Un caractère de séparation entre chaque nom de joueur + le null-terminator
+    char **playerNames = getPlayerNames(playerList, playerCount);
+    sortStrings(playerNames, playerCount);
+
     for (int i = 0; i < playerCount; i++)
     {
-        saveFileLength += strlen(playerList[i]->playerName);
+        saveFileLength += strlen(playerNames[i]);
     }
     char *fileName = calloc(saveFileLength, sizeof(char));
     strcat(fileName, SAVES_DIR);
@@ -44,7 +58,7 @@ char *createFilePath(Player *playerList[], int playerCount)
         {
             strcat(fileName, "+");
         }
-        strcat(fileName, playerList[i]->playerName);
+        strcat(fileName, playerNames[i]);
     }
     strcat(fileName, ".txt");
     return fileName;

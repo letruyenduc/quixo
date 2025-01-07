@@ -208,3 +208,31 @@ int skipLine(FILE *file)
     } while (buff[0] != '\n');
     return 0;
 }
+
+
+/**
+ * Auteur : Kevin Carletto
+ * Description : Permet de trier un tableau de chaines de caractères
+ * Paramètres :
+ * - strings : Le tableau de chaines de caractères
+ * - stringsCount : Le nombre de chaines de caractères dans le tableau
+ * Traitement :
+ * On parcourt chaque élément du tableau
+ * - On parcourt chaque élément suivant
+ *  - Si l'élément actuel est plus grand que l'élément suivant, on les échange
+ */
+void sortStrings(char **strings, int stringsCount)
+{
+    for (int i = 0; i < stringsCount - 1; i++)
+    {
+        for (int j = i + 1; j < stringsCount; j++)
+        {
+            if (strcmp(strings[i], strings[j]) > 0)
+            {
+                char *save = strings[i];
+                strings[i] = strings[j];
+                strings[j] = save;
+            }
+        }
+    }
+}
