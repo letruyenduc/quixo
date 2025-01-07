@@ -10,6 +10,7 @@ typedef struct
 {
     char playerSymbol;
     char *playerName;
+    int colorIndex;
 } Player;
 
 /**

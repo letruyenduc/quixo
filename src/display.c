@@ -50,18 +50,33 @@ void displayGrid(Grid *grid, int row, int column, int selectingFunction)
         for (int j = 0; j < grid->width; j++)
         {
             Player *player = grid->rows[i][j];
-            char symbol = player == NULL ? ' ' : player->playerSymbol;
-            // Curseur sur la position actuelle
-            if (i == row && j == column)
-            {
+            int isSelected = i == row && j == column;
+            if (isSelected)
                 attron(A_REVERSE); // Surligne la case courante
-                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", selectingFunction ? ' ' : symbol);
-                attroff(A_REVERSE);
+
+            if (player == NULL)
+            {
+                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, " ");
             }
             else
             {
-                mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", symbol);
+                // showDebugMessage("Player %c with color %d at %d, %d", player->playerSymbol, player->colorIndex, i, j);
+                attron(COLOR_PAIR(player->colorIndex));
+                // Curseur sur la position actuelle
+                if (i == row && j == column)
+                {
+                    attron(A_REVERSE); // Surligne la case courante
+                    mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", selectingFunction ? ' ' : player->playerSymbol);
+                    attroff(A_REVERSE);
+                }
+                else
+                {
+                    mvprintw(offsetLine + i * 2 + 1, offsetCol + j * 4 + 2, "%c", player->playerSymbol);
+                }
+                attroff(COLOR_PAIR(player->colorIndex));
             }
+            if (isSelected)
+                attroff(A_REVERSE);
         }
     }
 
@@ -117,7 +132,9 @@ void displayGridAndStatus(Grid *grid, Player *nextPlayer, wchar_t *statusMessage
         mvprintw(offsetLine + 2, textOffsetCol, "%ls", statusMessage);
     }
 
+    attron(COLOR_PAIR(nextPlayer->colorIndex));
     mvprintw(offsetLine + 3, textOffsetCol, "%s (%c) joue.", nextPlayer->playerName, nextPlayer->playerSymbol);
+    attroff(COLOR_PAIR(nextPlayer->colorIndex));
 
     refresh();
 }

@@ -8,6 +8,21 @@
 #include "loadgame.h"
 #include "save.h"
 #include "message.h"
+#ifdef _WIN32
+#include <ncursesw/ncurses.h>
+#else
+#include <ncurses.h>
+#endif
+
+void initPlayerColors(Player *playerList[], int playerCount)
+{
+    int offset = randInt(0, 6);
+    for (int i = 0; i < playerCount; i++)
+    {
+        playerList[i]->colorIndex = i + 1;
+        init_pair(playerList[i]->colorIndex, (i + offset) % 6 + 1, COLOR_BLACK);
+    }
+}
 
 /**
  * Description : Modifie la liste des joueurs pour passer au tour suivant
@@ -105,6 +120,8 @@ void gameLoop(Grid *grid, Player *playerList[], int playerCount)
     int playing = 1;
     wchar_t *statusMessage = NULL;
 
+    initPlayerColors(playerList, playerCount);
+
     while (playing)
     {
         handleInput(grid, playerList[0], statusMessage, &row, &column, &function);
@@ -187,7 +204,7 @@ void shufflePlayerList(Player *playerList[], int playerCount)
  * Traitement : On initialise une grille, on crée la liste des joueurs triée de manière aléatoire, puis on lance la boucle de jeu.
  * Enfin, on libère la mémoire utilisée par la grille.
  */
-void startNewGame(Player** playerList, int playerCount, int width, int height)
+void startNewGame(Player **playerList, int playerCount, int width, int height)
 {
     Grid *grid = createGrid(width, height);
     shufflePlayerList(playerList, playerCount);
