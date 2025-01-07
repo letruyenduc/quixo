@@ -70,14 +70,13 @@ bin/main
 - ✅ Conditions de victoire
 - ✅ Sauvegarde d'une partie en cours
 - ✅ Charger une partie en cours
-- ❌ Choisir les noms des joueurs
+- ✅ Choisir les noms des joueurs
 
 ### Fonctionnalités bonus :
-- ❌ Choisir les symboles des joueurs
+- ✅ Choisir les symboles des joueurs
 - ❌ Jouer contre un ordinateur
-- ❌ Jouer à plus de 2
-- ❌ Faire les options
-- ❌ Changer la taille de la grille
+- ✅ Jouer à plus de 2
+- ✅ Changer la taille de la grille
 
 ## Exemple d'utilisation 
 
