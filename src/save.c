@@ -18,6 +18,11 @@
 #include "constants.h"
 #include "utils.h"
 
+/**
+ * Auteur: Duc
+ * Description: Crée le répertoire de sauvegardes
+ * Retour: 0 si le répertoire a été créé ou existe déjà, 1 si une erreur est survenue
+ */
 int createSavesDirectory()
 {
 #ifdef _WIN32
@@ -29,6 +34,15 @@ int createSavesDirectory()
 #endif
 }
 
+/**
+ * Auteur: Kevin
+ * Description: Crée un tableau de chaines de caractères contenant les noms des joueurs
+ * Paramètres:
+ * - playerList: un tableau de pointeurs de joueurs
+ * - playerCount: le nombre de joueurs
+ * Retour: un tableau de chaines de caractères
+ * Note: le tableau retourné doit être libéré avec free
+ */
 char **getPlayerNames(Player *playerList[], int playerCount)
 {
     char **playerNames = malloc(playerCount * sizeof(char *));
@@ -39,6 +53,22 @@ char **getPlayerNames(Player *playerList[], int playerCount)
     return playerNames;
 }
 
+/**
+ * Auteur: Kevin
+ * Description: Crée le chemin du fichier de sauvegarde
+ * Paramètres:
+ * - playerList: un tableau de pointeurs de joueurs
+ * - playerCount: le nombre de joueurs
+ * Retour: une chaine de caractères contenant le chemin du fichier de sauvegarde
+ * Note: la chaine retournée doit être libérée avec free
+ * Traitement:
+ * - On calcule la longueur du chemin
+ * - On crée un tableau de chaines de caractères contenant les noms des joueurs
+ * - On trie les noms des joueurs
+ * - On concatène les noms des joueurs avec un séparateur
+ * - On ajoute l'extension .txt
+ * - On retourne le chemin
+ */
 char *createFilePath(Player *playerList[], int playerCount)
 {
     int saveFileLength = strlen(SAVES_DIR) + strlen(PATH_SEP) + playerCount + 4; // Un caractère de séparation entre chaque nom de joueur + le null-terminator
@@ -65,6 +95,23 @@ char *createFilePath(Player *playerList[], int playerCount)
     return fileName;
 }
 
+/**
+ * Auteur: Kevin et Duc
+ * Description: Sauvegarde la grille de jeu dans un fichier
+ * Paramètres:
+ * - grid: la grille de jeu
+ * - playerList: un tableau de pointeurs de joueurs
+ * - playerCount: le nombre de joueurs
+ * Retour: 0 si la sauvegarde a réussi, 1 si une erreur est survenue
+ * Traitement:
+ * - On crée le chemin du fichier de sauvegarde
+ * - On crée le répertoire de sauvegardes
+ * - On ouvre le fichier en écriture
+ * - On écrit la largeur, la hauteur et le nombre de joueurs dans le fichier
+ * - On écrit la liste des joueurs dans le fichier
+ * - On écrit la grille dans le fichier
+ * - On ferme le fichier
+ */
 int save_grid(Grid *grid, Player *playerList[], int playerCount)
 {
     char *filePath = createFilePath(playerList, playerCount);
