@@ -186,10 +186,34 @@ void inputSize(int *width, int *height)
     mvprintw(1, 0, "Veuillez entrer la largeur de la grille : ");
     refresh();
     scanw("%d", width);
+
+checkWidth:
+
+    if (*width < 3 || *width > 50)
+    {
+        clearLine(1);
+        mvprintw(1, 0, "Veuillez entrer une largeur entre 3 et 50 : ");
+        refresh();
+        scanw("%d", width);
+        goto checkWidth;
+    }
+
     clearLine(1);
     mvprintw(1, 0, "Veuillez entrer la hauteur de la grille : ");
     refresh();
     scanw("%d", height);
+
+checkHeight:
+
+    if (*height < 3 || *height > 50)
+    {
+        clearLine(1);
+        mvprintw(1, 0, "Veuillez entrer une hauteur entre 3 et 50 : ");
+        refresh();
+        scanw("%d", height);
+        goto checkHeight;
+    }
+
     noecho();
     curs_set(0);
 }
