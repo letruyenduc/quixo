@@ -60,6 +60,7 @@ char *createFilePath(Player *playerList[], int playerCount)
         }
         strcat(fileName, playerNames[i]);
     }
+    free(playerNames);
     strcat(fileName, ".txt");
     return fileName;
 }
