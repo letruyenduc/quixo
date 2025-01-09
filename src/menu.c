@@ -147,6 +147,17 @@ void inputUser(Player ***playerList, int *playerCount)
     mvprintw(1, 0, "Veuillez entrer le nombre de joueurs : ");
     refresh();
     scanw("%d", playerCount);
+
+checkPlayerCount:
+    if (*playerCount < 2 || *playerCount > 8)
+    {
+        clearLine(1);
+        mvprintw(1, 0, "Veuillez entrer un nombre de joueurs entre 2 et 8 : ");
+        refresh();
+        scanw("%d", playerCount);
+        goto checkPlayerCount;
+    }
+
     *playerList = (Player **)malloc(sizeof(Player *) * (*playerCount));
     for (int i = 0; i < *playerCount; i++)
     {
