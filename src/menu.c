@@ -73,7 +73,12 @@ Player *inputPlayerName(char playerSymbol, int line)
 
 nameCheck:
     refresh();
+    #ifdef __APPLE__ // POUR MACOS
+    player->playerName = malloc(100);
+    scanw("%99s", player->playerName);
+    #else // POUR LE RESTE
     scanw("%ms", &player->playerName);
+    #endif
     char checkStatus = checkPlayerName(player->playerName);
     if (checkStatus != CHECK_PLAYER_NAME_OK) // Changement de la fonction "verifierNomJoueur" en anglais
     {
