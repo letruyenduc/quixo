@@ -55,7 +55,13 @@ char checkPlayerName(char *playerName)
  * Auteurs : Duc & Kevin
  * Description : Permet de saisir le nom du joueur
  * Paramètres :
- * - player : La structure du joueur
+ * - playerSymbol : Le symbole du joueur
+ * - line : La ligne où afficher le message
+ * Retour : Le joueur créé
+ * Traitement :
+ * - On affiche un message pour demander le nom du joueur
+ * - On récupère le nom du joueur
+ * - On vérifie si le nom est valide; on redemande tant qu'il n'est pas valide
  */
 Player *inputPlayerName(char playerSymbol, int line)
 {

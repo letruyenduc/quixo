@@ -8,12 +8,14 @@
 /**
  * Description : Fonction de création d'une grille de jeu
  * Auteur : Kevin Carletto
- * Paramètre width: largeur de la grille
- * Paramètre height: la hauteur de la grille
- * Traitement : On commence par créer un tableau qui contiendra les lignes de la grille.
- * On crée ensuite chaque ligne et on les remplie de cases vides.
- * Enfin, on crée une structure qui contiendra la taille (largeur et hauteur) et le contenu de la grille.
+ * Paramètres :
+ * - width : La largeur de la grille
+ * - height : La hauteur de la grille
  * Retour : On retourne une structure contenant la grille de jeu.
+ * Traitement :
+ * - On commence par créer un tableau qui contiendra les lignes de la grille.
+ * - On crée ensuite chaque ligne et on les remplie de cases vides.
+ * - Enfin, on crée une structure qui contiendra la taille (largeur et hauteur) et le contenu de la grille.
  */
 Grid *createGrid(int width, int height)
 {
@@ -38,12 +40,13 @@ Grid *createGrid(int width, int height)
 /**
  * Description : Fonction pour vérifier si un déplacement est autorisé pour un jouuer
  * Auteur : Kevin Carletto
- * Paramètre grid: la structure de la grille de jeu
- * Paramètre row: l'indice de la ligne du cube à déplacer
- * Paramètre column: l'indice de la colonne du cube à déplacer
- * Paramètre player: le caractère du joueur qui joue.
- * Traitement : On récupère le cube modifié. On retourne 1 si le cube est vide ou si il appartient au joueur, 0 sinon.
+ * Paramètres :
+ * - grid : La structure de la grille de jeu
+ * - row : L'indice de la ligne du cube à déplacer
+ * - column : L'indice de la colonne du cube à déplacer
+ * - player : Un pointeur vers le joueur qui joue.
  * Retour : Une valeur booléenne (1 = autorisé, 0 = interdit)
+ * Traitement : On récupère le cube modifié. On retourne 1 si le cube est vide ou si il appartient au joueur, 0 sinon.
  */
 int isMoveAllowed(Grid *grid, int row, int column, Player *player)
 {
@@ -55,14 +58,16 @@ int isMoveAllowed(Grid *grid, int row, int column, Player *player)
 /**
  * Description : Permet de déplacer une ligne vers la droite
  * Auteur : Kevin Carletto
- * Paramètre grid: structure de la grille de jeu
- * Paramètre removedCuberow: l'indice de la ligne du cube à déplacer
- * Paramètre removedCubeColumn: l'indice de la colonne du cube déplacer
- * Paramètre player: le caractère du joueur qui joue.
- * Traitement : On vérifie que le déplacement de la dernière case de la ligne est autorisé, sinon on retourne un code d'erreur.
- * On parcours ensuite la ligne en partant de la fin en déplaçant le contenu de chaque case vers la suivante.
- * Enfin, on définit la première case de la ligne avec le caractère du joueur qui joue.
- * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
+ * Paramètres :
+ * - grid : La structure de la grille de jeu
+ * - removedCuberow : L'indice de la ligne du cube à déplacer
+ * - removedCubeColumn : L'indice de la colonne du cube à déplacer
+ * - player : Un pointeur vers le joueur qui joue.
+ * Retour : Le code de statut de réussite
+ * Traitement :
+ * - On vérifie que le déplacement de la dernière case de la ligne est autorisé, sinon on retourne un code d'erreur.
+ * - On parcours ensuite la ligne en partant de la fin en déplaçant le contenu de chaque case vers la suivante.
+ * - Enfin, on définit la première case de la ligne avec le caractère du joueur qui joue.
  */
 int shiftRowRight(Grid *grid, int removedCuberow, int removedCubecolumn, Player *player)
 {
@@ -85,14 +90,16 @@ int shiftRowRight(Grid *grid, int removedCuberow, int removedCubecolumn, Player 
 /**
  * Description : Permet de déplacer une ligne vers la gauche
  * Auteur : Kevin Carletto
- * Paramètre grid: structure de la grille de jeu
- * Paramètre removedCuberow: l'indice de la ligne du cube à déplacer
- * Paramètre removedCubeColumn: l'indice de la colonne du cube déplacer
- * Paramètre player: le caractère du joueur qui joue.
- * Traitement : On vérifie que le déplacement de la première case de la ligne est autorisé, sinon on retourne un code d'erreur.
- * On parcours ensuite la ligne en partant du début en déplaçant le contenu de chaque case vers la précédente.
- * Enfin, on définit la dernière case de la ligne avec le caractère du joueur qui joue.
- * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
+ * Paramètres :
+ * - grid : La structure de la grille de jeu
+ * - removedCuberow : L'indice de la ligne du cube à déplacer
+ * - removedCubeColumn : L'indice de la colonne du cube à déplacer
+ * - player : Un pointeur vers le joueur qui joue.
+ * Retour : Le code de statut de réussite
+ * Traitement :
+ * - On vérifie que le déplacement de la première case de la ligne est autorisé, sinon on retourne un code d'erreur.
+ * - On parcours ensuite la ligne en partant du début en déplaçant le contenu de chaque case vers la précédente.
+ * - Enfin, on définit la dernière case de la ligne avec le caractère du joueur qui joue.
  */
 int shiftRowLeft(Grid *grid, int removedCuberow, int removedCubeColumn, Player *player)
 {
@@ -115,14 +122,16 @@ int shiftRowLeft(Grid *grid, int removedCuberow, int removedCubeColumn, Player *
 /**
  * Description : Permet de déplacer une colonne vers le bas
  * Auteur : Kevin Carletto
- * Paramètre grid: structure de la grille de jeu
- * Paramètre removedCuberow: l'indice de la ligne du cube à déplacer
- * Paramètre removedCubeColumn: l'indice de la colonne du cube déplacer
- * Paramètre player: le caractère du joueur qui joue.
- * Traitement : On vérifie que le déplacement de la dernière case de la colonne est autorisé, sinon on retourne un code d'erreur.
- * On parcours ensuite la colonne en partant de la fin en déplaçant le contenu de chaque case vers la suivante.
- * Enfin, on définit la première case de la colonne avec le caractère du joueur qui joue.
- * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
+ * Paramètres :
+ * - grid : La structure de la grille de jeu
+ * - removedCuberow : L'indice de la ligne du cube à déplacer
+ * - removedCubeColumn : L'indice de la colonne du cube à déplacer
+ * - player : Un pointeur vers le joueur qui joue.
+ * Retour : Le code de statut de réussite
+ * Traitement :
+ * - On vérifie que le déplacement de la dernière case de la colonne est autorisé, sinon on retourne un code d'erreur.
+ * - On parcours ensuite la colonne en partant de la fin en déplaçant le contenu de chaque case vers la suivante.
+ * - Enfin, on définit la première case de la colonne avec le caractère du joueur qui joue.
  */
 int shiftColumnDown(Grid *grid, int removedCuberow, int removedCubeColumn, Player *player)
 {
@@ -145,14 +154,16 @@ int shiftColumnDown(Grid *grid, int removedCuberow, int removedCubeColumn, Playe
 /**
  * Description : Permet de déplacer une colonne vers le haut
  * Auteur : Kevin Carletto
- * Paramètre grid: structure de la grille de jeu
- * Paramètre removedCuberow: l'indice de la ligne du cube à déplacer
- * Paramètre removedCubeColumn: l'indice de la colonne du cube déplacer
- * Paramètre player: le caractère du joueur qui joue.
- * Traitement : On vérifie que le déplacement de la première case de la colonne est autorisé, sinon on retourne un code d'erreur.
- * On parcours ensuite la colonne en partant du début en déplaçant le contenu de chaque case vers la précédente.
- * Enfin, on définit la dernière case de la colonne avec le caractère du joueur qui joue.
- * Retour : Le code de statut de réussite (1 = le joueur n'a pas le droit de déplacer ce cube, 0 = Tout s'est bien passé)
+ * Paramètres :
+ * - grid : La structure de la grille de jeu
+ * - removedCuberow : L'indice de la ligne du cube à déplacer
+ * - removedCubeColumn : L'indice de la colonne du cube à déplacer
+ * - player : Un pointeur vers le joueur qui joue.
+ * Retour : Le code de statut de réussite
+ * Traitement :
+ * - On vérifie que le déplacement de la première case de la colonne est autorisé, sinon on retourne un code d'erreur.
+ * - On parcours ensuite la colonne en partant du début en déplaçant le contenu de chaque case vers la précédente.
+ * - Enfin, on définit la dernière case de la colonne avec le caractère du joueur qui joue.
  */
 int shiftColumnUp(Grid *grid, int removedCuberow, int removedCubeColumn, Player *player)
 {
@@ -175,9 +186,11 @@ int shiftColumnUp(Grid *grid, int removedCuberow, int removedCubeColumn, Player 
 /**
  * Description : Permet de libérer la mémoire utilisée par la grille de jeu
  * Auteur : Kevin Carletto
- * Paramètre grid: la structure de la grille de jeu.
- * Traitement : On libère chaque ligne de la grille, puis le tableau de lignes, et enfin la structure elle-même.
- * Penser à ne plus utiliser le pointeur après cette opération, de préférence le définir à NULL pour en être certain.
+ * Paramètres :
+ * - grid : La grille de jeu
+ * Traitement :
+ * - On libère chaque ligne de la grille, puis le tableau de lignes, et enfin la structure elle-même.
+ * Note: Penser à ne plus utiliser le pointeur après cette opération, de préférence le définir à NULL pour en être certain.
  */
 void freeGrid(Grid *grid)
 {

@@ -4,7 +4,10 @@
 /**
  * Description : Structure qui contient les informations d'un joueur
  * Auteur : Kevin Carletto
- * Champs : playerName contient le nom du joueur, playerSymbol le symbole du joueur
+ * Champs :
+ * - playerSymbol : Le symbole du joueur
+ * - playerName : Le nom du joueur
+ * - colorIndex : L'index de la couleur du joueur
  */
 typedef struct
 {
@@ -16,7 +19,10 @@ typedef struct
 /**
  * Description : Structure qui contient la grille de jeu
  * Auteur : Kevin Carletto
- * Champs : width contient la largeur de la grille, height la hauteur, et rows les lignes qui elle-mêmes contiennent les cases.
+ * Champs :
+ * - width : La largeur de la grille
+ * - height : La hauteur de la grille
+ * - rows : Un tableau de pointeurs de joueurs pour chaque case de la grille
  */
 typedef struct
 {
@@ -28,9 +34,9 @@ typedef struct
 /**
  * Description : Structure qui contient les informations d'une sauvegarde
  * Auteur : Kevin Carletto
- * Champs : saveName contient le nom de la sauvegarde, et filePath le chemin du fichier de sauvegarde
- *   saveName est le nom du fichier sans l'extension .txt
- *   filePath est le chemin complet du fichier
+ * Champs :
+ * - saveName : Le nom de la sauvegarde
+ * - filePath : Le chemin du fichier de sauvegarde
  */
 typedef struct
 {

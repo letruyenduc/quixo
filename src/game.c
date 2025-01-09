@@ -14,6 +14,17 @@
 #include <ncurses.h>
 #endif
 
+
+/**
+ * Description : Initialise les couleurs des joueurs
+ * Auteur : Kevin
+ * Paramètres :
+ * - playerList : La liste des joueurs
+ * - playerCount : Le nombre de joueurs dans la liste
+ * Traitement :
+ * On crée un offset aléatoire pour les couleurs.
+ * On attribue une couleur à chaque joueur en fonction de son indice dans la liste.
+ */
 void initPlayerColors(Player *playerList[], int playerCount)
 {
     int offset = randInt(0, 6);
@@ -28,7 +39,7 @@ void initPlayerColors(Player *playerList[], int playerCount)
  * Description : Modifie la liste des joueurs pour passer au tour suivant
  * Auteur : Kevin Carletto
  * Paramètres :
- * - playerList : La liste des caractères des joueurs
+ * - playerList : La liste des joueurs
  * - playerCount : Le nombre de joueurs dans la liste
  * Traitement : Le prochain joueur doit se retrouver à la première position.
  * Le joueur qui vient de jouer se donc retrouve à la fin, et chaque autre joueur avance d'une position dans la liste
@@ -51,7 +62,7 @@ void nextPlayer(Player *playerList[], int playerCount)
  * - row : L'indice de la ligne du cube sélectionné
  * - column : L'indice de la colonne du cube sélectionné
  * - function : L'indentifiant de la fonction à appeler
- * - playerList : La liste des caractères des joueurs
+ * - playerList : La liste des joueurs
  * - playerCount : Le nombre de joueurs dans la liste
  */
 int handlePlayerTurn(Grid *grid, int row, int column, int function, Player *playerList[], int playerCount)
@@ -76,7 +87,7 @@ int handlePlayerTurn(Grid *grid, int row, int column, int function, Player *play
  * Auteur : Kevin Carletto
  * Paramètres :
  * - status : Le statut retourné par la fonction handlePlayerTurn
- * - playerList : La liste des caractères des joueurs
+ * - playerList : La liste des joueurs
  * - playerCount : Le nombre de joueurs dans la liste
  * - statusMessage : Le pointeur vers une variable contenant le texte du statut
  * Traitement :
@@ -108,7 +119,7 @@ void handleTurnStatus(int status, Player *playerList[], int playerCount, wchar_t
  * Auteur : Kevin Carletto
  * Paramètres :
  * - grid : La grille de jeu
- * - playerList : La liste des caractères des joueurs
+ * - playerList : La liste des joueurs
  * - playerCount : Le nombre de joueurs dans la liste
  * Traitement : On boucle tant que la partie est en cours. À chaque itération, on affiche la grille, on récupère les entrées utilisateur,
  * on exécute l'action demandée. On effectue ensuite les actions de fin de tour en fonction du statut retourné.
@@ -180,7 +191,7 @@ void gameLoop(Grid *grid, Player *playerList[], int playerCount)
  * Description : Permet de mélanger la liste des joueurs dans un ordre aléatoire
  * Auteur : Kevin Carletto
  * Paramètres :
- * - playerList : La liste des caractères des joueurs
+ * - playerList : La liste des joueurs
  * - playerCount : Le nombre de joueurs dans la liste
  * Traitement : On parcourt chaque indice possible de la liste, et on échange la position du caractère à cet endroit avec une autre position choisie aléatoirement.
  */
@@ -201,8 +212,13 @@ void shufflePlayerList(Player *playerList[], int playerCount)
 /**
  * Description : Permet de lancer une nouvelle partie
  * Auteur : Kevin Carletto
+ * Paramètres :
+ * - playerList : La liste des joueurs
+ * - playerCount : Le nombre de joueurs dans la liste
+ * - width : La largeur de la grille
+ * - height : La hauteur de la grille
  * Traitement : On initialise une grille, on crée la liste des joueurs triée de manière aléatoire, puis on lance la boucle de jeu.
- * Enfin, on libère la mémoire utilisée par la grille.
+ * Enfin, on libère la mémoire utilisée par les joueurs et la grille.
  */
 void startNewGame(Player **playerList, int playerCount, int width, int height)
 {
@@ -222,8 +238,12 @@ void startNewGame(Player **playerList, int playerCount, int width, int height)
 /*
  * Auteur : Duc
  * Description : Charger une partie sauvegardée
- * Paramètres : Aucun
- * Retour : Aucun
+ * Paramètres :
+ * - saveFilePath : Le chemin du fichier de sauvegarde
+ * Retour (par paramètre pointeur) :
+ * - statusMessage : Le message de statut
+ * Traitement : On charge la partie sauvegardée, on lance la boucle de jeu.
+ * Enfin on libère la mémoire utilisée par les joueurs et la grille.
  */
 void startGameFromSave(char *saveFilePath, wchar_t **statusMessage)
 {

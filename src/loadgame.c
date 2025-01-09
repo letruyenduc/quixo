@@ -48,10 +48,18 @@ Player *findPlayerBySymbol(Player **playerList, int playerCount, char symbol)
  * Auteur : Duc et Kevin
  * Description : Charger la grille depuis un fichier
  * Paramètres :
- * - filename : Le nom du fichier de sauvegarde
+ * - filepath : Le chemin du fichier de sauvegarde
  * Retour (par paramètres pointeurs):
- * - La grille chargée
+ * - grid : La grille de jeu
+ * - playerList : La liste des joueurs
+ * - playerCount : Le nombre de joueurs
  * Retour (via instruction return) : 0 si la fonction s'est terminée, ou un code de statut en fonction de l'erreur
+ * Traitement :
+ * - On ouvre le fichier en lecture
+ * - On lit la largeur, la hauteur et le nombre de joueurs
+ * - On lit la liste des joueurs
+ * - On lit la grille
+ * - On ferme le fichier
  */
 int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount)
 {
@@ -135,8 +143,8 @@ int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount
 /**
  * Description : Fonction pour lister les fichiers de sauvegarde et retourner la liste des fichiers
  * Auteurs : Kevin et Duc
- * Retours par paramètres :
- * - files : La liste des sauvegardes
+ * Retours (par paramètres pointeurs) :
+ * - files : La liste des sauvegardes trouvées
  * - count : Le nombre de fichiers trouvés
  * Traitement : On ouvre le répertoire et on parcours la liste des fichiers.
  * - On ignore les fichiers s'appelant '.', '..' et ne terminant pas par '.txt'.

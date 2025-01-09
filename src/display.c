@@ -12,16 +12,51 @@
 
 #define TEXT_CENTERING 25
 
+
+/**
+ * Auteur : Kevin
+ * Description : Récupère le décalage de la ligne pour centrer la grille
+ * Paramètres :
+ * - grid : La grille de jeu
+ * Retour : Le décalage de la ligne
+ * Traitement :
+ * - On récupère la hauteur de la grille
+ * - On calcule le décalage en fonction de la hauteur de la grille
+ * - On retourne le décalage
+ */
 int getOffsetLine(Grid *grid)
 {
     return LINES / 2 - grid->height;
 }
 
+/**
+ * Auteur : Kevin
+ * Description : Récupère le décalage de la colonne pour positionner la grille
+ * Paramètres :
+ * - grid : La grille de jeu
+ * Retour : Le décalage de la colonne
+ * Traitement :
+ * - On récupère la largeur de la grille
+ * - On calcule le décalage en fonction de la largeur de la grille
+ * - On retourne le décalage
+ */
 int getOffsetCol(Grid *grid)
 {
     return COLS / 2 - grid->width * 2 - TEXT_CENTERING;
 }
 
+
+/**
+ * Auteur : Kevin
+ * Description : Récupère le décalage de la colonne pour positionner le texte
+ * Paramètres :
+ * - grid : La grille de jeu
+ * Retour : Le décalage de la colonne
+ * Traitement :
+ * - On récupère la largeur de la grille
+ * - On calcule le décalage en fonction de la largeur de la grille
+ * - On retourne le décalage
+ */
 int getTextOffsetCol(Grid *grid)
 {
     return COLS / 2 + grid->width * 2 - TEXT_CENTERING + 5;
