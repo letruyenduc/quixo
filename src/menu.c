@@ -70,38 +70,32 @@ Player *inputPlayerName(char playerSymbol, int line)
 
     clearLine(line);
     mvprintw(line, 0, "Nom du joueur %c : ", playerSymbol);
-    int validInput = 0;
 
-    while (!validInput)
+nameCheck:
+    refresh();
+    scanw("%ms", &player->playerName);
+    char checkStatus = checkPlayerName(player->playerName);
+    if (checkStatus != CHECK_PLAYER_NAME_OK) // Changement de la fonction "verifierNomJoueur" en anglais
     {
-        refresh();
-        scanw("%ms", &player->playerName);
-        char checkStatus = checkPlayerName(player->playerName);
-        if (checkStatus == CHECK_PLAYER_NAME_OK) // Changement de la fonction "verifierNomJoueur" en anglais
-        {
-            validInput = 1;
-        }
-        else
-        {
-            free(player->playerName);
-            clearLine(line);
-            wchar_t errorMessage[80];
+        free(player->playerName);
+        clearLine(line);
+        wchar_t errorMessage[80];
 
-            switch (checkStatus)
-            {
-            case CHECK_PLAYER_NAME_EMPTY:
-                wcscpy(errorMessage, L"Le nom ne doit pas être vide. Veuillez réessayer.");
-                break;
-            case CHECK_PLAYER_NAME_TOO_LONG:
-                wcscpy(errorMessage, L"Le nom ne doit pas dépasser 20 caractères. Veuillez réessayer.");
-                break;
-            default:
-                wcscpy(errorMessage, L"Le nom ne doit pas contenir le caractère suivant : ' ' . Veuillez réessayer.");
-                errorMessage[52] = (wchar_t)checkStatus; // Position précise dans la chaine précédente
-                break;
-            }
-            mvprintw(line, 0, "%ls Nom du joueur %c : ", errorMessage, playerSymbol);
+        switch (checkStatus)
+        {
+        case CHECK_PLAYER_NAME_EMPTY:
+            wcscpy(errorMessage, L"Le nom ne doit pas être vide. Veuillez réessayer.");
+            break;
+        case CHECK_PLAYER_NAME_TOO_LONG:
+            wcscpy(errorMessage, L"Le nom ne doit pas dépasser 20 caractères. Veuillez réessayer.");
+            break;
+        default:
+            wcscpy(errorMessage, L"Le nom ne doit pas contenir le caractère suivant : ' ' . Veuillez réessayer.");
+            errorMessage[52] = (wchar_t)checkStatus; // Position précise dans la chaine précédente
+            break;
         }
+        mvprintw(line, 0, "%ls Nom du joueur %c : ", errorMessage, playerSymbol);
+        goto nameCheck;
     }
 
     return player;
