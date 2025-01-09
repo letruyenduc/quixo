@@ -405,7 +405,7 @@ void handleInput(Grid *grid, Player *nextPlayer, wchar_t *statusMessage, int *ro
 void displayEndScreen(Grid *grid, Player *winner)
 {
     displayGrid(grid, -1, -1, 0);
-    mvprintw(getOffsetLine(grid) + 4, getTextOffsetCol(grid), "%s (%c) gagne!", winner->playerName, winner->playerSymbol);
+    mvprintw(getOffsetLine(grid) + 4, getTextOffsetCol(grid), "%s (%c) gagne !", winner->playerName, winner->playerSymbol, winner-> colorIndex);
     mvprintw(getOffsetLine(grid) + 6, getTextOffsetCol(grid), "Appuyez sur n'importe quelle touche pour quitter");
     refresh();
     getch();
