@@ -107,6 +107,29 @@ Player *inputPlayerName(char playerSymbol, int line)
     return player;
 }
 
+char inputPlayerSymbol(Player **playerList, int playerIndex)
+{
+    char playerSymbol;
+    clearLine(4);
+    mvprintw(4, 0, "Symbole du joueur %d : ", playerIndex + 1);
+    refresh();
+    scanw("%c", &playerSymbol);
+    for (int i = 0; i < playerIndex; i++)
+    {
+        if (playerList[i]->playerSymbol == playerSymbol)
+        {
+            clearLine(4);
+            wchar_t errorMessage[] = L"Le symbole   est déjà utilisé. Veuillez en choisir un autre : ";
+            errorMessage[11] = playerSymbol; // Position précise dans la chaine précédente
+            mvprintw(4, 0, "%ls", errorMessage);
+            refresh();
+            scanw("%c", &playerSymbol);
+            i = -1; // Recommencer la boucle pour vérifier tous les joueurs
+        }
+    }
+    return playerSymbol;
+}
+
 /**
  * Auteurs : Duc
  * Description : Permet de saisir le nombre de joueurs et leurs noms
@@ -127,12 +150,9 @@ void inputUser(Player ***playerList, int *playerCount)
     *playerList = (Player **)malloc(sizeof(Player *) * (*playerCount));
     for (int i = 0; i < *playerCount; i++)
     {
-        char playerSymbol;
-        clearLine(4);
-        mvprintw(4, 0, "Symbole du joueur %d : ", i + 1);
-        refresh();
-        scanw("%c", &playerSymbol);
-        (*playerList)[i] = inputPlayerName(playerSymbol, 4);
+        char playerSymbol = inputPlayerSymbol(*playerList, i);
+        (*playerList)[i] = inputPlayerName(playerSymbol, 5);
+        clearLine(5);
     }
     noecho();
     curs_set(0);
