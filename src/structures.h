@@ -22,7 +22,7 @@ typedef struct
  * Champs :
  * - width : La largeur de la grille
  * - height : La hauteur de la grille
- * - rows : Un tableau de pointeurs de joueurs pour chaque case de la grille
+ * - rows : Un tableau à 2 dimensions de pointeurs de joueurs pour chaque case de la grille
  */
 typedef struct
 {
