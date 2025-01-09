@@ -402,10 +402,12 @@ void handleInput(Grid *grid, Player *nextPlayer, wchar_t *statusMessage, int *ro
  * - grid : La grille de jeu
  * - winner : Le joueur gagnant
  */
-void displayEndScreen(Grid *grid, Player *winner, Player *colorIndex)
+void displayEndScreen(Grid *grid, Player *winner)
 {
     displayGrid(grid, -1, -1, 0);
-    mvprintw(getOffsetLine(grid) + 4, getTextOffsetCol(grid), "%s (%c) gagne !", winner->playerName, winner->playerSymbol, winner->colorIndex);
+    attron(COLOR_PAIR(winner->colorIndex));
+    mvprintw(getOffsetLine(grid) + 4, getTextOffsetCol(grid), "%s (%c) gagne !", winner->playerName, winner->playerSymbol);
+    attroff(COLOR_PAIR(winner->colorIndex));
     mvprintw(getOffsetLine(grid) + 6, getTextOffsetCol(grid), "Appuyez sur n'importe quelle touche pour quitter");
     refresh();
     getch();
