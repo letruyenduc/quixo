@@ -4,7 +4,6 @@
 #include "utils.h"
 #include "constants.h"
 #include "wincond.h"
-#include "endscreen.h"
 #include "loadgame.h"
 #include "save.h"
 #include "message.h"
