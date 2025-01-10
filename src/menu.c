@@ -180,10 +180,10 @@ checkWidth:
     refresh();
     scanw("%d", width);
 
-    if (*width < 3 || *width > 50)
+    if (*width < 3 || *width > 15)
     {
         clearLine(1);
-        mvprintw(1, 0, "Veuillez entrer une largeur entre 3 et 50 : ");
+        mvprintw(1, 0, "Veuillez entrer une largeur entre 3 et 15 : ");
         goto checkWidth;
     }
 
@@ -194,10 +194,10 @@ checkHeight:
     refresh();
     scanw("%d", height);
 
-    if (*height < 3 || *height > 50)
+    if (*height < 3 || *height > 15)
     {
         clearLine(1);
-        mvprintw(1, 0, "Veuillez entrer une hauteur entre 3 et 50 : ");
+        mvprintw(1, 0, "Veuillez entrer une hauteur entre 3 et 15 : ");
         goto checkHeight;
     }
 }
