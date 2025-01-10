@@ -3,6 +3,7 @@
 #include <time.h>
 #include <string.h>
 #include <errno.h>
+#include "message.h"
 
 // Définir le séparateur de chemin selon l'OS
 #ifdef _WIN32
@@ -151,4 +152,13 @@ int save_grid(Grid *grid, Player *playerList[], int playerCount)
     // Fermeture du fichier
     fclose(fichier);
     return 0;
+    
+}
+
+//suppression des sauvegardes
+void deleteSave(Player *playerList[], int playerCount){
+    char *filePath = createFilePath(playerList, playerCount);
+    if(remove(filePath) && errno != ENOENT){
+        showMessageOkButton(L"Impossible de supprimer la sauvegarde de votre partie", 1);
+    }
 }
