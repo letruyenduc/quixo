@@ -173,8 +173,10 @@ void inputSize(int *width, int *height)
 {
     clear();
     mvprintw(0, 0, "======================================");
+    mvprintw(1, 8, "Taille de la grille");
     mvprintw(2, 0, "======================================");
-    mvprintw(1, 0, "Veuillez entrer la largeur de la grille : ");
+
+    mvprintw(4, 0, "Veuillez entrer la largeur de la grille : ");
 
 checkWidth:
     refresh();
@@ -182,13 +184,12 @@ checkWidth:
 
     if (*width < 3 || *width > 15)
     {
-        clearLine(1);
-        mvprintw(1, 0, "Veuillez entrer une largeur entre 3 et 15 : ");
+        clearLine(4);
+        mvprintw(4, 0, "Veuillez entrer une largeur entre 3 et 15 : ");
         goto checkWidth;
     }
 
-    clearLine(1);
-    mvprintw(1, 0, "Veuillez entrer la hauteur de la grille : ");
+    mvprintw(5, 0, "Veuillez entrer la hauteur de la grille : ");
 
 checkHeight:
     refresh();
@@ -196,8 +197,8 @@ checkHeight:
 
     if (*height < 3 || *height > 15)
     {
-        clearLine(1);
-        mvprintw(1, 0, "Veuillez entrer une hauteur entre 3 et 15 : ");
+        clearLine(5);
+        mvprintw(5, 0, "Veuillez entrer une hauteur entre 3 et 15 : ");
         goto checkHeight;
     }
 }
