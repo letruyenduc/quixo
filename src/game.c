@@ -178,8 +178,8 @@ void gameLoop(Grid *grid, Player *playerList[], int playerCount)
                 Player *winner = winCond(grid, playerList, playerCount);
                 if (winner != NULL)
                 {
-                    deleteSave(playerList, playerCount);
                     displayEndScreen(grid, winner); // On affiche l'écran de fin de partie
+                    deleteSave(playerList, playerCount); // On supprime une éventuelle sauvegarde de la partie
                     playing = 0;
                 }
             }
