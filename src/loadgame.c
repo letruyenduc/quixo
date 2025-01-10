@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <assert.h>
+#include <errno.h>
 #include <dirent.h> // For DIR, struct dirent, opendir, readdir, closedir
 #include <sys/stat.h>
 #ifdef _WIN32
@@ -159,6 +160,11 @@ int listSaves(Save **files, int *count)
     DIR *dir = opendir(SAVES_DIR);
     if (dir == NULL)
     {
+        if (errno == ENOENT)
+        {
+            *count = 0;
+            return 0;
+        }
         return 1;
     }
 
