@@ -106,21 +106,21 @@ nameCheck:
     return player;
 }
 
-char inputPlayerSymbol(Player **playerList, int playerIndex)
+char inputPlayerSymbol(Player **playerList, int playerIndex, int line)
 {
     char playerSymbol;
-    clearLine(4);
-    mvprintw(4, 0, "Symbole du joueur %d : ", playerIndex + 1);
+    clearLine(line);
+    mvprintw(line, 0, "Symbole du joueur %d : ", playerIndex + 1);
     refresh();
     scanw("%c", &playerSymbol);
     for (int i = 0; i < playerIndex; i++)
     {
         if (playerList[i]->playerSymbol == playerSymbol)
         {
-            clearLine(4);
+            clearLine(line);
             wchar_t errorMessage[] = L"Le symbole   est déjà utilisé. Veuillez en choisir un autre : ";
             errorMessage[11] = playerSymbol; // Position précise dans la chaine précédente
-            mvprintw(4, 0, "%ls", errorMessage);
+            mvprintw(line, 0, "%ls", errorMessage);
             refresh();
             scanw("%c", &playerSymbol);
             i = -1; // Recommencer la boucle pour vérifier tous les joueurs
@@ -159,9 +159,8 @@ checkPlayerCount:
     *playerList = (Player **)malloc(sizeof(Player *) * (*playerCount));
     for (int i = 0; i < *playerCount; i++)
     {
-        char playerSymbol = inputPlayerSymbol(*playerList, i);
-        (*playerList)[i] = inputPlayerName(playerSymbol, 5);
-        clearLine(5);
+        char playerSymbol = inputPlayerSymbol(*playerList, i, 4 + i*3);
+        (*playerList)[i] = inputPlayerName(playerSymbol, 5 + i*3);
     }
     noecho();
     curs_set(0);
