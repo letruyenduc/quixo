@@ -311,8 +311,8 @@ void displayMenu()
 
         for (int i = (LINES - nbOptions) / 2 - 4; i < (LINES + nbOptions) / 2 + 3; i++)
         {
-            mvprintw(i, (COLS - 53) / 2, "#");
-            mvprintw(i, (COLS + 53) / 2, "#");
+            mvprintw(i, (COLS - 54) / 2, "#");
+            mvprintw(i, (COLS - 54) / 2 + 53, "#");
         }
         // Affichage des options
         for (int i = 0; i < nbOptions; i++)
@@ -320,7 +320,7 @@ void displayMenu()
             if (i == choix)
             {
                 attron(A_REVERSE); // Surlignage pour l'option sélectionnée
-                mvprintw((LINES - nbOptions) / 2 + i, (COLS - strlen(options[i])) / 2 - 3, " > %s < ", options[i]);
+                mvprintw((LINES - nbOptions) / 2 + i, (COLS - strlen(options[i]) - 6) / 2, " > %s < ", options[i]);
                 attroff(A_REVERSE);
             }
             else
