@@ -240,7 +240,7 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changeme
                 playerList = (Player **)malloc(sizeof(Player *) * 2);
                 playerCount = 2;
                 playerList[0] = inputPlayerName('X', 0);
-                playerList[1] = inputPlayerName('O', 0);
+                playerList[1] = inputPlayerName('O', 1);
                 width = 5;
                 height = 5;
             }
