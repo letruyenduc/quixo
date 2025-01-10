@@ -94,8 +94,8 @@ int loadSave(char *filepath, Grid **grid, Player ***playerList, int *playerCount
     for (int i = 0; i < *playerCount; i++)
     {
         (*playerList)[i] = malloc(sizeof(Player));
-        char buffer[32];
-        if (fscanf(file, "%c %31s", &(*playerList)[i]->playerSymbol, buffer) != 2)
+        char buffer[21];
+        if (fscanf(file, "%c %20s", &(*playerList)[i]->playerSymbol, buffer) != 2)
         {
             free(*playerList);
             free(line);
