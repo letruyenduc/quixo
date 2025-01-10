@@ -139,8 +139,6 @@ char inputPlayerSymbol(Player **playerList, int playerIndex, int line)
 void inputUsers(Player ***playerList, int *playerCount)
 {
     clear();
-    echo();
-    curs_set(1);
     mvprintw(0, 0, "======================================");
     mvprintw(2, 0, "======================================");
     mvprintw(1, 0, "Veuillez entrer le nombre de joueurs : ");
@@ -159,11 +157,9 @@ checkPlayerCount:
     *playerList = (Player **)malloc(sizeof(Player *) * (*playerCount));
     for (int i = 0; i < *playerCount; i++)
     {
-        char playerSymbol = inputPlayerSymbol(*playerList, i, 4 + i*3);
-        (*playerList)[i] = inputPlayerName(playerSymbol, 5 + i*3);
+        char playerSymbol = inputPlayerSymbol(*playerList, i, 4 + i * 3);
+        (*playerList)[i] = inputPlayerName(playerSymbol, 5 + i * 3);
     }
-    noecho();
-    curs_set(0);
 }
 
 /**
@@ -176,8 +172,6 @@ checkPlayerCount:
 void inputSize(int *width, int *height)
 {
     clear();
-    echo();
-    curs_set(1);
     mvprintw(0, 0, "======================================");
     mvprintw(2, 0, "======================================");
     mvprintw(1, 0, "Veuillez entrer la largeur de la grille : ");
@@ -206,9 +200,6 @@ checkHeight:
         mvprintw(1, 0, "Veuillez entrer une hauteur entre 3 et 50 : ");
         goto checkHeight;
     }
-
-    noecho();
-    curs_set(0);
 }
 
 /**
@@ -233,9 +224,11 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changeme
     {
     case 0:
         selectedOption = showMessage(L"Souhaitez-vous faire une partie par défaut ou personnalisée ?",
-                                         (wchar_t *[]){L"Par défaut", L"Personnalisée"}, 2, 1);
+                                     (wchar_t *[]){L"Par défaut", L"Personnalisée"}, 2, 1);
         if (selectedOption != -1)
         {
+            echo();
+            curs_set(1);
             if (selectedOption == 1)
             {
                 inputUsers(&playerList, &playerCount);
@@ -243,19 +236,16 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changeme
             }
             else
             {
-
                 clear();
-                echo();
-                curs_set(1);
                 playerList = (Player **)malloc(sizeof(Player *) * 2);
                 playerCount = 2;
                 playerList[0] = inputPlayerName('X', 0);
                 playerList[1] = inputPlayerName('O', 0);
                 width = 5;
                 height = 5;
-                noecho();
-                curs_set(0);
             }
+            noecho();
+            curs_set(0);
             startNewGame(playerList, playerCount, width, height);
         }
         break;
