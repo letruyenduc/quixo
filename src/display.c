@@ -9,6 +9,7 @@
 #endif
 #include "grid.h"
 #include "constants.h"
+#include "utils.h"
 
 #define TEXT_CENTERING 25
 
@@ -155,23 +156,32 @@ void displayGrid(Grid *grid, int row, int column, int selectingFunction)
  * - row : Position actuelle du curseur (ligne)
  * - column : Position actuelle du curseur (colonne)
  * - selectingFunction : Valeur booléenne définissant s'il s'agit de la sélection du mouvement de déplacement
+ * Retour : La ligne suivante disponible pour l'affichage
  */
-void displayGridAndStatus(Grid *grid, Player *nextPlayer, wchar_t *statusMessage, int row, int column, int selectingFunction)
+int displayGridAndStatus(Grid *grid, Player *nextPlayer, wchar_t *statusMessage, int row, int column, int selectingFunction)
 {
     int offsetLine = getOffsetLine(grid), textOffsetCol = getTextOffsetCol(grid);
 
     displayGrid(grid, row, column, selectingFunction);
 
+    int nextLine;
     if (statusMessage != NULL)
     {
-        mvprintw(offsetLine + 2, textOffsetCol, "%ls", statusMessage);
+        nextLine = mvprintwLines(offsetLine + 1, textOffsetCol, statusMessage) + 1;
+    } else {
+        nextLine = offsetLine + 2;
+    }
+
+    if (nextLine < offsetLine + 4) {
+        nextLine = offsetLine + 4;
     }
 
     attron(COLOR_PAIR(nextPlayer->colorIndex));
-    mvprintw(offsetLine + 3, textOffsetCol, "%s (%c) joue.", nextPlayer->playerName, nextPlayer->playerSymbol);
+    mvprintw(nextLine, textOffsetCol, "%s (%c) joue.", nextPlayer->playerName, nextPlayer->playerSymbol);
     attroff(COLOR_PAIR(nextPlayer->colorIndex));
 
     refresh();
+    return nextLine + 2;
 }
 /**
  * Auteurs : Duc et Kevin
@@ -179,7 +189,6 @@ void displayGridAndStatus(Grid *grid, Player *nextPlayer, wchar_t *statusMessage
  * Paramètres :
  * - grid : La grille de jeu
  * - nextPlayer : Le prochain joueur qui doit jouer
- * - offsetLine : Décalage de la ligne
  * - textOffsetCol : Décalage de la colonne pour le texte
  * - row : Ligne de la grille de la case sélectionnée
  * - column : Colonne de la grille de la case sélectionnée
@@ -189,22 +198,21 @@ void displayGridAndStatus(Grid *grid, Player *nextPlayer, wchar_t *statusMessage
  * - function : L'action choisie par l'utilisateur
  * Retour (par instruction return) : 0 si l'utilisateur a choisi une action, 1 sinon
  */
-int handleFunctionSelection(Grid *grid, Player *nextPlayer, int offsetLine, int textOffsetCol, int row, int column, wchar_t **statusMessage, int *function)
+int handleFunctionSelection(Grid *grid, Player *nextPlayer, int textOffsetCol, int row, int column, wchar_t **statusMessage, int *function)
 {
     *function = -1;
     do
     {
-        displayGridAndStatus(grid, nextPlayer, *statusMessage, row, column, 1);
-        int textLine = 5;
+        int textLine = displayGridAndStatus(grid, nextPlayer, *statusMessage, row, column, 1);
         if (column != 0)
-            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche droite : Réinsérer par la gauche et pousser vers droite");
+            mvprintw(textLine++, textOffsetCol, "%ls", L"Flèche droite : Réinsérer par la gauche et pousser vers droite");
         if (column != grid->width - 1)
-            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche gauche : Réinsérer par la droite et pousser vers la gauche");
+            mvprintw(textLine++, textOffsetCol, "%ls", L"Flèche gauche : Réinsérer par la droite et pousser vers la gauche");
         if (row != 0)
-            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche bas : Réinsérer par le haut et pousser vers le bas");
+            mvprintw(textLine++, textOffsetCol, "%ls", L"Flèche bas : Réinsérer par le haut et pousser vers le bas");
         if (row != grid->height - 1)
-            mvprintw(offsetLine + textLine++, textOffsetCol, "%ls", L"Flèche haut : Réinsérer par le bas et pousser vers le haut");
-        mvprintw(offsetLine + textLine, textOffsetCol, "%ls", L"Echap pour revenir à la sélection de la case");
+            mvprintw(textLine++, textOffsetCol, "%ls", L"Flèche haut : Réinsérer par le bas et pousser vers le haut");
+        mvprintw(textLine, textOffsetCol, "%ls", L"Echap pour revenir à la sélection de la case");
         *statusMessage = NULL;
         int key = getch();
         switch (key)
@@ -248,6 +256,7 @@ int handleFunctionSelection(Grid *grid, Player *nextPlayer, int offsetLine, int 
  * Paramètres :
  * - grid : La grille de jeu
  * - nextPlayer : Le prochain joueur qui doit jouer
+ * - textLine : La ligne de texte
  * - statusMessage : Le message de statut
  * Retours (par paramètres pointeurs) :
  * - statusMessage : Le message de statut
@@ -260,13 +269,13 @@ int handleFunctionSelection(Grid *grid, Player *nextPlayer, int offsetLine, int 
  * - Entrée pour sélectionner une case puis sélectionner un déplacement à effectuer
  * - Echap pour quitter
  */
-int handleGridPointSelection(Grid *grid, Player *nextPlayer, wchar_t **statusMessage, int *row, int *column, int *function)
+int handleGridPointSelection(Grid *grid, Player *nextPlayer, int textLine, wchar_t **statusMessage, int *row, int *column, int *function)
 {
-    int offsetLine = getOffsetLine(grid), textOffsetCol = getTextOffsetCol(grid);
+    int textOffsetCol = getTextOffsetCol(grid);
 
-    mvprintw(offsetLine + 5, textOffsetCol, "%ls", L"Utilisez les flèches pour naviguer.");
-    mvprintw(offsetLine + 6, textOffsetCol, "%ls", L"Appuyez sur Entrer pour sélectionner une case.");
-    mvprintw(offsetLine + 7, textOffsetCol, "Echap pour afficher le menu de jeu.");
+    mvprintw(textLine, textOffsetCol, "%ls", L"Utilisez les flèches pour naviguer.");
+    mvprintw(textLine + 1, textOffsetCol, "%ls", L"Appuyez sur Entrer pour sélectionner une case.");
+    mvprintw(textLine + 2, textOffsetCol, "Echap pour afficher le menu de jeu.");
     refresh();
 
     int key = getch();
@@ -348,7 +357,7 @@ int handleGridPointSelection(Grid *grid, Player *nextPlayer, wchar_t **statusMes
             break;
         }
 
-        return handleFunctionSelection(grid, nextPlayer, offsetLine, textOffsetCol, *row, *column, statusMessage, function);
+        return handleFunctionSelection(grid, nextPlayer, textOffsetCol, *row, *column, statusMessage, function);
     case 27: // Echap pour quitter
         *function = FUNCTION_QUIT_GAME;
         return 0;
@@ -381,7 +390,7 @@ void handleInput(Grid *grid, Player *nextPlayer, wchar_t *statusMessage, int *ro
     {
         if (!isMoveAllowed(grid, *row, *column, nextPlayer))
         {
-            statusMessage = L"Ce cube appartient à un autre joueur. Vous ne pouvez pas le déplacer.";
+            statusMessage = L"Ce cube appartient à un autre joueur.\nVous ne pouvez pas le déplacer.";
         }
         else
         {
@@ -389,9 +398,9 @@ void handleInput(Grid *grid, Player *nextPlayer, wchar_t *statusMessage, int *ro
         }
 
         // Affiche la grille + le curseur
-        displayGridAndStatus(grid, nextPlayer, statusMessage, *row, *column, 0);
+        int textLine = displayGridAndStatus(grid, nextPlayer, statusMessage, *row, *column, 0);
 
-        selecting = handleGridPointSelection(grid, nextPlayer, &statusMessage, row, column, function);
+        selecting = handleGridPointSelection(grid, nextPlayer, textLine, &statusMessage, row, column, function);
     }
 }
 
