@@ -16,6 +16,7 @@
  * - message : Le message à afficher. Peut contenir plusieurs lignes
  * - options : Les options que l'utilisateur peut sélectionner
  * - optionsCount : Le nombre d'options passés avec l'argument précédent
+ * - allowEscape : Indique si l'utilisateur peut quitter la sélection avec la touche Echap
  * Retour : L'indice de l'option sélectionnée
  * Traitement :
  * On commence par calculer la largeur de l'affichage :
@@ -35,7 +36,7 @@
  *   - S'il s'agit de la touche entrer, on valide la sélection en quittant la boucle
  * Enfin, on efface l'écran et on retourne l'indice de l'option sélectionnée
  */
-int showMessage(wchar_t *message, wchar_t **options, int optionsCount)
+int showMessage(wchar_t *message, wchar_t **options, int optionsCount, int allowEscape)
 {
     assert(optionsCount > 0);
 
@@ -115,6 +116,13 @@ int showMessage(wchar_t *message, wchar_t **options, int optionsCount)
         case KEY_DOWN:
             selectedOption = (selectedOption + 1) % optionsCount;
             break;
+        case 27: // Touche Echap
+            if (allowEscape)
+            {
+                selecting = 0;
+                selectedOption = -1;
+            }
+            break;
         case '\n': // Touche entrer
             selecting = 0;
             break;
@@ -133,9 +141,10 @@ int showMessage(wchar_t *message, wchar_t **options, int optionsCount)
  * Auteur : Kevin Carletto
  * Paramètres :
  * - message : Le message à afficher. Peut contenir plusieurs lignes
+ * - allowEscape : Indique si l'utilisateur peut quitter la sélection avec la touche Echap
  * Traitement : On appelle la fonction showMessage définie au dessus, avec le message passé en argument ici et la seule option "OK".
  */
-void showMessageOkButton(wchar_t *message)
+void showMessageOkButton(wchar_t *message, int allowEscape)
 {
-    showMessage(message, (wchar_t *[]){L"Ok"}, 1);
+    showMessage(message, (wchar_t *[]){L"Ok"}, 1, allowEscape);
 }

@@ -228,33 +228,37 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changeme
     int playerCount;
     int savesCount;
     int width, height;
+    int selectedOption;
 
     switch (choix)
     {
     case 0:
-        if (showMessage(L"Souhaitez-vous faire une partie par défaut ou personnalisée ?",
-                        (wchar_t *[]){L"Par défaut", L"Personnalisée"}, 2) == 1)
+        selectedOption = showMessage(L"Souhaitez-vous faire une partie par défaut ou personnalisée ?",
+                                         (wchar_t *[]){L"Par défaut", L"Personnalisée"}, 2, 1);
+        if (selectedOption != -1)
         {
+            if (selectedOption == 1)
+            {
+                inputUser(&playerList, &playerCount);
+                inputSize(&width, &height);
+            }
+            else
+            {
 
-            inputUser(&playerList, &playerCount);
-            inputSize(&width, &height);
+                clear();
+                echo();
+                curs_set(1);
+                playerList = (Player **)malloc(sizeof(Player *) * 2);
+                playerCount = 2;
+                playerList[0] = inputPlayerName('X', 0);
+                playerList[1] = inputPlayerName('O', 0);
+                width = 5;
+                height = 5;
+                noecho();
+                curs_set(0);
+            }
+            startNewGame(playerList, playerCount, width, height);
         }
-        else
-        {
-
-            clear();
-            echo();
-            curs_set(1);
-            playerList = (Player **)malloc(sizeof(Player *) * 2);
-            playerCount = 2;
-            playerList[0] = inputPlayerName('X', 0);
-            playerList[1] = inputPlayerName('O', 0);
-            width = 5;
-            height = 5;
-            noecho();
-            curs_set(0);
-        }
-        startNewGame(playerList, playerCount, width, height);
         break;
     case 1:
         if (listSaves(&saves, &savesCount) == 0)

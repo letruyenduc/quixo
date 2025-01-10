@@ -21,5 +21,5 @@ void showDebugMessage(wchar_t *fmt, ...)
     vswprintf(message, 256, fmt, arg_ptr);
     va_end(arg_ptr);
 
-    showMessageOkButton(message);
+    showMessageOkButton(message, 1);
 }

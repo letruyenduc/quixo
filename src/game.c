@@ -142,7 +142,7 @@ void gameLoop(Grid *grid, Player *playerList[], int playerCount)
             int selectedOption = showMessage(
                 L"Le jeu a été mis en pause\nSouhaitez-vous continuer la partie, sauvegarder, ou quitter sans sauvegarder ?",
                 (wchar_t *[]){L"Continuer", L"Sauvegarder", L"Quitter sans sauvegarder"},
-                3);
+                3, 1);
 
             switch (selectedOption)
             {
@@ -152,7 +152,7 @@ void gameLoop(Grid *grid, Player *playerList[], int playerCount)
                     selectedOption = showMessage(
                         L"Une erreur est survenue lors de la sauvegarde de l'état du jeu !\nSouhaitez vous quitter sans sauvegarder ou continuer à jouer ?",
                         (wchar_t *[]){L"Quitter sans sauvegarder", L"Continuer à jouer"},
-                        2);
+                        2, 0);
                     if (selectedOption == 0) // Quitter sans sauvegarder, dans le cas contraire on ne modifie pas l'état de la variable playing
                     {
                         playing = 0;
@@ -160,7 +160,7 @@ void gameLoop(Grid *grid, Player *playerList[], int playerCount)
                 }
                 else
                 {
-                    showMessageOkButton(L"L'état du jeu a été sauvegardé");
+                    showMessageOkButton(L"L'état du jeu a été sauvegardé", 1);
                     playing = 0;
                 }
                 break;
