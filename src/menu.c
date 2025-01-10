@@ -300,29 +300,42 @@ void displayMenu()
     // Affichage du menu
     while (execution)
     {
-        mvprintw(0, 0, "======================================");
-        mvprintw(1, 0, "       Bienvenue sur le Quixo !       ");
-        mvprintw(2, 0, "======================================");
+        clear();
+        int row, col;
+        getmaxyx(stdscr, row, col); // Obtenir la taille de la fenêtre
 
+        mvprintw(row / 2 - nbOptions - 3, (col - 53) / 2, "######################################################");
+        attron(A_BOLD);
+        mvprintw(row / 2 - nbOptions - 2, (col - 24) / 2, "Bienvenue sur le Quixo !");
+        attroff(A_BOLD);
+        mvprintw(row / 2 - nbOptions / 2 - 3, (col - 53) / 2, "######################################################");
+
+        for(int i = row/2 - nbOptions / 2 - 4; i < row/2 + nbOptions / 2 + 3; i++)
+        {
+            mvprintw(i, (col - 53) / 2, "#");
+            mvprintw(i, (col + 53) / 2, "#");
+        }
         // Affichage des options
         for (int i = 0; i < nbOptions; i++)
         {
             if (i == choix)
             {
-                attron(A_REVERSE);                    // Surligner l'option sélectionnée
-                mvprintw(4 + i, 2, "%s", options[i]); // Ajout de "%s"
+                attron(A_BOLD);     // Texte en gras
+                attron(A_REVERSE);  // Surlignage pour l'option sélectionnée
+                mvprintw(row / 2 - nbOptions / 2 + i, (col - strlen(options[i])) / 2 - 3, " > %s < ", options[i]);
                 attroff(A_REVERSE);
+                attroff(A_BOLD);
             }
             else
             {
-                mvprintw(4 + i, 2, "%s", options[i]); // Ajout de "%s"
+                mvprintw(row / 2 - nbOptions / 2 + i, (col - strlen(options[i])) / 2, "%s", options[i]);
             }
         }
-
-        mvprintw(4 + nbOptions + 1, 0, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider.");
+        mvprintw(row / 2 + nbOptions / 2 + 3, (col - 53) / 2, "######################################################");
+        mvprintw(row / 2 + nbOptions / 2 + 5, (col - 54) / 2, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider.");
         if (statusMessage != NULL)
         {
-            mvprintw(4 + nbOptions + 2, 0, "%ls", statusMessage);
+            mvprintw(row / 2 + nbOptions / 2 + 2, (col - wcslen(statusMessage)) / 2, "%ls", statusMessage);
             statusMessage = NULL;
         }
         refresh();
