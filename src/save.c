@@ -155,7 +155,13 @@ int save_grid(Grid *grid, Player *playerList[], int playerCount)
     
 }
 
-//suppression des sauvegardes
+/**
+ * Auteur:Clément 
+ * description: supprime la sauvegarde lorsque la partie se termine
+ * paramètres: 
+ * - playerList: un tableau de pointeur des joueurs
+ * - playerCount: le nombre de joueurs  
+*/
 void deleteSave(Player *playerList[], int playerCount){
     char *filePath = createFilePath(playerList, playerCount);
     if(remove(filePath) && errno != ENOENT){
