@@ -29,7 +29,7 @@ void initPlayerColors(Player *playerList[], int playerCount)
     int offset = randInt(0, 6);
     for (int i = 0; i < playerCount; i++)
     {
-        playerList[i]->colorIndex = i + 1;
+        playerList[i]->colorIndex = PLAYER_COLOR_START + i;
         init_pair(playerList[i]->colorIndex, (i + offset) % 6 + 1, COLOR_BLACK);
     }
 }

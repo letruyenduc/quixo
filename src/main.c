@@ -3,6 +3,7 @@
 #include <locale.h>
 #include "menu.h"
 #include "utils.h"
+#include "constants.h"
 
 #ifdef _WIN32
 #include <ncursesw/ncurses.h>
@@ -25,6 +26,8 @@ void initNcurses()
     curs_set(0);          // Masque le curseur
     keypad(stdscr, TRUE); // Activer les touches fléchées
     start_color();        // Activer les couleurs
+    init_pair(COLOR_CYAN_ON_BLACK, COLOR_CYAN, COLOR_BLACK);
+    init_pair(COLOR_RED_ON_BLACK, COLOR_RED, COLOR_BLACK);
     ESCDELAY = 25;        // Réduire le délai d'attente après un appui sur la touche ESC
 }
 

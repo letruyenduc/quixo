@@ -292,6 +292,7 @@ void displayMenu()
         "Charger une Partie",
         "Quitter"};
     wchar_t *statusMessage = NULL;
+    int showInstructions = 1;
     int nbOptions = sizeof(options) / sizeof(options[0]);
     int choix = 0; // Index de l'option sélectionnée
     int execution = 1;
@@ -328,10 +329,21 @@ void displayMenu()
             }
         }
         mvprintw((LINES + nbOptions) / 2 + 2, (COLS - 54) / 2, "######################################################");
-        mvprintw((LINES + nbOptions) / 2 + 4, (COLS - 56) / 2, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider.");
-        if (statusMessage != NULL)
+
+        if (statusMessage == NULL)
         {
-            mvprintw((LINES + nbOptions) / 2 + 5, (COLS - wcslen(statusMessage)) / 2, "%ls", statusMessage);
+            if (showInstructions)
+            {
+                attron(COLOR_PAIR(COLOR_CYAN_ON_BLACK));
+                mvprintw((LINES + nbOptions) / 2 + 4, (COLS - 56) / 2, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider.");
+                attroff(COLOR_PAIR(COLOR_CYAN_ON_BLACK));
+            }
+        }
+        else
+        {
+            attron(COLOR_PAIR(COLOR_RED_ON_BLACK));
+            mvprintw((LINES + nbOptions) / 2 + 4, (COLS - wcslen(statusMessage)) / 2, "%ls", statusMessage);
+            attroff(COLOR_PAIR(COLOR_RED_ON_BLACK));
             statusMessage = NULL;
         }
         refresh();
@@ -343,9 +355,11 @@ void displayMenu()
         {
         case KEY_UP:
             choix = (choix - 1 + nbOptions) % nbOptions;
+            showInstructions = 0;
             break;
         case KEY_DOWN:
             choix = (choix + 1) % nbOptions;
+            showInstructions = 0;
             break;
         case 27: // Touche Echap
             execution = 0;

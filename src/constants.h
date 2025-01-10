@@ -22,6 +22,10 @@
 #define CHECK_PLAYER_NAME_EMPTY '\1'
 #define CHECK_PLAYER_NAME_TOO_LONG '\2'
 
+#define COLOR_CYAN_ON_BLACK 1
+#define COLOR_RED_ON_BLACK 2
+#define PLAYER_COLOR_START 3
+
 #ifdef _WIN32
 #define PATH_SEP "\\"
 #else
