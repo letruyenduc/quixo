@@ -7,10 +7,8 @@
 // Définir le séparateur de chemin selon l'OS
 #ifdef _WIN32
 #include <direct.h> // Pour _mkdir sur Windows
-#define SEPARATEUR "\\"
 #else
 #include <sys/stat.h> // Pour mkdir sur Linux/macOS
-#define SEPARATEUR "/"
 #endif
 
 #include "grid.h"
