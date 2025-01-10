@@ -105,6 +105,7 @@ void mvprintwLinesKnownCount(int line, int col, wchar_t *str, int *messageLinesL
         {
             lineBuffer[j] = str[strOffset + j];
         }
+        lineBuffer[messageLinesLength[i]] = L'\0';
         mvprintw(line + i, col, "%ls", lineBuffer);
         strOffset += messageLinesLength[i] + 1;
     }
