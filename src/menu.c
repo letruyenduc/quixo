@@ -136,7 +136,7 @@ char inputPlayerSymbol(Player **playerList, int playerIndex)
  * - playerList : La liste des joueurs
  * - playerCount : Le nombre de joueurs
  */
-void inputUser(Player ***playerList, int *playerCount)
+void inputUsers(Player ***playerList, int *playerCount)
 {
     clear();
     echo();
@@ -239,7 +239,7 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changeme
         {
             if (selectedOption == 1)
             {
-                inputUser(&playerList, &playerCount);
+                inputUsers(&playerList, &playerCount);
                 inputSize(&width, &height);
             }
             else
