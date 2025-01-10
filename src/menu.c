@@ -302,11 +302,11 @@ void displayMenu()
     {
         clear();
 
-        mvprintw((LINES - nbOptions) / 2 - 5, (COLS - 53) / 2, "######################################################");
+        mvprintw((LINES - nbOptions) / 2 - 5, (COLS - 54) / 2, "######################################################");
         attron(A_BOLD);
         mvprintw((LINES - nbOptions) / 2 - 4, (COLS - 24) / 2, "Bienvenue sur le Quixo !");
         attroff(A_BOLD);
-        mvprintw((LINES - nbOptions) / 2 - 3, (COLS - 53) / 2, "######################################################");
+        mvprintw((LINES - nbOptions) / 2 - 3, (COLS - 54) / 2, "######################################################");
 
         for (int i = (LINES - nbOptions) / 2 - 4; i < (LINES + nbOptions) / 2 + 3; i++)
         {
@@ -318,19 +318,17 @@ void displayMenu()
         {
             if (i == choix)
             {
-                attron(A_BOLD);    // Texte en gras
                 attron(A_REVERSE); // Surlignage pour l'option sélectionnée
                 mvprintw((LINES - nbOptions) / 2 + i, (COLS - strlen(options[i])) / 2 - 3, " > %s < ", options[i]);
                 attroff(A_REVERSE);
-                attroff(A_BOLD);
             }
             else
             {
                 mvprintw((LINES - nbOptions) / 2 + i, (COLS - strlen(options[i])) / 2, "%s", options[i]);
             }
         }
-        mvprintw((LINES + nbOptions) / 2 + 2, (COLS - 53) / 2, "######################################################");
-        mvprintw((LINES + nbOptions) / 2 + 4, (COLS - 54) / 2, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider.");
+        mvprintw((LINES + nbOptions) / 2 + 2, (COLS - 54) / 2, "######################################################");
+        mvprintw((LINES + nbOptions) / 2 + 4, (COLS - 56) / 2, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider.");
         if (statusMessage != NULL)
         {
             mvprintw((LINES + nbOptions) / 2 + 5, (COLS - wcslen(statusMessage)) / 2, "%ls", statusMessage);
