@@ -80,6 +80,11 @@ int showMessage(wchar_t *message, wchar_t **options, int optionsCount, int allow
         mvprintw(startLine + i, startCol, "#");
         mvprintw(startLine + i, startCol + width - 1, "#");
     }
+#ifdef __linux
+    // Raffraichir après l'affichage des bordures pour ne pas qu'elles se décalent en affichant des accents dans le texte
+    // Ce problème n'est présent que sur Linux, donc on évite d'affecter les autres systèmes
+    refresh();
+#endif
 
     // Afficher le message, on utilise mvprintwLinesKnownCount car on connait déjà la longueur des lignes
     mvprintwLinesKnownCount(startLine + 1, startCol + (width - messageMaxLength) / 2, message, messageLinesLength, messageLineCount);
