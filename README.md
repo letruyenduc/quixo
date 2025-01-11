@@ -50,12 +50,12 @@ Exécutez le programme suivant :
 
 ### Sur Windows :
 ```batch
-bin\main.exe
+bin\quixo.exe
 ```
 
 ### Sur MacOS / Linux :
-```batch
-bin/main
+```bash
+bin/quixo
 ```
 
 ## Fonctionnalités

@@ -1,4 +1,4 @@
 saves/
 bin/main.exe
 bin/main
-winbuild/my.res
+windows_build/icon/my.res
