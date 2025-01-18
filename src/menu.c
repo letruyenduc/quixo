@@ -35,13 +35,8 @@ char checkPlayerName(char *playerName)
     {
         return CHECK_PLAYER_NAME_EMPTY;
     }
-    int len = strlen(playerName);
-    if (len > 20)
-    {
-        return CHECK_PLAYER_NAME_TOO_LONG;
-    }
     const char *invalidChars = "./\\*?:\"<>|";
-    for (int i = 0; i < len; i++)
+    for (int i = 0; playerName[i] != '\0'; i++)
     {
         if (strchr(invalidChars, playerName[i]) != NULL)
         {
@@ -65,24 +60,16 @@ char checkPlayerName(char *playerName)
  */
 Player *inputPlayerName(char playerSymbol, int line)
 {
-    Player *player = malloc(sizeof(Player));
-    player->playerSymbol = playerSymbol;
-
     clearLine(line);
     mvprintw(line, 0, "Nom du joueur %c : ", playerSymbol);
 
+    char playerNameInput[21] = {0};
 nameCheck:
     refresh();
-#ifdef __APPLE__ // POUR MACOS
-    player->playerName = malloc(22);
-    scanw("%21s", player->playerName);
-#else // POUR LE RESTE
-    scanw("%ms", &player->playerName);
-#endif
-    char checkStatus = checkPlayerName(player->playerName);
-    if (checkStatus != CHECK_PLAYER_NAME_OK) // Changement de la fonction "verifierNomJoueur" en anglais
+    wgetnstr(stdscr, playerNameInput, 20); // wgetnstr limite le nombre de caractères pouvant être tapés à 20, donc pas besoin de faire la vérification ensuite
+    char checkStatus = checkPlayerName(playerNameInput);
+    if (checkStatus != CHECK_PLAYER_NAME_OK)
     {
-        free(player->playerName);
         clearLine(line);
         wchar_t errorMessage[80];
 
@@ -90,9 +77,6 @@ nameCheck:
         {
         case CHECK_PLAYER_NAME_EMPTY:
             wcscpy(errorMessage, L"Le nom ne doit pas être vide. Veuillez réessayer.");
-            break;
-        case CHECK_PLAYER_NAME_TOO_LONG:
-            wcscpy(errorMessage, L"Le nom ne doit pas dépasser 20 caractères. Veuillez réessayer.");
             break;
         default:
             wcscpy(errorMessage, L"Le nom ne doit pas contenir le caractère suivant : ' ' . Veuillez réessayer.");
@@ -103,6 +87,9 @@ nameCheck:
         goto nameCheck;
     }
 
+    Player *player = malloc(sizeof(Player));
+    player->playerSymbol = playerSymbol;
+    player->playerName = strdup(playerNameInput);
     return player;
 }
 
