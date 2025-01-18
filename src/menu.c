@@ -108,11 +108,28 @@ nameCheck:
 
 char inputPlayerSymbol(Player **playerList, int playerIndex, int line)
 {
+    char playerSymbolInput[2];
     char playerSymbol;
     clearLine(line);
     mvprintw(line, 0, "Symbole du joueur %d : ", playerIndex + 1);
+
+    symbolCheck:
     refresh();
-    scanw("%c", &playerSymbol);
+
+    wgetnstr(stdscr, playerSymbolInput, 1); // Limiter le nombre de caractères pouvant être tapés à 1
+    playerSymbol = playerSymbolInput[0];
+    if (playerSymbol == '\0') {
+        clearLine(line);
+        mvprintw(line, 0, "%ls", L"Le symbole ne peut pas être vide. Veuillez en choisir un autre : ");
+        goto symbolCheck;
+    }
+
+    if (playerSymbol == ' ') {
+        clearLine(line);
+        mvprintw(line, 0, "%ls", L"Le symbole ne peut pas être un espace. Veuillez en choisir un autre : ");
+        goto symbolCheck;
+    }
+
     for (int i = 0; i < playerIndex; i++)
     {
         if (playerList[i]->playerSymbol == playerSymbol)
@@ -121,9 +138,7 @@ char inputPlayerSymbol(Player **playerList, int playerIndex, int line)
             wchar_t errorMessage[] = L"Le symbole   est déjà utilisé. Veuillez en choisir un autre : ";
             errorMessage[11] = playerSymbol; // Position précise dans la chaine précédente
             mvprintw(line, 0, "%ls", errorMessage);
-            refresh();
-            scanw("%c", &playerSymbol);
-            i = -1; // Recommencer la boucle pour vérifier tous les joueurs
+            goto symbolCheck;
         }
     }
     return playerSymbol;
