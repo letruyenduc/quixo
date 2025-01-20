@@ -1,2 +1,2 @@
 mkdir -p bin
-gcc src/*.c -o bin/quixo -Llib -lncurses
+gcc src/*.c -o bin/quixo -lncurses
