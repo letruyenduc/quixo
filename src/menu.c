@@ -305,13 +305,13 @@ void displayMenu()
     {
         clear();
 
-        mvprintw((LINES - nbOptions) / 2 - 5, (COLS - 54) / 2, "######################################################");
+        mvprintw((LINES - nbOptions) / 2 - 6, (COLS - 54) / 2, "######################################################");
         attron(A_BOLD);
         mvprintw((LINES - nbOptions) / 2 - 4, (COLS - 24) / 2, "Bienvenue sur le Quixo !");
         attroff(A_BOLD);
-        mvprintw((LINES - nbOptions) / 2 - 3, (COLS - 54) / 2, "######################################################");
+        mvprintw((LINES - nbOptions) / 2 - 2, (COLS - 54) / 2, "######################################################");
 
-        for (int i = (LINES - nbOptions) / 2 - 4; i < (LINES + nbOptions) / 2 + 3; i++)
+        for (int i = (LINES - nbOptions) / 2 - 5; i < (LINES + nbOptions) / 2 + 3; i++)
         {
             mvprintw(i, (COLS - 54) / 2, "#");
             mvprintw(i, (COLS - 54) / 2 + 53, "#");
@@ -322,29 +322,29 @@ void displayMenu()
             if (i == choix)
             {
                 attron(A_REVERSE); // Surlignage pour l'option sélectionnée
-                mvprintw((LINES - nbOptions) / 2 + i, (COLS - strlen(options[i]) - 6) / 2, " > %s < ", options[i]);
+                mvprintw((LINES - nbOptions) / 2 + i + 1, (COLS - strlen(options[i]) - 6) / 2, " > %s < ", options[i]);
                 attroff(A_REVERSE);
             }
             else
             {
-                mvprintw((LINES - nbOptions) / 2 + i, (COLS - strlen(options[i])) / 2, "%s", options[i]);
+                mvprintw((LINES - nbOptions) / 2 + i + 1, (COLS - strlen(options[i])) / 2, "%s", options[i]);
             }
         }
-        mvprintw((LINES + nbOptions) / 2 + 2, (COLS - 54) / 2, "######################################################");
+        mvprintw((LINES + nbOptions) / 2 + 3, (COLS - 54) / 2, "######################################################");
 
         if (statusMessage == NULL)
         {
             if (showInstructions)
             {
                 attron(COLOR_PAIR(COLOR_CYAN_ON_BLACK));
-                mvprintw((LINES + nbOptions) / 2 + 4, (COLS - 56) / 2, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider.");
+                mvprintw((LINES + nbOptions) / 2 + 5, (COLS - 56) / 2, "%ls", L"Utilisez les flèches pour naviguer, Entrée pour valider.");
                 attroff(COLOR_PAIR(COLOR_CYAN_ON_BLACK));
             }
         }
         else
         {
             attron(COLOR_PAIR(COLOR_RED_ON_BLACK));
-            mvprintw((LINES + nbOptions) / 2 + 4, (COLS - wcslen(statusMessage)) / 2, "%ls", statusMessage);
+            mvprintw((LINES + nbOptions) / 2 + 5, (COLS - wcslen(statusMessage)) / 2, "%ls", statusMessage);
             attroff(COLOR_PAIR(COLOR_RED_ON_BLACK));
             statusMessage = NULL;
         }
