@@ -100,18 +100,20 @@ char inputPlayerSymbol(Player **playerList, int playerIndex, int line)
     clearLine(line);
     mvprintw(line, 0, "Symbole du joueur %d : ", playerIndex + 1);
 
-    symbolCheck:
+symbolCheck:
     refresh();
 
     wgetnstr(stdscr, playerSymbolInput, 1); // Limiter le nombre de caractères pouvant être tapés à 1
     playerSymbol = playerSymbolInput[0];
-    if (playerSymbol == '\0') {
+    if (playerSymbol == '\0')
+    {
         clearLine(line);
         mvprintw(line, 0, "%ls", L"Le symbole ne peut pas être vide. Veuillez en choisir un autre : ");
         goto symbolCheck;
     }
 
-    if (playerSymbol == ' ') {
+    if (playerSymbol == ' ')
+    {
         clearLine(line);
         mvprintw(line, 0, "%ls", L"Le symbole ne peut pas être un espace. Veuillez en choisir un autre : ");
         goto symbolCheck;
