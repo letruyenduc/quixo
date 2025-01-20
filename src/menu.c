@@ -368,6 +368,7 @@ void displayMenu()
             break;
         case '\n':                                          // Touche Entrée
             treatChoice(choix, &execution, &statusMessage); // Appelle la fonction de traitement
+            showInstructions = 1;                           // Afficher les instructions au réaffichage du menu
             // Pas de break car on veut également exécuter le clear à la fin du traitement du choix
         default:
             clear();
