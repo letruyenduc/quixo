@@ -1,4 +1,7 @@
 # Quixo (Glisséo)
+
+**⚠️ La version rendue le 21/01/2025 est sur la branche [rendu](https://github.com/letruyenduc/quixo/tree/rendu), la branche main a pu être mise à jour avec des ajouts supplémentaires.**
+
 ## Contexte
 
 Une **entreprise de jeux de société** est en train de préparer la sortie future d’un **nouveau jeu**, celui-ci s’appelle **Quixo**. Cependant, l’entreprise ne sait pas si ce jeu va plaire et elle ne veut pas **décevoir sa clientèle**. Elle veut proposer le jeu le plus qualitatif et adapté aux demandes, aux envies des clients avec l’objectif que ce jeu devienne un classique dans le monde des jeux de société au même niveau que les monopoly, puissance 4… C’est pour cela que l’entreprise décide de développer d’abord ce jeu dans une version en ligne puis de créer un **site web** qui intègre le jeu, les explications, et un formulaire de contact et de recommandations permettant aux visiteurs de donner leur avis afin d’améliorer le jeu après une partie.
