@@ -149,9 +149,8 @@ void inputUsers(Player ***playerList, int *playerCount)
 
 checkPlayerCount:
     refresh();
-    scanw("%d", playerCount);
 
-    if (*playerCount < 2 || *playerCount > 8)
+    if (scanw("%d", playerCount) != 1 || *playerCount < 2 || *playerCount > 8)
     {
         clearLine(1);
         mvprintw(1, 0, "Veuillez entrer un nombre de joueurs entre 2 et 8 : ");
@@ -222,7 +221,7 @@ void treatChoice(int choix, int *execution, wchar_t **statusMessage) // Changeme
     Player **playerList;
     int playerCount;
     int savesCount;
-    int width, height;
+    int width = 0, height = 0;
     int selectedOption;
 
     switch (choix)
